@@ -24,7 +24,7 @@ paths:
                   type: string
                   example: "passw0rd"
       responses:
-        202:
+        204:
           description: "ok"
           headers:
             set-cookie:
@@ -50,7 +50,7 @@ paths:
                   type: integer
                   example: 1234
       responses:
-        202:
+        204:
           description: "ok"
         401:
           description: "one time pass has been expired"
@@ -100,7 +100,7 @@ paths:
                 email_me_about_special_pricing_and_more:
                   type: boolean
       responses:
-        202:
+        204:
           description: "ok"
         401:
           description: "email confirmation has been expired"
@@ -123,7 +123,7 @@ paths:
                   type: string
                   example: "passw0rd"
       responses:
-        202:
+        204:
           description: "successfully logged in"
           headers:
             set-cookie:
@@ -159,7 +159,7 @@ paths:
                   type: string
                   example: "example@translango.com"
       responses:
-        202:
+        204:
           description: "email is found"
           headers:
             set-cookie:
@@ -382,7 +382,7 @@ paths:
         - $ref: "#/components/parameters/cookie"
         - $ref: "#/components/parameters/listID"
       responses:
-        202:
+        204:
           description: "ok"
 components:
   schemas:
