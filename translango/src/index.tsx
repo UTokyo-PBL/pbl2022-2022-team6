@@ -3,13 +3,23 @@ import ReactDOM from 'react-dom/client';
 import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import AppCtx, { AppContextInterface } from './store/app-state-context';
+import { CssBaseline } from '@mui/material';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+const initialAppCtx: AppContextInterface = {
+  isLoggedIn: false
+};
+
 root.render(
   <React.StrictMode>
-    <App />
+    <AppCtx.Provider value={initialAppCtx}>
+      {/* <CssBaseline /> */}
+      <App />
+    </AppCtx.Provider>
   </React.StrictMode>
 );
 
