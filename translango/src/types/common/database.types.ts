@@ -1,4 +1,5 @@
-
+// --------->>> INSTANCES
+// INSTANCE: Type for objects stored from images
 export type objectType = {
     objectId: string
     timeStamp: Date
