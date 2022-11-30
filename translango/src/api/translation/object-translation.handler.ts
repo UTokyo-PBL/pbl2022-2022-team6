@@ -1,8 +1,8 @@
-import { objectType } from "./../../types/common/database.types";
-import { axiosResponse } from "./../../types/common/axios.types";
-import { AXIOS } from "./../../constants/common/axios.constants";
+import { objectType } from "../../types/common/database.types";
+import { axiosResponse } from "../../types/common/axios.types";
+import { AXIOS } from "../../constants/common/axios.constants";
 import FormData from "form-data";
-import { TRANSLATION_ENDPOINTS } from "../../constants/translation/axios.constants";
+import { TRANSLATION_OBJECT_ENDPOINTS } from "../../constants/translation/object-translation.constants";
 
 /*
     Description: Handler for managing the object detection and translation
@@ -26,7 +26,7 @@ export default class ObjectController {
 
     // Send the image via AXIOS
     const axiosResponse: axiosResponse = await AXIOS.post(
-      TRANSLATION_ENDPOINTS.OBJECT_UPLOAD.url,
+      TRANSLATION_OBJECT_ENDPOINTS.OBJECT_UPLOAD.url,
       formData,
       {
         headers: {
@@ -38,7 +38,7 @@ export default class ObjectController {
     // Check the response
     if (
       axiosResponse.statusCode !==
-      TRANSLATION_ENDPOINTS.OBJECT_UPLOAD.statusCodes!.success
+      TRANSLATION_OBJECT_ENDPOINTS.OBJECT_UPLOAD.statusCodes!.success
     ) {
       throw new Error("Invalid status code");
     }
@@ -50,14 +50,14 @@ export default class ObjectController {
   /*
         Description: Upload the data on a register @ the object table @ database
         Usage example> 
-            @onUpdateRequested = 'ObjectController.updateObject ({objectId : 'jfsdwer', object : OBJECT})'
+            @onUpdateRequested = 'ObjectController.updateObjectFromObjectId ({objectId : 'jfsdwer', object : OBJECT})'
         Expected inputs:
             - objectId : string,
             - object : objectType,
         Expected output:
     */
 
-  static async updateObject({
+  static async updateObjectFromObjectId({
     objectId,
     object,
   }: {
@@ -66,7 +66,7 @@ export default class ObjectController {
   }) {
     // Send the new information via AXIOS
     const axiosResponse: axiosResponse = await AXIOS.post(
-      TRANSLATION_ENDPOINTS.OBJECT_UPDATE.url,
+      TRANSLATION_OBJECT_ENDPOINTS.OBJECT_UPDATE.url,
       {
         objectId,
         object,
@@ -76,43 +76,9 @@ export default class ObjectController {
     // Check the response
     if (
       axiosResponse.statusCode !==
-      TRANSLATION_ENDPOINTS.OBJECT_UPDATE.statusCodes!.success
+      TRANSLATION_OBJECT_ENDPOINTS.OBJECT_UPDATE.statusCodes!.success
     ) {
       throw new Error("Invalid status code");
     }
-  }
-
-  /*
-        Description: Sends some text, the original language and a target language to be translated
-        Usage example> 
-            @onButtonClicked = 'ObjectController.translateText ({text: 'some text', fromLang: 'en', toLang: 'sp'})'
-        Expected inputs:
-            - text: HTMLInputElement
-            - fromLang : string 
-            - toLang : string 
-        Expected output:
-            - RESPONSE FROM RESTFULL API -> https://cloud.google.com/translate
-    */
-
-  static async translateText({
-    text,
-    fromLang,
-    toLang,
-  }: {
-    text: string;
-    fromLang: string;
-    toLang: string;
-  }) {
-    // Set the adequate translation API
-    let url = TRANSLATION_ENDPOINTS.TEXT_TRANSLATE.url;
-    url += "&q=" + encodeURI(text);
-    url += `&source=${fromLang}`;
-    url += `&target=${toLang}`;
-
-    // Send the image via AXIOS
-    const googleResponse = await AXIOS.get(url);
-
-    // Return the result
-    return googleResponse;
   }
 }
