@@ -16,8 +16,8 @@ import { deepPurple } from '@mui/material/colors';
 import { Image, Widgets } from '@mui/icons-material';
 
 // Images
-import TranslanGoIcon from '../../Assets/TranslanGoIcon.svg';
-import TranslanGo from '../../Assets/TranslanGo.svg';
+import TranslanGoIcon from '../../assets/TranslanGoIcon.svg';
+import TranslanGo from '../../assets/TranslanGo.svg';
 import { Icon, SvgIcon } from '@mui/material';
 
 // Components
