@@ -1,10 +1,11 @@
+import { objectType } from './../../types/common/database.types';
 import { AXIOS } from "../../constants/common/axios.constants";
 import { GAMIFICATION_FLASHCARDS_OBJECT_ENDPOINTS } from "../../constants/gamification/flashcards.constants";
 import { axiosResponse } from "../../types/common/axios.types";
 import { gamificationFlashcardOutcomeType } from "../../types/gamification/flashcards.types";
 
 /*
-    Description: Handler for managing the object detection and translation
+    Description: Handler for managing gamification by flashcards
 */
 
 export default class FlashCardsController {
@@ -42,7 +43,7 @@ export default class FlashCardsController {
     }
 
     const { objects } = axiosResponse.body;
-    return objects;
+    return objects as objectType[];
   }
 
   /*
@@ -51,7 +52,7 @@ export default class FlashCardsController {
             @onGameEnd = 'FlashCardsController.setGameResult ({outcome: gamificationFlashcardOutcomeType})'
         Expected inputs:
             - outcome: gamificationFlashcardOutcomeType
-        Expected output:
+        Expected output (NONE)
     */
 
   static async setGameResult({

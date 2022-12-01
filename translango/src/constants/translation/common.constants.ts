@@ -7,9 +7,9 @@ import { COMMON_STATUS_CODES } from "../common/axios.constants";
 
 // --------->>> INSTANCES
 //INSTANCES: All the entrypoints for https requests
-export const TRANSLATION_OBJECT_ENDPOINTS: endpointsType = {
+export const TRANSLATION_COMMON_ENDPOINTS: endpointsType = {
   // TODO: Set the entrypoint URL
-  OBJECT_UPLOAD: {
+  GET_AVAILABLE_LANGUAGES: {
     description: "Endpoint for image upload",
     url: "/<setithere>",
     statusCodes: {

@@ -44,41 +44,6 @@ export default class ObjectController {
     }
 
     const { object } = axiosResponse.body;
-    return object;
-  }
-
-  /*
-        Description: Upload the data on a register @ the object table @ database
-        Usage example> 
-            @onUpdateRequested = 'ObjectController.updateObjectFromObjectId ({objectId : 'jfsdwer', object : OBJECT})'
-        Expected inputs:
-            - objectId : string,
-            - object : objectType,
-        Expected output:
-    */
-
-  static async updateObjectFromObjectId({
-    objectId,
-    object,
-  }: {
-    objectId: string;
-    object: objectType;
-  }) {
-    // Send the new information via AXIOS
-    const axiosResponse: axiosResponse = await AXIOS.post(
-      TRANSLATION_OBJECT_ENDPOINTS.OBJECT_UPDATE.url,
-      {
-        objectId,
-        object,
-      }
-    );
-
-    // Check the response
-    if (
-      axiosResponse.statusCode !==
-      TRANSLATION_OBJECT_ENDPOINTS.OBJECT_UPDATE.statusCodes!.success
-    ) {
-      throw new Error("Invalid status code");
-    }
+    return object as objectType;
   }
 }

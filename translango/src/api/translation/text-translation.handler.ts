@@ -2,7 +2,7 @@ import { AXIOS } from "../../constants/common/axios.constants";
 import { TRANSLATION_TEXT_ENDPOINTS } from "../../constants/translation/text-translation.constants";
 
 /*
-    Description: Handler for managing the object detection and translation
+    Description: Handler for managing the text translation
 */
 
 export default class TextTranslationController {

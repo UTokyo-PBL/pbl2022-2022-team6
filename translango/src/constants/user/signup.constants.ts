@@ -7,10 +7,10 @@ import { COMMON_STATUS_CODES } from "../common/axios.constants";
 
 // --------->>> INSTANCES
 //INSTANCES: All the entrypoints for https requests
-export const TRANSLATION_OBJECT_ENDPOINTS: endpointsType = {
+export const SIGNUP_ENDPOINTS: endpointsType = {
   // TODO: Set the entrypoint URL
-  OBJECT_UPLOAD: {
-    description: "Endpoint for image upload",
+  CREATE_USER: {
+    description: "Endpoint for creating a new user",
     url: "/<setithere>",
     statusCodes: {
       success: COMMON_STATUS_CODES.success,
