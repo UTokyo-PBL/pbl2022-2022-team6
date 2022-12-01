@@ -3,6 +3,9 @@ import { blue, deepPurple } from '@mui/material/colors';
 
 const theme = createTheme({
     palette: {
+        background: {
+            default: "#FAEEFC",
+        },
         primary: {
             main: '#8338EC',
             light: '#FAEEFC',
