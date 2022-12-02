@@ -45,6 +45,6 @@ export default class SignupController {
     }
 
     const { caseDescription } = axiosResponse.body;
-    return caseDescription as 'CREATED' | 'ALREADY_EXISTS' | 'INVALID_INFO';
+    return caseDescription as 'CREATED' | 'ALREADY_EXISTS' | 'INVALID_INFO' ;
   }
 }

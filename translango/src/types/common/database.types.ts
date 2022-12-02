@@ -1,5 +1,4 @@
 // --------->>> INSTANCES
-
 import { ISO639_1LanguageCodeType } from "./common.types";
 
 // INSTANCE: Type for objects stored from images
@@ -15,7 +14,7 @@ export type objectType = {
   caption?: string;
   favourite?: boolean;
   isPublic?: boolean;
-  likeCounter? : number
+  likeCounter?: number;
 };
 
 // INSTANCE: Type for the available languages stored on the database

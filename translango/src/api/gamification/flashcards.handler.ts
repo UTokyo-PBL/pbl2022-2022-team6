@@ -12,7 +12,7 @@ export default class FlashCardsController {
   /*
         Description: Request a series of at most N random objects from database for gamification purposes
         Usage example> 
-            @onGameStart = 'FlashCardsController.getNObjectsFromDatabase ({amountOfItems: 10})'
+            @onGameStart = FlashCardsController.getNObjectsFromDatabase ({amountOfItems: 10})'
         Expected inputs:
             - amountOfItems: Number
         Expected output:
