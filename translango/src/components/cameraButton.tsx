@@ -87,7 +87,7 @@ export default class CameraButton extends Component<UploadImageProps, UploadImag
                 )}
                 <ThemeProvider theme={theme}>
                     <Button variant='text' color="secondary" aria-label="Camera" sx={cameraStyle} component='label'>
-                        <input hidden type="file" accept="image/*" capture="environment" onChange={this.changeImage} />
+                        <input hidden type="file" accept="image/*" onChange={this.changeImage} />
                         <CameraAltIcon color="secondary" sx={{ fontSize: 100 }} />
                         <span>Camera</span>
                     </Button>

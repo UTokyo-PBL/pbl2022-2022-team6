@@ -9,7 +9,7 @@ import ViewInArIcon from '@mui/icons-material/ViewInAr';
 import TitleIcon from '@mui/icons-material/Title';
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
-    width: 62,
+    width: 80,
     height: 34,
     padding: 7,
     '& .MuiSwitch-switchBase': {
@@ -18,7 +18,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
         transform: 'translateX(6px)',
         '&.Mui-checked': {
             color: '#fff',
-            transform: 'translateX(22px)',
+            transform: 'translateX(40px)',
             '& .MuiSwitch-thumb:before': {
                 backgroundImage: `url("data:image/svg+xml,%3Csvg width='25' height='25' viewBox='0 0 25 25' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M21.4031 17.3101C21.4031 17.6901 21.1931 18.0201 20.8731 18.1901L12.9731 22.6301C12.8131 22.7501 12.6131 22.8101 12.4031 22.8101C12.1931 22.8101 11.9931 22.7501 11.8331 22.6301L3.93308 18.1901C3.61308 18.0201 3.40308 17.6901 3.40308 17.3101V8.31006C3.40308 7.93006 3.61308 7.60006 3.93308 7.43006L11.8331 2.99006C11.9931 2.87006 12.1931 2.81006 12.4031 2.81006C12.6131 2.81006 12.8131 2.87006 12.9731 2.99006L20.8731 7.43006C21.1931 7.60006 21.4031 7.93006 21.4031 8.31006V17.3101ZM12.4031 4.96006L6.44308 8.31006L12.4031 11.6601L18.3631 8.31006L12.4031 4.96006ZM5.40308 16.7201L11.4031 20.1001V13.3901L5.40308 10.0201V16.7201ZM19.4031 16.7201V10.0201L13.4031 13.3901V20.1001L19.4031 16.7201Z' fill='white'/%3E%3C/svg%3E");`,
             },
@@ -62,11 +62,11 @@ function SwitchThumb(props: any) {
 export default function ToggleSwitch() {
     return (
         <FormGroup>
-
             <Stack direction="row" spacing={1} alignItems="center">
-                <Typography>Text</Typography>
+                {/* <span></span> */}
+                {/* <Typography>Text</Typography> */}
                 <MaterialUISwitch sx={{ m: 1 }} defaultChecked />
-                <Typography>Objects</Typography>
+                {/* <Typography>Objects</Typography> */}
             </Stack>
         </FormGroup>
     );
