@@ -14,7 +14,7 @@ export const TRANSLATION_COMMON_ENDPOINTS: endpointsType = {
     url: "/<setithere>",
     statusCodes: {
       success: COMMON_STATUS_CODES.success,
-      failure: [COMMON_STATUS_CODES.failure],
+      failure: COMMON_STATUS_CODES.failure,
     },
   },
 
@@ -24,7 +24,7 @@ export const TRANSLATION_COMMON_ENDPOINTS: endpointsType = {
     url: "/<setithere>",
     statusCodes: {
       success: COMMON_STATUS_CODES.success,
-      failure: [COMMON_STATUS_CODES.failure],
+      failure: COMMON_STATUS_CODES.failure,
     },
   },
 };

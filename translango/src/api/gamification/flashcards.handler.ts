@@ -1,8 +1,7 @@
-import { objectType } from './../../types/common/database.types';
-import { AXIOS } from "../../constants/common/axios.constants";
+import { objectType } from "./../../types/common/database.types";
 import { GAMIFICATION_FLASHCARDS_OBJECT_ENDPOINTS } from "../../constants/gamification/flashcards.constants";
-import { axiosResponse } from "../../types/common/axios.types";
 import { gamificationFlashcardOutcomeType } from "../../types/gamification/flashcards.types";
+import { $axios } from "../../constants/common/axios.constants";
 
 /*
     Description: Handler for managing gamification by flashcards
@@ -25,7 +24,7 @@ export default class FlashCardsController {
     amountOfItems: number;
   }) {
     // Send the request via AXIOS
-    const axiosResponse: axiosResponse = await AXIOS.post(
+    const axiosResponse: Response = await $axios.post(
       GAMIFICATION_FLASHCARDS_OBJECT_ENDPOINTS
         .GET_CARDS_FOR_GAMIFICATION_BY_FLASHCARDS.url,
       {
@@ -35,14 +34,15 @@ export default class FlashCardsController {
 
     // Check the response
     if (
-      axiosResponse.statusCode !==
-      GAMIFICATION_FLASHCARDS_OBJECT_ENDPOINTS
-        .GET_CARDS_FOR_GAMIFICATION_BY_FLASHCARDS.statusCodes!.success
+      !GAMIFICATION_FLASHCARDS_OBJECT_ENDPOINTS.GET_CARDS_FOR_GAMIFICATION_BY_FLASHCARDS.statusCodes!.success?.includes(
+        axiosResponse.status
+      )
     ) {
       throw new Error("Invalid status code");
     }
 
-    const { objects } = axiosResponse.body;
+    // Get the items to retrieve
+    const { objects } = await axiosResponse.json();
     return objects as objectType[];
   }
 
@@ -61,7 +61,7 @@ export default class FlashCardsController {
     outcome: gamificationFlashcardOutcomeType;
   }) {
     // Send the request via AXIOS
-    const axiosResponse: axiosResponse = await AXIOS.post(
+    const axiosResponse: Response = await $axios.post(
       GAMIFICATION_FLASHCARDS_OBJECT_ENDPOINTS
         .SET_GAME_OUTCOME_FOR_GAMIFICATION_BY_FLASHCARDS.url,
       {
@@ -71,9 +71,9 @@ export default class FlashCardsController {
 
     // Check the response
     if (
-      axiosResponse.statusCode !==
-      GAMIFICATION_FLASHCARDS_OBJECT_ENDPOINTS
-        .SET_GAME_OUTCOME_FOR_GAMIFICATION_BY_FLASHCARDS.statusCodes!.success
+      !GAMIFICATION_FLASHCARDS_OBJECT_ENDPOINTS.SET_GAME_OUTCOME_FOR_GAMIFICATION_BY_FLASHCARDS.statusCodes!.success?.includes(
+        axiosResponse.status
+      )
     ) {
       throw new Error("Invalid status code");
     }

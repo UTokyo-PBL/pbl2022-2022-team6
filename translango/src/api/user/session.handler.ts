@@ -1,6 +1,6 @@
+import { $axios } from "../../constants/common/axios.constants";
 import { SESSION_ENDPOINTS } from "../../constants/user/session.constants";
-import { AXIOS } from "../../constants/common/axios.constants";
-import { axiosResponse } from "../../types/common/axios.types";
+import CookieController from "../common/cookie.handler";
 
 /*
     Description: Handler for managing the session's logic
@@ -8,19 +8,20 @@ import { axiosResponse } from "../../types/common/axios.types";
 
 export default class SessionController {
   /*
-        Description: Send login data and retrieves a case description regarding the outcome of session creation
-        Usage example> 
-            @login = 'SessionController.login ({email: user@test.com, password:'myrawpassword'})'
-        Expected inputs:
-            - email: number
-            - password: string
-        Expected output:
-            - caseDescription : LOGGED | INVALID_USER | INVALID_PASSWORD | BLOCKED_ACCOUNT
+    Description: Send login data and retrieves a case description regarding the outcome of session creation
+    Usage example> 
+      @login = 'SessionController.login ({email: user@test.com, password:'myrawpassword'})'
+    Expected inputs:
+      - email: number
+      - password: string
+    Expected output:
+      - userId
+      - caseDescription : LOGGED | INVALID_USER | INVALID_PASSWORD | BLOCKED_ACCOUNT
     */
 
   static async login({ email, password }: { email: string; password: string }) {
     // Send the request via AXIOS
-    const axiosResponse: axiosResponse = await AXIOS.post(
+    const axiosResponse: Response = await $axios.post(
       SESSION_ENDPOINTS.LOGIN.url,
       {
         email,
@@ -30,17 +31,34 @@ export default class SessionController {
 
     // Check the response
     if (
-      axiosResponse.statusCode !== SESSION_ENDPOINTS.LOGIN.statusCodes!.success
+      !SESSION_ENDPOINTS.LOGIN.statusCodes!.success?.includes(
+        axiosResponse.status
+      )
     ) {
       throw new Error("Invalid status code");
     }
 
-    const { caseDescription } = axiosResponse.body;
-    return caseDescription as
-      | "LOGGED"
-      | "INVALID_USER"
-      | "INVALID_PASSWORD"
-      | "BLOCKED_ACCOUNT";
+    // Check the response from the server
+    const { caseDescription, userId } = await axiosResponse.json();
+
+    // If the userId is available, set it to a cookie
+    if (userId) {
+      CookieController.setCookie({
+        cookieName: "userId",
+        cookieValue: userId,
+        expirationDays: 14,
+      });
+    }
+
+    // Return a response
+    return { caseDescription, userId } as {
+      caseDescription:
+        | "LOGGED"
+        | "INVALID_USER"
+        | "INVALID_PASSWORD"
+        | "BLOCKED_ACCOUNT";
+      userId: string;
+    };
   }
 
   /*
@@ -51,17 +69,12 @@ export default class SessionController {
         Expected output (NONE)
     */
 
-  static async logout() {
-    // Send the request via AXIOS
-    const axiosResponse: axiosResponse = await AXIOS.get(
-      SESSION_ENDPOINTS.LOGOUT.url
-    );
-
-    // Check the response
-    if (
-      axiosResponse.statusCode !== SESSION_ENDPOINTS.LOGOUT.statusCodes!.success
-    ) {
-      throw new Error("Invalid status code");
-    }
+  static logout() {
+    // Remove the userId's cookie content
+    CookieController.setCookie({
+      cookieName: "userId",
+      cookieValue: "",
+      expirationDays: 0,
+    });
   }
 }

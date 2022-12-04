@@ -1,9 +1,8 @@
-import { languageType } from './../../types/common/database.types';
-import { axiosResponse } from "./../../types/common/axios.types";
-import { AXIOS } from "../../constants/common/axios.constants";
+import { languageType } from "./../../types/common/database.types";
 import { TRANSLATION_TEXT_ENDPOINTS } from "../../constants/translation/text-translation.constants";
 import { ISO639_1LanguageCodeType } from "../../types/common/common.types";
 import { translationType } from "../../types/translation/common.types";
+import { $axios } from "../../constants/common/axios.constants";
 
 /*
     Description: Handler for managing the text translation
@@ -30,7 +29,7 @@ export default class TextTranslationController {
     targetLanguage: ISO639_1LanguageCodeType;
   }) {
     // Send the referred URL to axios
-    const axiosResponse: axiosResponse = await AXIOS.post(
+    const axiosResponse: Response = await $axios.post(
       TRANSLATION_TEXT_ENDPOINTS.TEXT_RECOGNITION.url,
       {
         url,
@@ -40,13 +39,16 @@ export default class TextTranslationController {
 
     // Check the response
     if (
-      axiosResponse.statusCode !==
-      TRANSLATION_TEXT_ENDPOINTS.TEXT_RECOGNITION.statusCodes!.success
+      !TRANSLATION_TEXT_ENDPOINTS.TEXT_RECOGNITION.statusCodes!.success?.includes(
+        axiosResponse.status
+      )
     ) {
       throw new Error("Invalid status code");
     }
 
-    const { detectedText, translationOnRequestedLanguage } = axiosResponse.body;
+    // Get the items to retrieve
+    const { detectedText, translationOnRequestedLanguage } =
+      await axiosResponse.json();
     return { detectedText, translationOnRequestedLanguage } as {
       detectedText: string;
       translationOnRequestedLanguage: string;
@@ -72,7 +74,7 @@ export default class TextTranslationController {
     preferredLanguages: languageType;
   }) {
     // Send the referred URL to axios
-    const axiosResponse: axiosResponse = await AXIOS.post(
+    const axiosResponse: Response = await $axios.post(
       TRANSLATION_TEXT_ENDPOINTS.TEXT_RECOGNITION.url,
       {
         text,
@@ -82,13 +84,15 @@ export default class TextTranslationController {
 
     // Check the response
     if (
-      axiosResponse.statusCode !==
-      TRANSLATION_TEXT_ENDPOINTS.TEXT_RECOGNITION.statusCodes!.success
+      !TRANSLATION_TEXT_ENDPOINTS.TEXT_RECOGNITION.statusCodes!.success?.includes(
+        axiosResponse.status
+      )
     ) {
       throw new Error("Invalid status code");
     }
 
-    const { translations } = axiosResponse.body;
+    // Get the items to retrieve
+    const { translations } = await axiosResponse.json();
     return { translations } as {
       translations: translationType;
     };

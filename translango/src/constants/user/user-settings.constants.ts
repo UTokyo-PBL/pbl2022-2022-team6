@@ -14,7 +14,7 @@ export const USER_SETTINGS_ENDPOINTS: endpointsType = {
     url: "/<setithere>",
     statusCodes: {
       success: COMMON_STATUS_CODES.success,
-      failure: [COMMON_STATUS_CODES.failure],
+      failure: COMMON_STATUS_CODES.failure,
     },
   },
 };

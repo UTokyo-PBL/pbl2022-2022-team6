@@ -1,9 +1,8 @@
 import { ISO639_1LanguageCodeType } from "./../../types/common/common.types";
 import { objectType } from "./../../types/common/database.types";
-import { axiosResponse } from "../../types/common/axios.types";
-import { AXIOS } from "../../constants/common/axios.constants";
 import { TRANSLATION_OBJECT_ENDPOINTS } from "../../constants/translation/object-translation.constants";
 import { boundingBoxType } from "../../types/translation/common.types";
+import { $axios } from "../../constants/common/axios.constants";
 
 /*
     Description: Handler for managing the object detection and translation
@@ -31,7 +30,7 @@ export default class ObjectController {
     targetLanguage: ISO639_1LanguageCodeType;
   }) {
     // Send the referred URL to axios
-    const axiosResponse: axiosResponse = await AXIOS.post(
+    const axiosResponse: Response = await $axios.post(
       TRANSLATION_OBJECT_ENDPOINTS.OBJECT_RECOGNITION.url,
       {
         targetLanguage,
@@ -41,15 +40,21 @@ export default class ObjectController {
 
     // Check the response
     if (
-      axiosResponse.statusCode !==
-      TRANSLATION_OBJECT_ENDPOINTS.OBJECT_RECOGNITION.statusCodes!.success
+      !TRANSLATION_OBJECT_ENDPOINTS.OBJECT_RECOGNITION.statusCodes!.success?.includes(
+        axiosResponse.status
+      )
     ) {
       throw new Error("Invalid status code");
     }
 
+    // Get the items to retrieve
     const { detectedObjects, boundingBoxes, translationsOnRequestedLanguage } =
-      axiosResponse.body;
-    return { detectedObjects, boundingBoxes, translationsOnRequestedLanguage } as {
+      await axiosResponse.json();
+    return {
+      detectedObjects,
+      boundingBoxes,
+      translationsOnRequestedLanguage,
+    } as {
       detectedObjects: objectType[];
       boundingBoxes: boundingBoxType[];
       translationsOnRequestedLanguage: string[];

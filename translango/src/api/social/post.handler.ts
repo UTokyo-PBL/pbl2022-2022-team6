@@ -1,7 +1,6 @@
 import { objectType, userType } from "./../../types/common/database.types";
-import { axiosResponse } from "../../types/common/axios.types";
-import { AXIOS } from "../../constants/common/axios.constants";
 import { POST_ENDPOINTS } from "../../constants/social/post.constants";
+import { $axios } from "../../constants/common/axios.constants";
 
 /*
     Description: Handler for getting data related to posts  from user
@@ -37,7 +36,7 @@ export default class PostController {
     diameter?: number;
   }) {
     // Send the request via AXIOS
-    const axiosResponse: axiosResponse = await AXIOS.post(
+    const axiosResponse: Response = await $axios.post(
       POST_ENDPOINTS.GET_POSTS.url,
       {
         source,
@@ -49,13 +48,16 @@ export default class PostController {
 
     // Check the response
     if (
-      axiosResponse.statusCode !== POST_ENDPOINTS.GET_POSTS.statusCodes!.success
+      !POST_ENDPOINTS.GET_POSTS.statusCodes!.success?.includes(
+        axiosResponse.status
+      )
     ) {
       throw new Error("Invalid status code");
     }
 
-    const { languages } = axiosResponse.body;
-    return languages as { user: userType; objects: objectType[] }[];
+    // Get the items to retrieve
+    const { posts } = await axiosResponse.json();
+    return posts as { user: userType; objects: objectType[] }[];
   }
 
   /*
@@ -69,7 +71,7 @@ export default class PostController {
 
   static async updatePost({ object }: { object: objectType }) {
     // Send the new information via AXIOS
-    const axiosResponse: axiosResponse = await AXIOS.post(
+    const axiosResponse: Response = await $axios.post(
       POST_ENDPOINTS.POST_UPDATE.url,
       {
         object,
@@ -78,8 +80,9 @@ export default class PostController {
 
     // Check the response
     if (
-      axiosResponse.statusCode !==
-      POST_ENDPOINTS.POST_UPDATE.statusCodes!.success
+      !POST_ENDPOINTS.POST_UPDATE.statusCodes!.success?.includes(
+        axiosResponse.status
+      )
     ) {
       throw new Error("Invalid status code");
     }
@@ -96,7 +99,7 @@ export default class PostController {
 
   static async deletePost({ object }: { object: objectType }) {
     // Send the new information via AXIOS
-    const axiosResponse: axiosResponse = await AXIOS.post(
+    const axiosResponse: Response = await $axios.post(
       POST_ENDPOINTS.POST_DELETE.url,
       {
         object,
@@ -105,8 +108,9 @@ export default class PostController {
 
     // Check the response
     if (
-      axiosResponse.statusCode !==
-      POST_ENDPOINTS.POST_UPDATE.statusCodes!.success
+      !POST_ENDPOINTS.POST_DELETE.statusCodes!.success?.includes(
+        axiosResponse.status
+      )
     ) {
       throw new Error("Invalid status code");
     }

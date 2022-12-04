@@ -1,7 +1,6 @@
 import { TRANSLATION_COMMON_ENDPOINTS } from "./../../constants/translation/common.constants";
 import { languageType } from "./../../types/common/database.types";
-import { axiosResponse } from "../../types/common/axios.types";
-import { AXIOS } from "../../constants/common/axios.constants";
+import { $axios } from "../../constants/common/axios.constants";
 
 /*
     Description: Handler for managing common actions for translation
@@ -19,19 +18,21 @@ export default class CommonTranslationController {
 
   static async getAvailableLanguages() {
     // Send the request via AXIOS
-    const axiosResponse: axiosResponse = await AXIOS.get(
+    const axiosResponse: Response = await $axios.get(
       TRANSLATION_COMMON_ENDPOINTS.GET_AVAILABLE_LANGUAGES.url
     );
 
     // Check the response
     if (
-      axiosResponse.statusCode !==
-      TRANSLATION_COMMON_ENDPOINTS.GET_AVAILABLE_LANGUAGES.statusCodes!.success
+      !TRANSLATION_COMMON_ENDPOINTS.GET_AVAILABLE_LANGUAGES.statusCodes!.success?.includes(
+        axiosResponse.status
+      )
     ) {
       throw new Error("Invalid status code");
     }
 
-    const { languages } = axiosResponse.body;
+    // Get the items to retrieve
+    const { languages } = await axiosResponse.json();
     return languages as languageType[];
   }
 
@@ -51,7 +52,7 @@ export default class CommonTranslationController {
     formData.append("image", input.files!.length > 0 ? input.files![0] : "");
 
     // Send the image via AXIOS
-    const axiosResponse: axiosResponse = await AXIOS.post(
+    const axiosResponse: Response = await $axios.post(
       TRANSLATION_COMMON_ENDPOINTS.IMAGE_UPLOAD.url,
       formData,
       {
@@ -63,13 +64,15 @@ export default class CommonTranslationController {
 
     // Check the response
     if (
-      axiosResponse.statusCode !==
-      TRANSLATION_COMMON_ENDPOINTS.IMAGE_UPLOAD.statusCodes!.success
+      !TRANSLATION_COMMON_ENDPOINTS.IMAGE_UPLOAD.statusCodes!.success?.includes(
+        axiosResponse.status
+      )
     ) {
       throw new Error("Invalid status code");
     }
 
-    const { url } = axiosResponse.body;
+    // Get the items to retrieve
+    const { url } = await axiosResponse.json();
     return url as string;
   }
 }

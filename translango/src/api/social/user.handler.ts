@@ -1,6 +1,5 @@
-import { axiosResponse } from "../../types/common/axios.types";
-import { AXIOS } from "../../constants/common/axios.constants";
 import { USER_ENDPOINTS } from "../../constants/social/user.constants";
+import { $axios } from "../../constants/common/axios.constants";
 
 /*
     Description: Handler for handling social interactions between users
@@ -25,7 +24,7 @@ export default class UserSocialController {
     isFollow: "FOLLOW" | "UNFOLLOW";
   }) {
     // Send the new information via AXIOS
-    const axiosResponse: axiosResponse = await AXIOS.post(
+    const axiosResponse: Response = await $axios.post(
       USER_ENDPOINTS.SET_FOLLOW.url,
       {
         targetUserId,
@@ -35,8 +34,9 @@ export default class UserSocialController {
 
     // Check the response
     if (
-      axiosResponse.statusCode !==
-      USER_ENDPOINTS.SET_FOLLOW.statusCodes!.success
+      !USER_ENDPOINTS.SET_FOLLOW.statusCodes!.success?.includes(
+        axiosResponse.status
+      )
     ) {
       throw new Error("Invalid status code");
     }

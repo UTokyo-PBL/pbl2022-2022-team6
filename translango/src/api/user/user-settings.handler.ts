@@ -1,8 +1,7 @@
 import { languageType } from "./../../types/common/database.types";
-import { AXIOS } from "../../constants/common/axios.constants";
-import { axiosResponse } from "../../types/common/axios.types";
 import { ISO639_1LanguageCodeType } from "../../types/common/common.types";
 import { USER_SETTINGS_ENDPOINTS } from "../../constants/user/user-settings.constants";
+import { $axios } from "../../constants/common/axios.constants";
 
 /*
     Description: Handler for managing the user's preferences and settings
@@ -20,20 +19,21 @@ export default class UserSettingsController {
 
   static async getPreferredLanguages() {
     // Send the request via AXIOS
-    const axiosResponse: axiosResponse = await AXIOS.get(
+    const axiosResponse: Response = await $axios.get(
       USER_SETTINGS_ENDPOINTS.SET_PREFERRED_LANGUAGES.url
     );
 
     // Check the response
     if (
-      axiosResponse.statusCode !==
-      USER_SETTINGS_ENDPOINTS.SET_PREFERRED_LANGUAGES.statusCodes!.success
+      !USER_SETTINGS_ENDPOINTS.SET_PREFERRED_LANGUAGES.statusCodes!.success?.includes(
+        axiosResponse.status
+      )
     ) {
       throw new Error("Invalid status code");
     }
 
     // Set the response
-    const { preferredLanguages } = axiosResponse.body;
+    const { preferredLanguages } = await axiosResponse.json();
     return preferredLanguages as languageType[];
   }
 
@@ -52,7 +52,7 @@ export default class UserSettingsController {
     languages: ISO639_1LanguageCodeType[];
   }) {
     // Send the request via AXIOS
-    const axiosResponse: axiosResponse = await AXIOS.post(
+    const axiosResponse: Response = await $axios.post(
       USER_SETTINGS_ENDPOINTS.SET_PREFERRED_LANGUAGES.url,
       {
         languages,
@@ -61,8 +61,9 @@ export default class UserSettingsController {
 
     // Check the response
     if (
-      axiosResponse.statusCode !==
-      USER_SETTINGS_ENDPOINTS.SET_PREFERRED_LANGUAGES.statusCodes!.success
+      !USER_SETTINGS_ENDPOINTS.SET_PREFERRED_LANGUAGES.statusCodes!.success?.includes(
+        axiosResponse.status
+      )
     ) {
       throw new Error("Invalid status code");
     }

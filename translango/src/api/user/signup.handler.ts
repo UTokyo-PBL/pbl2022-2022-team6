@@ -1,6 +1,5 @@
+import { $axios } from "../../constants/common/axios.constants";
 import { SIGNUP_ENDPOINTS } from "../../constants/user/signup.constants";
-import { AXIOS } from "../../constants/common/axios.constants";
-import { axiosResponse } from "../../types/common/axios.types";
 
 /*
     Description: Handler for managing the account creation
@@ -26,25 +25,25 @@ export default class SignupController {
     password: string;
   }) {
     // Send the request via AXIOS
-    const axiosResponse: axiosResponse = await AXIOS.post(
-        SIGNUP_ENDPOINTS
-        .CREATE_USER.url,
+    const axiosResponse: Response = await $axios.post(
+      SIGNUP_ENDPOINTS.CREATE_USER.url,
       {
         email,
-        password
+        password,
       }
     );
 
     // Check the response
     if (
-      axiosResponse.statusCode !==
-      SIGNUP_ENDPOINTS
-        .CREATE_USER.statusCodes!.success
+      !SIGNUP_ENDPOINTS.CREATE_USER.statusCodes!.success?.includes(
+        axiosResponse.status
+      )
     ) {
       throw new Error("Invalid status code");
     }
 
-    const { caseDescription } = axiosResponse.body;
-    return caseDescription as 'CREATED' | 'ALREADY_EXISTS' | 'INVALID_INFO' ;
+    // Check the response from the server
+    const { caseDescription } = await axiosResponse.json();
+    return caseDescription as "CREATED" | "ALREADY_EXISTS" | "INVALID_INFO";
   }
 }

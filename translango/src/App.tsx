@@ -8,6 +8,7 @@ import WelcomePage from './pages/welcome';
 import { ThemeProvider } from '@mui/system';
 import theme from './theme/theme';
 import { CssBaseline } from '@mui/material';
+import { TestImage } from './pages/test/test';
 
 
 
@@ -19,7 +20,8 @@ function App() {
           <CssBaseline />
           <Router>
             <Routes>
-              <Route path='/' element={<WelcomePage />} />
+            <Route path='/test' element={<TestImage />} />
+            <Route path='/' element={<WelcomePage />} />
               <Route path="/view-image" element={<ViewImage />} />
             </Routes>
           </Router>

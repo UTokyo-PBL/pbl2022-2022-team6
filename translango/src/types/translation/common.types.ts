@@ -4,8 +4,6 @@ import { languageType } from './../common/database.types';
 // TYPE: Type for object recognition's bounding boxes
 export type boundingBoxType = {
   upperLeftCorner: number;
-  upperRoght: number;
-  lowerLeft: number;
   lowerRight: number;
 };
 
