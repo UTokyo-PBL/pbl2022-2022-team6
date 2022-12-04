@@ -10,6 +10,16 @@ import { COMMON_STATUS_CODES } from "../common/axios.constants";
 export const TRANSLATION_COMMON_ENDPOINTS: endpointsType = {
   // TODO: Set the entrypoint URL
   GET_AVAILABLE_LANGUAGES: {
+    description: "Endpoint for getting a list of available languages",
+    url: "/<setithere>",
+    statusCodes: {
+      success: COMMON_STATUS_CODES.success,
+      failure: [COMMON_STATUS_CODES.failure],
+    },
+  },
+
+  // TODO: Set the entrypoint URL
+  IMAGE_UPLOAD: {
     description: "Endpoint for image upload",
     url: "/<setithere>",
     statusCodes: {

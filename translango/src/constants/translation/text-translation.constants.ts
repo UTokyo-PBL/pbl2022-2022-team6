@@ -1,15 +1,20 @@
-import { GOOGLE_TRANSLATE_API_KEY } from '../common/google.constants';
 /*
     Description: Constants for AXIOS (see https://github.com/axios/axios for more)
 */
 
 import { endpointsType } from "../../types/common/axios.types";
+import { COMMON_STATUS_CODES } from '../common/axios.constants';
 
 // --------->>> INSTANCES
 //INSTANCES: All the entrypoints for https requests
 export const TRANSLATION_TEXT_ENDPOINTS: endpointsType = {
-  TEXT_TRANSLATE: {
-    description: "Endpoint for RESTful requests to GOOGLE's translation api",
-    url: `https://translation.googleapis.com/language/translate/v2?key=${GOOGLE_TRANSLATE_API_KEY}`,
-  }
+  // TODO: Set the entrypoint URL
+  TEXT_RECOGNITION: {
+    description: "Endpoint for recognizing text on a given URL",
+    url: "/<setithere>",
+    statusCodes: {
+      success: COMMON_STATUS_CODES.success,
+      failure: [COMMON_STATUS_CODES.failure],
+    },
+  },
 };

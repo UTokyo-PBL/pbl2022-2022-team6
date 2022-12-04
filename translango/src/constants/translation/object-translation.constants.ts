@@ -9,8 +9,8 @@ import { COMMON_STATUS_CODES } from "../common/axios.constants";
 //INSTANCES: All the entrypoints for https requests
 export const TRANSLATION_OBJECT_ENDPOINTS: endpointsType = {
   // TODO: Set the entrypoint URL
-  OBJECT_UPLOAD: {
-    description: "Endpoint for image upload",
+  OBJECT_RECOGNITION: {
+    description: "Endpoint for recognizing objects on a given URL",
     url: "/<setithere>",
     statusCodes: {
       success: COMMON_STATUS_CODES.success,

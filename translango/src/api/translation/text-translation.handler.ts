@@ -1,5 +1,9 @@
+import { languageType } from './../../types/common/database.types';
+import { axiosResponse } from "./../../types/common/axios.types";
 import { AXIOS } from "../../constants/common/axios.constants";
 import { TRANSLATION_TEXT_ENDPOINTS } from "../../constants/translation/text-translation.constants";
+import { ISO639_1LanguageCodeType } from "../../types/common/common.types";
+import { translationType } from "../../types/translation/common.types";
 
 /*
     Description: Handler for managing the text translation
@@ -7,36 +11,86 @@ import { TRANSLATION_TEXT_ENDPOINTS } from "../../constants/translation/text-tra
 
 export default class TextTranslationController {
   /*
-        Description: Sends some text, the original language and a target language to be translated
+        Description: Sends a URL to the database for text identification
         Usage example> 
-            @onButtonClicked = 'TextTranslationController.translateText ({text: 'some text', fromLang: 'en', toLang: 'sp'})'
+            @onTextTranslation = 'TextTranslationController.getTextFromURL ({url: 'www.myurl.com/image.jpg'})'
         Expected inputs:
-            - text: HTMLInputElement
-            - fromLang : string 
-            - toLang : string 
+            - url : string
+            - targetLanguage : ISO639_1LanguageCodeType referring to the system's language
         Expected output:
-            - RESPONSE FROM RESTFULL API -> https://cloud.google.com/translate
+            - detectedText : Identifyied text from the image. No database storage is required from etxt detection.
+            - translationOnRequestedLanguage : string containing the translation to the user's system language
     */
 
-  static async translateText({
-    text,
-    fromLang,
-    toLang,
+  static async getTextFromURL({
+    url,
+    targetLanguage,
   }: {
-    text: string;
-    fromLang: string;
-    toLang: string;
+    url: String;
+    targetLanguage: ISO639_1LanguageCodeType;
   }) {
-    // Set the adequate translation API
-    let url = TRANSLATION_TEXT_ENDPOINTS.TEXT_TRANSLATE.url;
-    url += "&q=" + encodeURI(text);
-    url += `&source=${fromLang}`;
-    url += `&target=${toLang}`;
+    // Send the referred URL to axios
+    const axiosResponse: axiosResponse = await AXIOS.post(
+      TRANSLATION_TEXT_ENDPOINTS.TEXT_RECOGNITION.url,
+      {
+        url,
+        targetLanguage,
+      }
+    );
 
-    // Send the image via AXIOS
-    const googleResponse = await AXIOS.get(url);
+    // Check the response
+    if (
+      axiosResponse.statusCode !==
+      TRANSLATION_TEXT_ENDPOINTS.TEXT_RECOGNITION.statusCodes!.success
+    ) {
+      throw new Error("Invalid status code");
+    }
 
-    // Return the result
-    return googleResponse;
+    const { detectedText, translationOnRequestedLanguage } = axiosResponse.body;
+    return { detectedText, translationOnRequestedLanguage } as {
+      detectedText: string;
+      translationOnRequestedLanguage: string;
+    };
+  }
+
+  /*
+        Description: Translates a given text to the preferred languages of the user
+        Usage example> 
+            @onSimpleTextTranslation = 'TextTranslationController.translateToPreferredLanguages ({text: 'Hola!', preferredLanguages:ARRAY})'
+        Expected inputs:
+            - text : string
+            - preferredLanguages : Array of preferred languages obtained using the UserSettingsController.getPreferredLanguages method.
+        Expected output:
+            - translations : Identifyied text from the image. No database storage is required from text detection.
+    */
+
+  static async translateToPreferredLanguages({
+    text,
+    preferredLanguages,
+  }: {
+    text: String;
+    preferredLanguages: languageType;
+  }) {
+    // Send the referred URL to axios
+    const axiosResponse: axiosResponse = await AXIOS.post(
+      TRANSLATION_TEXT_ENDPOINTS.TEXT_RECOGNITION.url,
+      {
+        text,
+        preferredLanguages,
+      }
+    );
+
+    // Check the response
+    if (
+      axiosResponse.statusCode !==
+      TRANSLATION_TEXT_ENDPOINTS.TEXT_RECOGNITION.statusCodes!.success
+    ) {
+      throw new Error("Invalid status code");
+    }
+
+    const { translations } = axiosResponse.body;
+    return { translations } as {
+      translations: translationType;
+    };
   }
 }

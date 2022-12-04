@@ -34,4 +34,42 @@ export default class CommonTranslationController {
     const { languages } = axiosResponse.body;
     return languages as languageType[];
   }
+
+  /*
+        Description: Takes a reference to the input DOM item and uploads image to the server
+        Usage example> 
+            @onFileSelected = 'CommonTranslationController.uploadImageToServer ({input : document.querySelector('#file')})'
+        Expected inputs:
+            - input: HTMLInputElement
+        Expected output:
+            - url : url to the stored image
+    */
+
+  static async uploadImageToServer({ input }: { input: HTMLInputElement }) {
+    // Set an object to append the received image
+    const formData = new FormData();
+    formData.append("image", input.files!.length > 0 ? input.files![0] : "");
+
+    // Send the image via AXIOS
+    const axiosResponse: axiosResponse = await AXIOS.post(
+      TRANSLATION_COMMON_ENDPOINTS.IMAGE_UPLOAD.url,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    // Check the response
+    if (
+      axiosResponse.statusCode !==
+      TRANSLATION_COMMON_ENDPOINTS.IMAGE_UPLOAD.statusCodes!.success
+    ) {
+      throw new Error("Invalid status code");
+    }
+
+    const { url } = axiosResponse.body;
+    return url as string;
+  }
 }

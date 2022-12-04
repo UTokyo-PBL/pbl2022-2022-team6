@@ -1,8 +1,9 @@
-import { objectType } from "../../types/common/database.types";
+import { ISO639_1LanguageCodeType } from "./../../types/common/common.types";
+import { objectType } from "./../../types/common/database.types";
 import { axiosResponse } from "../../types/common/axios.types";
 import { AXIOS } from "../../constants/common/axios.constants";
-import FormData from "form-data";
 import { TRANSLATION_OBJECT_ENDPOINTS } from "../../constants/translation/object-translation.constants";
+import { boundingBoxType } from "../../types/translation/common.types";
 
 /*
     Description: Handler for managing the object detection and translation
@@ -10,40 +11,48 @@ import { TRANSLATION_OBJECT_ENDPOINTS } from "../../constants/translation/object
 
 export default class ObjectController {
   /*
-        Description: Takes a reference to the input DOM item and uploads image to the server
-        Usage example> 
-            @onFileSelected = 'ObjectController.uploadImageToServer ({input : document.querySelector('#file')})'
+        Description: Sends a URL to the database for object identification
+        Usage example>
+            @onObjectTranslation = 'ObjectController.getObjectFromURL ({url: 'www.myurl.com/image.jpg', targetLamguage: 'en'})'
         Expected inputs:
-            - input: HTMLInputElement
+            - url : string
+            - targetLanguage : ISO639_1LanguageCodeType referring to the system's language (this is to show a preview to the user, so it has to be the user's setted up language)
         Expected output:
-            - object : objectType
+            - detectedObjects : Detected objects are stored in database and then retrieved as DB entries to frontend 
+            - boundingBoxes: array containing the information of the bounding boxes of each item.  boundingBoxType type
+            - translationsOnRequestedLanguage : array of strings containing the translation of each object on the system's language
     */
 
-  static async uploadImageToServer({ input }: { input: HTMLInputElement }) {
-    // Set an object to append the received image
-    const formData = new FormData();
-    formData.append("image", input.files!.length > 0 ? input.files![0] : "");
-
-    // Send the image via AXIOS
+  static async getObjectFromURL({
+    url,
+    targetLanguage,
+  }: {
+    url: String;
+    targetLanguage: ISO639_1LanguageCodeType;
+  }) {
+    // Send the referred URL to axios
     const axiosResponse: axiosResponse = await AXIOS.post(
-      TRANSLATION_OBJECT_ENDPOINTS.OBJECT_UPLOAD.url,
-      formData,
+      TRANSLATION_OBJECT_ENDPOINTS.OBJECT_RECOGNITION.url,
       {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        targetLanguage,
+        url,
       }
     );
 
     // Check the response
     if (
       axiosResponse.statusCode !==
-      TRANSLATION_OBJECT_ENDPOINTS.OBJECT_UPLOAD.statusCodes!.success
+      TRANSLATION_OBJECT_ENDPOINTS.OBJECT_RECOGNITION.statusCodes!.success
     ) {
       throw new Error("Invalid status code");
     }
 
-    const { object } = axiosResponse.body;
-    return object as objectType;
+    const { detectedObjects, boundingBoxes, translationsOnRequestedLanguage } =
+      axiosResponse.body;
+    return { detectedObjects, boundingBoxes, translationsOnRequestedLanguage } as {
+      detectedObjects: objectType[];
+      boundingBoxes: boundingBoxType[];
+      translationsOnRequestedLanguage: string[];
+    };
   }
 }

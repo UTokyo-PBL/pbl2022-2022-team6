@@ -3,8 +3,8 @@ import { ISO639_1LanguageCodeType } from "./common.types";
 
 // INSTANCE: Type for objects stored from images
 export type objectType = {
-  objectId: string;
-  timeStamp: Date;
+  objectId?: string;
+  timeStamp?: Date;
   userId: string;
   modelOutput: number[];
   english: string;
@@ -19,9 +19,9 @@ export type objectType = {
 
 // INSTANCE: Type for the available languages stored on the database
 export type languageType = {
-  languageId: string;
-  timestamp: Date;
-  name: string;
+  languageId?: string;
+  timestamp?: Date;
+  name?: string;
   region?: string;
   code: ISO639_1LanguageCodeType; // ISO 639-1 compliant
 };
