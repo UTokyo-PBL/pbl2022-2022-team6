@@ -1,5 +1,6 @@
 import { $axios } from "../../constants/common/axios.constants";
 import { SIGNUP_ENDPOINTS } from "../../constants/user/signup.constants";
+import { userType } from "../../types/common/database.types";
 
 /*
     Description: Handler for managing the account creation
@@ -9,41 +10,58 @@ export default class SignupController {
   /*
         Description: Sends the data of a new user and retrieves a success or failure code
         Usage example> 
-            @createUser = 'SignupController.createUser ({email: user@test.com, password:'myrawpassword'})'
+            @createUser = 'SignupController.createUser ({user : {OBJECT}})'
         Expected inputs:
-            - email: number
-            - password: string
+            - user: userType
         Expected output:
-            - caseDescription : CREATED | ALREADY_EXISTS | INVALID_INFO
+            - number
     */
 
-  static async createUser({
-    email,
-    password,
-  }: {
-    email: string;
-    password: string;
-  }) {
+  static async createUser({ user }: { user: userType }) {
+    // REVIEWED
     // Send the request via AXIOS
     const axiosResponse: Response = await $axios.post(
       SIGNUP_ENDPOINTS.CREATE_USER.url,
       {
-        email,
-        password,
+        user,
+      }
+    );
+
+    // Return the status code as response
+    return axiosResponse.status;
+  }
+
+  /*
+        Description: Update a given user's data
+        Usage example> 
+            @updateUser = 'SignupController.updateUser ({email: user@test.com, password:'myrawpassword'})'
+        Expected inputs:
+            - user: userType
+        Expected output:
+            - updatedUser : userType 
+    */
+
+  static async updateUser({ user }: { user: userType }) {
+    // REVIEWED
+    // Send the request via AXIOS
+    const axiosResponse: Response = await $axios.post(
+      SIGNUP_ENDPOINTS.MODIFY_USER.url,
+      {
+        user,
       }
     );
 
     // Check the response
     if (
-      !SIGNUP_ENDPOINTS.CREATE_USER.statusCodes!.success?.includes(
+      !SIGNUP_ENDPOINTS.MODIFY_USER.statusCodes!.success?.includes(
         axiosResponse.status
       )
     ) {
       throw new Error("Invalid status code");
     }
 
-    // Check the response from the server
-    const { caseDescription } = await axiosResponse.json();
-    return caseDescription as "CREATED" | "ALREADY_EXISTS" | "INVALID_INFO";
+    // Get the items to retrieve
+    const { updatedUser } = await axiosResponse.json();
+    return updatedUser as userType;
   }
 }

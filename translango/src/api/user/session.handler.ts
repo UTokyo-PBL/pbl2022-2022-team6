@@ -20,6 +20,7 @@ export default class SessionController {
     */
 
   static async login({ email, password }: { email: string; password: string }) {
+    // REVIEWED
     // Send the request via AXIOS
     const axiosResponse: Response = await $axios.post(
       SESSION_ENDPOINTS.LOGIN.url,
@@ -70,6 +71,7 @@ export default class SessionController {
     */
 
   static logout() {
+    // REVIEWED
     // Remove the userId's cookie content
     CookieController.setCookie({
       cookieName: "userId",

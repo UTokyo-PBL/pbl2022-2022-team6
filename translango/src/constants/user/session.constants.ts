@@ -8,10 +8,9 @@ import { COMMON_STATUS_CODES } from "../common/axios.constants";
 // --------->>> INSTANCES
 //INSTANCES: All the entrypoints for https requests
 export const SESSION_ENDPOINTS: endpointsType = {
-  // TODO: Set the entrypoint URL
   LOGIN: {
     description: "Endpoint for setting a session in the server side",
-    url: "/<setithere>",
+    url: "/user/login",
     statusCodes: {
       success: COMMON_STATUS_CODES.success,
       failure: COMMON_STATUS_CODES.failure,

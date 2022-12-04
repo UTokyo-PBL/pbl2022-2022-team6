@@ -23,9 +23,9 @@ $axios.interceptors.request.use(async (request) => {
   const userId = CookieController.getCookie({ cookieName: "userId" });
 
   // Set it as a new parameter
-  request.data.userId = userId;
+  request.headers = {userId};
 
-  console.log(request.data)
+  console.log(request)
 
   // Allow the promise to continue
   return request;

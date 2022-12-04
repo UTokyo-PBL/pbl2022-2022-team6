@@ -11,6 +11,15 @@ export const SIGNUP_ENDPOINTS: endpointsType = {
   // TODO: Set the entrypoint URL
   CREATE_USER: {
     description: "Endpoint for creating a new user",
+    url: "/user/signup",
+    statusCodes: {
+      success: COMMON_STATUS_CODES.success,
+      failure: COMMON_STATUS_CODES.failure,
+    },
+  },
+  // TODO: Set the entrypoint URL
+  MODIFY_USER: {
+    description: "Endpoint for creating a new user",
     url: "/<setithere>",
     statusCodes: {
       success: COMMON_STATUS_CODES.success,

@@ -1,4 +1,4 @@
-import { objectType } from "./../../types/common/database.types";
+import { listType } from "./../../types/common/database.types";
 import { GAMIFICATION_FLASHCARDS_OBJECT_ENDPOINTS } from "../../constants/gamification/flashcards.constants";
 import { gamificationFlashcardOutcomeType } from "../../types/gamification/flashcards.types";
 import { $axios } from "../../constants/common/axios.constants";
@@ -9,26 +9,34 @@ import { $axios } from "../../constants/common/axios.constants";
 
 export default class FlashCardsController {
   /*
-        Description: Request a series of at most N random objects from database for gamification purposes
+        Description: Request a series of at most N random objects from database for gamification purposes. It requires a listId which should be known in advance
         Usage example> 
-            @onGameStart = FlashCardsController.getNObjectsFromDatabase ({amountOfItems: 10})'
+            @onGameStart = FlashCardsController.getNObjectsFromDatabase ({num_questions: 10, listId : 'qwe-wer-ert'})'
         Expected inputs:
-            - amountOfItems: Number
+            - num_questions: Number
+            - listId : string
         Expected output:
-            - objects : objectType []
+            - list : listType (Returns a list with the requested amount of items)
     */
 
   static async getNObjectsFromDatabase({
-    amountOfItems,
+    // REVIEWED
+    num_questions,
+    listId,
   }: {
-    amountOfItems: number;
+    num_questions: number;
+    listId: number;
   }) {
     // Send the request via AXIOS
-    const axiosResponse: Response = await $axios.post(
+    const axiosResponse: Response = await $axios.get(
       GAMIFICATION_FLASHCARDS_OBJECT_ENDPOINTS
-        .GET_CARDS_FOR_GAMIFICATION_BY_FLASHCARDS.url,
+        .GET_CARDS_FOR_GAMIFICATION_BY_FLASHCARDS.url +
+        "/" +
+        listId,
       {
-        amountOfItems,
+        params: {
+          num_questions,
+        },
       }
     );
 
@@ -42,8 +50,14 @@ export default class FlashCardsController {
     }
 
     // Get the items to retrieve
-    const { objects } = await axiosResponse.json();
-    return objects as objectType[];
+    const { id, name, icon_name, items } = await axiosResponse.json();
+    const list: listType = {
+      id,
+      name,
+      icon_name,
+      items,
+    };
+    return list;
   }
 
   /*
@@ -51,13 +65,16 @@ export default class FlashCardsController {
         Usage example> 
             @onGameEnd = 'FlashCardsController.setGameResult ({outcome: gamificationFlashcardOutcomeType})'
         Expected inputs:
+            - listId : 
             - outcome: gamificationFlashcardOutcomeType
         Expected output (NONE)
     */
 
   static async setGameResult({
+    listId,
     outcome,
   }: {
+    listId: number;
     outcome: gamificationFlashcardOutcomeType;
   }) {
     // Send the request via AXIOS
@@ -65,6 +82,7 @@ export default class FlashCardsController {
       GAMIFICATION_FLASHCARDS_OBJECT_ENDPOINTS
         .SET_GAME_OUTCOME_FOR_GAMIFICATION_BY_FLASHCARDS.url,
       {
+        listId,
         outcome,
       }
     );

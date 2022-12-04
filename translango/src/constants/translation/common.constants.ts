@@ -17,11 +17,26 @@ export const TRANSLATION_COMMON_ENDPOINTS: endpointsType = {
       failure: COMMON_STATUS_CODES.failure,
     },
   },
-
   // TODO: Set the entrypoint URL
-  IMAGE_UPLOAD: {
-    description: "Endpoint for image upload",
+  UPDATE_ITEM: {
+    description: "Endpoint for updating an item in database",
     url: "/<setithere>",
+    statusCodes: {
+      success: COMMON_STATUS_CODES.success,
+      failure: COMMON_STATUS_CODES.failure,
+    },
+  },
+  IMAGE_RECOGNITION: {
+    description: "Endpoint for translating an image to text",
+    url: "/dashboard/camera",
+    statusCodes: {
+      success: COMMON_STATUS_CODES.success,
+      failure: COMMON_STATUS_CODES.failure,
+    },
+  },
+  AVAILABLE_LISTS: {
+    description: "Endpoint for getting the available list of lists",
+    url: "/dashboard/list",
     statusCodes: {
       success: COMMON_STATUS_CODES.success,
       failure: COMMON_STATUS_CODES.failure,
