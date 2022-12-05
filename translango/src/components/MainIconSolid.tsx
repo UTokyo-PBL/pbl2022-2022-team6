@@ -1,7 +1,7 @@
 import { Avatar, SvgIcon } from '@mui/material';
 import React, { Component } from 'react';
-import TranslanGoIconWhite from '../Assets/TranslanGoIconWhite.svg';
-import TranslanGoIconDark from '../Assets/TranslanGoIconDark.svg';
+import TranslanGoIconWhite from '../assets/TranslanGoIconWhite.svg';
+import TranslanGoIconDark from '../assets/TranslanGoIconDark.svg';
 
 
 export default class MainIconSolid extends Component<{ darklogo: boolean }, {}> {
