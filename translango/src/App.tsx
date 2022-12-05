@@ -8,6 +8,7 @@ import WelcomePage from './pages/welcome';
 import { ThemeProvider } from '@mui/system';
 import theme from './theme/theme';
 import { CssBaseline } from '@mui/material';
+import SignInPage from './pages/signin';
 
 
 
@@ -21,6 +22,7 @@ function App() {
             <Routes>
               <Route path='/' element={<WelcomePage />} />
               <Route path="/view-image" element={<ViewImage />} />
+              <Route path="/signin" element={<SignInPage />} />
             </Routes>
           </Router>
         </ThemeProvider>

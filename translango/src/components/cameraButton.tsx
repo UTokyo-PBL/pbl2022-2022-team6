@@ -52,17 +52,15 @@ export default class CameraButton extends Component<UploadImageProps, UploadImag
 
     changeImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
         if (!event.target.files || !event.target.files[0]) return;
-        event.persist();
-        const file = await event.target.files[0];
+        // event.persist();
+        const file = event.target.files[0];
         this.setState({ img: file, rawurl: URL.createObjectURL(file), uploadedimg: true });
 
-        // 
-
         await new Promise<void>((resolve, reject) => {
-            console.log('async', event.target.value)
+            console.log('async', this.state.rawurl)
             resolve();
         })
-
+        console.log(this.state.rawurl)
     };
 
     render() {

@@ -21,7 +21,7 @@ import { AccountCircle } from '@mui/icons-material';
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-function TopNavigation() {
+function TopNavigation(props: any) {
     const [auth, setAuth] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 

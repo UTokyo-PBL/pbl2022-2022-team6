@@ -28,7 +28,7 @@ function Copyright(props: any) {
 
 const theme = createTheme();
 
-export default function WelcomePage() {
+export default function SignInPage() {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);

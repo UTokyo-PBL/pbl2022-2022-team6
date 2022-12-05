@@ -22,14 +22,6 @@ import TextButton from '../../components/TextButton';
 
 
 export default function WelcomePage() {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
-    };
 
     return (
         <ThemeProvider theme={theme}>
@@ -49,7 +41,7 @@ export default function WelcomePage() {
                         backgroundPosition: 'center',
                     }}
                 />
-                <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} bgcolor='primary.main' square>
+                <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} bgcolor='primary.main'>
                     <Box
                         sx={{
                             my: 4,

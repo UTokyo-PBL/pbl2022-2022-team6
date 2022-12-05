@@ -59,13 +59,13 @@ function SwitchThumb(props: any) {
     );
 }
 
-export default function ToggleSwitch() {
+export default function ToggleSwitch(props: any) {
     return (
         <FormGroup>
             <Stack direction="row" spacing={1} alignItems="center">
                 {/* <span></span> */}
                 {/* <Typography>Text</Typography> */}
-                <MaterialUISwitch sx={{ m: 1 }} defaultChecked />
+                <MaterialUISwitch sx={{ m: 1 }} defaultChecked onChange={props.onChange} />
                 {/* <Typography>Objects</Typography> */}
             </Stack>
         </FormGroup>
