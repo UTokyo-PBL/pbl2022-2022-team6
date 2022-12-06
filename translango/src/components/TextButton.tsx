@@ -2,6 +2,8 @@ import { Avatar, Box, Button, makeStyles, SvgIcon, SvgIconProps, ThemeProvider }
 import React, { Component } from 'react';
 import TextRecognitionIcon from '../assets/TextRecognitionIcon.svg';
 import theme from '../theme/theme';
+import { withTranslation, WithTranslation } from 'react-i18next';
+
 
 
 function TextRecIcon(props: SvgIconProps) {
@@ -12,7 +14,13 @@ function TextRecIcon(props: SvgIconProps) {
     );
 }
 
-export default class TextButton extends Component<{ background: string }, {}> {
+export interface TextButtonProps extends WithTranslation {
+    user?: any;
+    uid?: string;
+    background: string;
+}
+
+class TextButton extends Component<TextButtonProps, {}> {
 
     render() {
         const background = this.props.background;
@@ -31,7 +39,7 @@ export default class TextButton extends Component<{ background: string }, {}> {
             <ThemeProvider theme={theme}>
                 <Button variant='text' color="secondary" aria-label="Text" sx={textStyle} href="#">
                     <TextRecIcon color="secondary" sx={{ fontSize: 100 }} />
-                    <span>Text</span>
+                    <span>{this.props.t('Text')}</span>
                 </Button>
             </ThemeProvider>
 
@@ -40,4 +48,6 @@ export default class TextButton extends Component<{ background: string }, {}> {
     }
 
 }
+
+export default withTranslation()(TextButton);
 

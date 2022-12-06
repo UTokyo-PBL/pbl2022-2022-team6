@@ -2,14 +2,16 @@ import React from 'react';
 import logo from './logo.svg';
 import classes from './App.module.scss';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { ViewImage } from './pages/viewimage';
-
+import ViewImage from './pages/viewimage';
 import WelcomePage from './pages/welcome';
 import { ThemeProvider } from '@mui/system';
 import theme from './theme/theme';
 import { CssBaseline } from '@mui/material';
 import SignInPage from './pages/signin';
 import { TestImage } from './pages/test/test';
+
+import './i18n.tsx'
+
 
 
 

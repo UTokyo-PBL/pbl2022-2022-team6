@@ -76,6 +76,7 @@ function TopNavigation(props: any) {
                         >
                             Translan<Box sx={{ fontStyle: 'italic', fontWeight: 'bold' }}>Go</Box>
                         </Typography>
+
                     </Stack>
 
                     {auth && (

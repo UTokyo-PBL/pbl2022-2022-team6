@@ -6,8 +6,12 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 // import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Autocomplete from '@mui/material/Autocomplete';
 import Typography from '@mui/material/Typography';
-import { ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import * as locales from '@mui/material/locale';
+import { useTranslation } from 'react-i18next'
+
 
 // Components
 import MainIcon from '../../components/MainIcon';
@@ -19,12 +23,26 @@ import Copyright from '../../components/Copyright';
 // theme
 import theme from '../../theme/theme';
 import TextButton from '../../components/TextButton';
+import { TextField } from '@mui/material';
+import SelectLanguage from '../../components/selectLanguage';
+
+type SupportedLocales = keyof typeof locales;
 
 
 export default function WelcomePage() {
 
+    const [locale, setLocale] = React.useState<SupportedLocales>('enUS');
+
+    const themeWithLocale = React.useMemo(
+        () => createTheme(theme, locales[locale]),
+        [locale, theme],
+    );
+
+    // It is a hook imported from 'react-i18next'
+    const { t } = useTranslation();
+
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={themeWithLocale}>
             <Grid container component="main" sx={{ height: '100vh', bgcolor: 'primary.main' }}>
                 <CssBaseline />
                 <Grid
@@ -44,7 +62,7 @@ export default function WelcomePage() {
                 <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} bgcolor='primary.main'>
                     <Box
                         sx={{
-                            my: 4,
+                            my: 3,
                             mx: 4,
                             display: 'flex',
                             flexDirection: 'column',
@@ -52,7 +70,7 @@ export default function WelcomePage() {
                             bgcolor: 'primary'
                         }}
                     >
-                        <Grid container direction="row" alignItems="center" sx={{ m: 6 }}>
+                        <Grid container direction="row" alignItems="center" sx={{ m: 4 }}>
                             <Grid item>
                                 <MainIcon background='primary.main' />
                             </Grid>
@@ -63,16 +81,16 @@ export default function WelcomePage() {
                         <Grid container direction="column" alignItems="right" justifyContent="flex-end">
                             <Grid item>
                                 <Typography variant='h4' color='white' fontWeight='bold'>
-                                    Translate on the Go!
+                                    {t('Welcome')}
                                 </Typography>
                             </Grid>
                             <Grid item>
                                 <Typography variant='body1' color='white'>
-                                    Choose how you’d like to translate
+                                    {t('Choose_Translate')}
                                 </Typography>
                             </Grid>
                         </Grid>
-                        <Grid container direction="row" alignItems='center' justifyContent="center">
+                        <Grid container direction="row" alignItems='center' justifyContent="center" >
                             <Grid item>
                                 <CameraButton background='white' />
                             </Grid>
@@ -83,12 +101,12 @@ export default function WelcomePage() {
                         <Grid container sx={{ m: 0 }} direction="column" alignItems="right" justifyContent="flex-end">
                             <Grid item>
                                 <Typography variant='body1' color='white'>
-                                    Or
+                                    {t('Or')}
                                 </Typography>
                             </Grid>
                             <Grid item>
                                 <Typography variant='body1' color='white'>
-                                    Discover more below
+                                    {t('Discover')}
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -101,7 +119,7 @@ export default function WelcomePage() {
                                 sx={{ bgcolor: 'white', minHeight: '40px', width: '280px', color: 'primary' }}
                                 href="#"
                             >
-                                Sign In
+                                {t('Sign_In')}
                             </Button>
                             <Button
                                 fullWidth
@@ -110,11 +128,22 @@ export default function WelcomePage() {
                                 sx={{ mt: 3, mb: 2, color: 'white', minHeight: '40px', width: '280px', border: '2px solid' }}
                                 href="#"
                             >
-                                Sign Up
+                                {t('Sign_Up')}
                             </Button>
 
-                            <Copyright sx={{ mt: 5, color: 'white' }} />
+
+
+
                         </Box>
+
+                        <Grid container direction="column" alignItems='center'>
+                            <Grid item>
+                                <SelectLanguage />
+                            </Grid>
+                            <Grid item>
+                                <Copyright sx={{ mt: 1, color: 'white' }} />
+                            </Grid>
+                        </Grid>
                     </Box>
                 </Grid>
             </Grid >

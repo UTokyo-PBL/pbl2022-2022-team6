@@ -18,12 +18,12 @@ export const $axios = axios.create({
 });
 
 // INSTANCES: Axios request interceptors
-$axios.interceptors.request.use(async (request) => {
+$axios.interceptors.request.use(async (request: any) => {
   // Get the cookie's userId parameter
   const userId = CookieController.getCookie({ cookieName: "userId" });
 
   // Set it as a new parameter
-  request.headers = {userId};
+  request.headers = { userId };
 
   console.log(request)
 

@@ -1,6 +1,6 @@
 import { Avatar } from '@mui/material';
 import React, { Component } from 'react';
-import TranslanGoIcon from '../assets/TranslanGoIcon.svg';
+import TranslanGoIcon from '../Assets/TranslanGoIcon.svg';
 
 export default class MainIcon extends Component<{ background: string }, {}> {
 

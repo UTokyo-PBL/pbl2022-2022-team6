@@ -3,9 +3,10 @@ import React, { Component, useState } from 'react';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import theme from '../theme/theme';
 import { Navigate } from "react-router-dom";
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 
-export interface UploadImageProps {
+export interface UploadImageProps extends WithTranslation {
     user?: any;
     uid?: string;
     background: string;
@@ -26,8 +27,7 @@ export interface UploadImageState {
 }
 
 
-
-export default class CameraButton extends Component<UploadImageProps, UploadImageState> {
+class CameraButton extends Component<UploadImageProps, UploadImageState> {
 
     constructor(UploadImageProps: any) {
         super(UploadImageProps);
@@ -78,6 +78,8 @@ export default class CameraButton extends Component<UploadImageProps, UploadImag
 
 
 
+
+
         return (
             <>
                 {this.state.uploadedimg && (
@@ -87,7 +89,7 @@ export default class CameraButton extends Component<UploadImageProps, UploadImag
                     <Button variant='text' color="secondary" aria-label="Camera" sx={cameraStyle} component='label'>
                         <input hidden type="file" accept="image/*" onChange={this.changeImage} />
                         <CameraAltIcon color="secondary" sx={{ fontSize: 100 }} />
-                        <span>Camera</span>
+                        <span>{this.props.t('Camera')}</span>
                     </Button>
                 </ThemeProvider>
             </>
@@ -96,4 +98,6 @@ export default class CameraButton extends Component<UploadImageProps, UploadImag
     }
 
 }
+
+export default withTranslation()(CameraButton);
 

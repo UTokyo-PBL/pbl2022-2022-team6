@@ -8,6 +8,9 @@ import ToggleSwitch from "../../components/ToggleSwitch";
 import TopNavigation from "../../components/TopNavigation";
 import Copyright from "../../components/Copyright";
 import BottomNavigation from "../../components/BottomNavigation";
+import axios from "axios";
+import CommonTranslationController from "../../api/translation/common.handler";
+
 
 
 
@@ -21,7 +24,7 @@ export interface uploadStates {
 }
 
 // background: 'linear-gradient(to right bottom, #430089, #82ffa1)'
-export const ViewImage = () => {
+export default function ViewImage(props: any) {
 
 
     const location = useLocation();
@@ -58,6 +61,19 @@ export const ViewImage = () => {
 
         if (toggledObject === true) {
             navigate('/scanobjects');
+
+            // SEND TO S3
+
+            const imageObject = {
+                type: 'object',
+                image_url: '',
+                location: null,
+                preferred_languages: {
+                    code: 'en'
+                }
+
+            }
+            // CommonTranslationController.detectFromImage(imageObject)
         }
         else {
             navigate('/scantext');
