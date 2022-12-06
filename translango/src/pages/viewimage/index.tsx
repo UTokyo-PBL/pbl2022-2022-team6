@@ -10,8 +10,23 @@ import Copyright from "../../components/Copyright";
 import BottomNavigation from "../../components/BottomNavigation";
 import axios from "axios";
 import CommonTranslationController from "../../api/translation/common.handler";
+import { uploadFile } from 'react-s3';
+import Resizer from "react-image-file-resizer";
 
 
+// Use URL.revokeObjectURL(img.src) in large scale production
+
+const S3_BUCKET = 'YOUR_BUCKET_NAME';
+const REGION = 'YOUR_REGION_NAME';
+const ACCESS_KEY = 'YOUR_ACCESS_KEY';
+const SECRET_ACCESS_KEY = 'YOUR_SECRET_ACCESS_KEY';
+
+const config = {
+    bucketName: S3_BUCKET,
+    region: REGION,
+    accessKeyId: ACCESS_KEY,
+    secretAccessKey: SECRET_ACCESS_KEY,
+}
 
 
 export interface uploadProps {
@@ -34,6 +49,14 @@ export default function ViewImage(props: any) {
     const [toggledObject, setToggledObject] = React.useState(true);
 
     const navigate = useNavigate();
+    const handleToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setToggledObject(event.target.checked);
+        // console.log(toggledObject);
+    };
+
+
+
+
 
     const changeImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
         if (!event.target.files || !event.target.files[0]) return;
@@ -43,6 +66,7 @@ export default function ViewImage(props: any) {
         setRawURL(URL.createObjectURL(file));
         setUpdateImage(true);
 
+
         await new Promise<void>((resolve, reject) => {
             console.log('async', event.target.value)
             resolve();
@@ -50,11 +74,28 @@ export default function ViewImage(props: any) {
 
     };
 
-    const handleToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setToggledObject(event.target.checked);
-        // console.log(toggledObject);
-    };
 
+    const resizeFile = (file: any) =>
+        new Promise((resolve) => {
+            Resizer.imageFileResizer(
+                file,
+                300,
+                400,
+                "JPEG",
+                50,
+                0,
+                (uri) => {
+                    resolve(uri);
+                },
+                "base64"
+            );
+        });
+
+    const uploadtoS3 = async (file: any) => {
+        uploadFile(file, config)
+            .then((data: any) => console.log(data))
+            .catch((err: any) => console.error(err));
+    }
     const goScan = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         // console.log(toggledObject);
@@ -78,6 +119,7 @@ export default function ViewImage(props: any) {
         else {
             navigate('/scantext');
         }
+
 
     };
 
