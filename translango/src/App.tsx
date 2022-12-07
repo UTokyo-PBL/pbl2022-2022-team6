@@ -20,13 +20,17 @@ function App() {
     <div className={classes.App}>
       <header className={classes.AppHeader}>
         <ThemeProvider theme={theme}>
-          <CssBaseline />
           <Router>
             <Routes>
               <Route path='/test' element={<TestImage />} />
               <Route path='/' element={<WelcomePage />} />
               <Route path="/view-image" element={<ViewImage />} />
               <Route path="/signin" element={<SignInPage />} />
+              <Route path='/sign-up'>
+              <Route index element={<GetSignUpDetails />}/>
+                <Route path='confirm-email' element={<SignUpConfirmEmail />} />
+                <Route path='create-profile' element={<CreateProfile />}/>
+              </Route>
             </Routes>
           </Router>
         </ThemeProvider>
