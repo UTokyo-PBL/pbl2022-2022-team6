@@ -5,61 +5,12 @@ info:
 servers:
   - url: "https://api.translango.com"
 paths:
-  /user/register:
-    post:
-      summary: "signup - register email & password"
-      tags:
-        - "user"
-      description: "register email & password, then one time password will be sent to email"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  example: "example@translango.com"
-                password:
-                  type: string
-                  example: "passw0rd"
-      responses:
-        204:
-          description: "ok"
-          headers:
-            set-cookie:
-              schema:
-                type: string
-                format: uuid
-              description: "session id for identifying user"
-  /user/confirm:
-    post:
-      summary: "signup - confirm email"
-      tags:
-        - "user"
-      description: "confirm email by submitting one time password"
-      parameters:
-        - $ref: "#/components/parameters/cookie"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                onetimepass:
-                  type: integer
-                  example: 1234
-      responses:
-        204:
-          description: "ok"
-        401:
-          description: "one time pass has been expired"
   /user/signup:
     get:
       summary: "signup page"
       tags:
         - "user"
-      description: "signup page - list languages"
+      description: "signup page - list available languages"
       responses:
         200:
           description: "ok"
@@ -72,38 +23,53 @@ paths:
                     type: array
                     items:
                       type: string
-                      example: "日本語"
+                      example: "ja"
     post:
-      summary: "signup - register user information"
+      summary: "signup - register user"
       tags:
         - "user"
-      description: "register full name, username, native language and some settings"
-      parameters:
-        - $ref: "#/components/parameters/cookie"
+      description: "register email, password, full name, username, native language and some settings"
       requestBody:
         content:
           application/json:
             schema:
               type: object
               properties:
-                fullname:
+                email:
                   type: string
-                  example: "John Doe"
+                  example: "example@translango.com"
+                password:
+                  type: string
+                  example: "passw0rd"
+                first_name:
+                  type: string
+                  example: "John"
+                middle_name:
+                  type: string
+                last_name:
+                  type: string
+                  example: "Doe"
                 username:
                   type: string
                   example: "johndoe123"
                 language:
                   type: string
-                  example: "日本語"
-                keep_me_signed_in:
-                  type: boolean
-                email_me_about_special_pricing_and_more:
-                  type: boolean
+                  example: "ja"
       responses:
         204:
           description: "ok"
         401:
           description: "email confirmation has been expired"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/message"
+        409:
+          description: "user already exists"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/message"
   /user/login:
     post:
       summary: "login"
@@ -131,50 +97,46 @@ paths:
                 type: string
                 format: uuid
               description: "session id for authentication"
-        403:
-          description: "please finish signup"
+        401:
+          description: "invalid info input"
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    enum:
-                      - "confirm email"
-                      - "register user information"
-  /user/recover:
-    post:
-      summary: "recover password"
+                $ref: "#/components/schemas/message"
+  /user/profile:
+    get:
+      summary: "user profile"
       tags:
         - "user"
-      description: "submit email to recover password"
+      description: "retrieve user profile"
+      parameters:
+        - $ref: "#/components/parameters/cookie"
+      responses:
+        200:
+          description: "ok"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user"
+    post:
+      summary: "edit user profile"
+      tags:
+        - "user"
+      description: "edit user profile"
       requestBody:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  example: "example@translango.com"
+              $ref: "#/components/schemas/user"
       responses:
         204:
-          description: "email is found"
-          headers:
-            set-cookie:
-              schema:
-                type: string
-                format: uuid
-              description: "session id for identifying user"
-        401:
-          description: "unknown email"
+          description: "ok"
   /dashboard/top:
     get:
-      summary: "dashboard - top"
+      summary: "dashboard/main - top"
       tags:
         - "dashboard"
-      description: "main page - list favourite languages"
+      description: "dashboard/main - list preferred languages"
       parameters:
         - $ref: "#/components/parameters/cookie"
       responses:
@@ -189,13 +151,32 @@ paths:
                     type: array
                     items:
                       type: string
-                      example: "日本語"
-  /dashboard/histories:
-    get:
-      summary: "dashboard - histories"
+                      example: "ja"
+    post:
+      summary: "dashboard/main - update preferred language"
       tags:
         - "dashboard"
-      description: "histories page - list histories"
+      description: "dashboard/main - update preferred languages"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                languages:
+                  type: array
+                  items:
+                    type: string
+                    example: "ja"
+      responses:
+        204:
+          description: "ok"
+  /dashboard/histories:
+    get:
+      summary: "dashboard/histories - list histories"
+      tags:
+        - "dashboard"
+      description: "histories/histories - list histories"
       parameters:
         - $ref: "#/components/parameters/cookie"
         - in: query
@@ -228,7 +209,9 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: "#/components/schemas/object"
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/object"
                   total:
                     type: integer
                     example: 50
@@ -239,12 +222,20 @@ paths:
                     type: string
                     example: "https://api.tranlango.com/dashboard/hisotries?offset=15&limit=15"
     post:
-      summary: "dashboard - add history"
+      summary: "dashboard/camera - add history (detect object or text)"
       tags:
         - "dashboard"
-      description: "camera page - add object"
+      description: "dashboard/camera - add history (detect object or text)"
       parameters:
         - $ref: "#/components/parameters/cookie"
+        - name: type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - "object"
+              - "text"
       requestBody:
         content:
           application/json:
@@ -258,12 +249,38 @@ paths:
                 image_url:
                   type: string
                   example: "https://statics.translango.com/617a283a-44e1-42e5-8a65-c5a29afe51fc.png"
+                original:
+                  type: object
+                  properties:
+                    text:
+                      type: string
+                      example: "Dog"
+                    language:
+                      type: string
+                      example: "English"
+                target:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      text:
+                        type: string
+                        example: "犬"
+                      language:
+                        type: string
+                        example: "ja"
                 country:
                   type: string
                   example: "Japan"
                 city:
                   type: string
                   example: "Tokyo"
+                latitude:
+                  type: number
+                  format: float
+                longitude:
+                  type: number
+                  format: float
       responses:
         200:
           description: "ok"
@@ -273,10 +290,10 @@ paths:
                 $ref: "#/components/schemas/object"
   /dashboard/histories/{objectID}:
     get:
-      summary: "dashboard - history"
+      summary: "dashboard/history - history"
       tags:
         - "dashboard"
-      description: "history page - one history for object"
+      description: "dashboard/history - one history for object"
       parameters:
         - $ref: "#/components/parameters/cookie"
         - $ref: "#/components/parameters/objectID"
@@ -288,10 +305,10 @@ paths:
               schema:
                 $ref: "#/components/schemas/object"
     patch:
-      summary: "dashboard - edit history"
+      summary: "dashboard/history - edit history"
       tags:
         - "dashboard"
-      description: "history page - edit"
+      description: "dashboard/history - edit"
       parameters:
         - $ref: "#/components/parameters/cookie"
         - $ref: "#/components/parameters/objectID"
@@ -312,12 +329,97 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/object"
-  /dashboard/lists:
-    get:
-      summary: "dashboard - lists"
+  /dashboard/histories/{objectID}/caption:
+    patch:
+      summary: "dashboard/histories - edit caption"
       tags:
         - "dashboard"
-      description: "lists page - list lists"
+      description: "dashboard/histories - edit caption"
+      parameters:
+        - $ref: "#/components/parameters/objectID"
+        - $ref: "#/components/parameters/cookie"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                caption:
+                  type: string
+      responses:
+        200:
+          $ref: "#/components/schemas/object"
+        404:
+          description: "resource not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/message"
+  /dashboard/histories/{objectID}/num_failures:
+    patch:
+      summary: "dashboard/histories - edit num failures"
+      tags:
+        - "dashboard"
+      description: "dashboard/histories - edit num failures while gaming"
+      parameters:
+        - $ref: "#/components/parameters/objectID"
+        - $ref: "#/components/parameters/cookie"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                num_failures:
+                  type: integer
+      responses:
+        200:
+          $ref: "#/components/schemas/object"
+        404:
+          description: "resource not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/message"
+  /dashboard/histories/{objectID}/original:
+    patch:
+      summary: "dashboard/histories - edit original language"
+      tags:
+        - "dashboard"
+      description: "dashboard/histories - edit original language"
+      parameters:
+        - $ref: "#/components/parameters/objectID"
+        - $ref: "#/components/parameters/cookie"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                original:
+                  type: object
+                  properties:
+                    text:
+                      type: string
+                      example: "Dog"
+                    language:
+                      type: string
+                      example: "English"
+      responses:
+        200:
+          $ref: "#/components/schemas/object"
+        404:
+          description: "resource not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/message"
+  /dashboard/lists:
+    get:
+      summary: "dashboard/list - lists"
+      tags:
+        - "dashboard"
+      description: "dashboard/list - list lists"
       parameters:
         - $ref: "#/components/parameters/cookie"
       responses:
@@ -328,16 +430,20 @@ paths:
               schema:
                 type: object
                 properties:
-                  data:
+                  default_list:
                     $ref: "#/components/schemas/list"
+                  custom_lists:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/list"
                   total:
                     type: integer
                     example: 3
     post:
-      summary: "dashboard - add list"
+      summary: "dashboard/list - add custom list"
       tags:
         - "dashboard"
-      description: "lists page - add list"
+      description: "dashboard/list - add custom list"
       parameters:
         - $ref: "#/components/parameters/cookie"
       requestBody:
@@ -353,6 +459,25 @@ paths:
               schema:
                 $ref: "#/components/schemas/list"
   /dashboards/lists/{listID}:
+    get:
+      summary: "dashboard/list - start game"
+      tags:
+        - "dashboard"
+      description: "dashboard/list - start game. FE pick a language up from response"
+      parameters:
+        - $ref: "#/components/parameters/cookie"
+        - name: num_questions
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "ok"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/list"
     put:
       summary: "dashboard - edit list"
       tags:
@@ -386,6 +511,13 @@ paths:
           description: "ok"
 components:
   schemas:
+    coordinate:
+      type: object
+      properties:
+        x:
+          type: number
+        y:
+          type: number
     object:
       type: object
       properties:
@@ -393,30 +525,63 @@ components:
           type: string
           format: uuid
           example: "617a283a-44e1-42e5-8a65-c5a29afe51fc"
-        original_text:
-          type: string
-          example: "Dog"
-        original_language:
-          type: string
-          example: "English"
-        translated_text:
-          type: string
-          example: "犬 (いぬ)"
-        translated_language:
-          type: string
-          example: "日本語"
+        original:
+          type: object
+          properties:
+            text:
+              type: string
+              example: "Dog"
+            language:
+              type: string
+              example: "English"
+            sound_url:
+              type: string
+        target:
+          type: array
+          items:
+            type: object
+            properties:
+              text:
+                type: string
+                example: "犬"
+              language:
+                type: string
+                example: "ja"
+              sound_url:
+                type: string
+        bbox:
+          type: object
+          properties:
+            upper_left:
+              $ref: "#/components/schemas/coordinate"
+            lower_left:
+              $ref: "#/components/schemas/coordinate"
+            lower_right:
+              $ref: "#/components/schemas/coordinate"
+            upper_right:
+              $ref: "#/components/schemas/coordinate"
         image_url:
           type: string
           example: "https://statics.translango.com/617a283a-44e1-42e5-8a65-c5a29afe51fc.png"
+        caption:
+          type: string
         country:
           type: string
           example: "Japan"
         city:
           type: string
           example: "Tokyo"
+        latitude:
+          type: number
+          format: float
+        longitude:
+          type: number
+          format: float
         liked:
           type: boolean
           example: true
+        num_failures:
+          type: integer
     list:
       type: object
       properties:
@@ -433,8 +598,40 @@ components:
         items:
           type: array
           items:
+            $ref: "#/components/schemas/object"
+    message:
+      type: object
+      properties:
+        message:
+          type: string
+    user:
+      type: object
+      properties:
+        email:
+          type: string
+          example: "example@translango.com"
+        password:
+          type: string
+          description: "null in response"
+        first_name:
+          type: string
+          example: "John"
+        middle_name:
+          type: string
+        last_name:
+          type: string
+          example: "Doe"
+        username:
+          type: string
+          example: "johndoe123"
+        language:
+          type: string
+          example: "ja"
+        preferred_languages:
+          type: array
+          items:
             type: string
-            description: "history id"
+            example: "ja"
   parameters:
     cookie:
       in: header
