@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import SignUpAndLoginTop from "../../SignUpAndLoginTop";
+import SignUpAndLoginTop from "../SignUpAndLoginTop";
 
 const GetSignUpDetails: React.FC = () => {
   return (

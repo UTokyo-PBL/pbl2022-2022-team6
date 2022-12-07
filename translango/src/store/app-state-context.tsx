@@ -1,4 +1,4 @@
-import { createContext } from "react"
+import { createContext, PropsWithChildren } from "react"
 
 export interface AppContextInterface {
     isLoggedIn: boolean;

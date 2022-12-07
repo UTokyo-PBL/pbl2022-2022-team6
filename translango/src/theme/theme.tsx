@@ -1,6 +1,17 @@
 import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 import { blue, deepPurple } from '@mui/material/colors';
 
+declare module '@mui/material/styles' {
+    interface Palette {
+        lightText?: Palette['primary'],
+        darkText?: Palette['primary']
+    }
+    interface PaletteOptions {
+        lightText?: PaletteOptions['primary'],
+        darkText?: PaletteOptions['primary']
+    }
+}
+
 const theme = createTheme({
     palette: {
         background: {
@@ -18,6 +29,16 @@ const theme = createTheme({
         },
         info: {
             main: '#FFFFFF',
+        },
+        lightText: {
+            main: "#eeeeee",
+            light: "#ffffff",
+            dark: "#dddddd"
+        },
+        darkText: {
+            main: "#121212",
+            light: "#232323",
+            dark: "#000000"
         }
     },
     // typography: {

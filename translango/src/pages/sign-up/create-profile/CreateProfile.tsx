@@ -18,7 +18,7 @@ import {
     TextField,
     Typography,
   } from "@mui/material";
-  import SignUpAndLoginTop from "../../SignUpAndLoginTop";
+  import SignUpAndLoginTop from "../SignUpAndLoginTop";
   
   const CreateProfile: React.FC = () => {
     return (

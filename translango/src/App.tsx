@@ -11,6 +11,9 @@ import SignInPage from './pages/signin';
 import { TestImage } from './pages/test/test';
 
 import './i18n.tsx'
+import GetSignUpDetails from './pages/sign-up/get-sign-up-details/GetSignUpDetails';
+import ConfirmEmail from './pages/sign-up/confirm-email/ConfirmEmail';
+import CreateProfile from './pages/sign-up/create-profile/CreateProfile';
 
 
 
@@ -28,7 +31,7 @@ function App() {
               <Route path="/signin" element={<SignInPage />} />
               <Route path='/sign-up'>
               <Route index element={<GetSignUpDetails />}/>
-                <Route path='confirm-email' element={<SignUpConfirmEmail />} />
+                <Route path='confirm-email' element={<ConfirmEmail />} />
                 <Route path='create-profile' element={<CreateProfile />}/>
               </Route>
             </Routes>
