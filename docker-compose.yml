@@ -1,0 +1,16 @@
+version: '3'
+services:
+  db:
+    # volumeの永続化は行わない
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_USER: translango
+      MYSQL_DATABASE: translango
+      MYSQL_PASSWORD: passw0rd
+      MYSQL_ROOT_PASSWORD: passw0rd
+      TZ: "Asia/Tokyo"
+    volumes:
+      - ./ddl:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
