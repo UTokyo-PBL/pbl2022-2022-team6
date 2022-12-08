@@ -1,0 +1,888 @@
+{
+  "schemas": [
+    {
+      "type": "mysql",
+      "name": "translango",
+      "tables": [
+        {
+          "type": "table",
+          "name": "languages",
+          "columns": [
+            {
+              "name": "id",
+              "datatype": {
+                "type": "int"
+              },
+              "is_primary": true,
+              "is_sequence": true
+            },
+            {
+              "name": "language",
+              "datatype": {
+                "type": "char",
+                "prec": 2
+              }
+            }
+          ],
+          "primary_keys": [
+            {
+              "name": "id",
+              "datatype": {
+                "type": "int"
+              },
+              "is_primary": true,
+              "is_sequence": true
+            }
+          ],
+          "indexes": [
+            {
+              "name": "language",
+              "fields": [
+                {
+                  "name": "language",
+                  "datatype": {
+                    "type": "char",
+                    "prec": 2
+                  }
+                }
+              ],
+              "is_unique": true
+            },
+            {
+              "name": "languages_id_pkey",
+              "fields": [
+                {
+                  "name": "id",
+                  "datatype": {
+                    "type": "int"
+                  },
+                  "is_primary": true,
+                  "is_sequence": true
+                }
+              ],
+              "is_unique": true,
+              "is_primary": true
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "name": "list_objects",
+          "columns": [
+            {
+              "name": "id",
+              "datatype": {
+                "type": "int"
+              },
+              "is_primary": true,
+              "is_sequence": true
+            },
+            {
+              "name": "list_id",
+              "datatype": {
+                "type": "char",
+                "prec": 36
+              }
+            },
+            {
+              "name": "object_id",
+              "datatype": {
+                "type": "char",
+                "prec": 36
+              }
+            },
+            {
+              "name": "created_at",
+              "datatype": {
+                "type": "timestamp"
+              },
+              "default": "CURRENT_TIMESTAMP"
+            },
+            {
+              "name": "updated_at",
+              "datatype": {
+                "type": "timestamp"
+              },
+              "default": "CURRENT_TIMESTAMP"
+            }
+          ],
+          "primary_keys": [
+            {
+              "name": "id",
+              "datatype": {
+                "type": "int"
+              },
+              "is_primary": true,
+              "is_sequence": true
+            }
+          ],
+          "indexes": [
+            {
+              "name": "list_id",
+              "fields": [
+                {
+                  "name": "list_id",
+                  "datatype": {
+                    "type": "char",
+                    "prec": 36
+                  }
+                },
+                {
+                  "name": "object_id",
+                  "datatype": {
+                    "type": "char",
+                    "prec": 36
+                  }
+                }
+              ],
+              "is_unique": true
+            },
+            {
+              "name": "list_objects_id_pkey",
+              "fields": [
+                {
+                  "name": "id",
+                  "datatype": {
+                    "type": "int"
+                  },
+                  "is_primary": true,
+                  "is_sequence": true
+                }
+              ],
+              "is_unique": true,
+              "is_primary": true
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "name": "lists",
+          "columns": [
+            {
+              "name": "id",
+              "datatype": {
+                "type": "char",
+                "prec": 36
+              },
+              "is_primary": true
+            },
+            {
+              "name": "name",
+              "datatype": {
+                "type": "varchar",
+                "prec": 256
+              }
+            },
+            {
+              "name": "icon_name",
+              "datatype": {
+                "type": "varchar",
+                "prec": 256,
+                "nullable": true
+              }
+            },
+            {
+              "name": "created_at",
+              "datatype": {
+                "type": "timestamp"
+              },
+              "default": "CURRENT_TIMESTAMP"
+            },
+            {
+              "name": "updated_at",
+              "datatype": {
+                "type": "timestamp"
+              },
+              "default": "CURRENT_TIMESTAMP"
+            }
+          ],
+          "primary_keys": [
+            {
+              "name": "id",
+              "datatype": {
+                "type": "char",
+                "prec": 36
+              },
+              "is_primary": true
+            }
+          ],
+          "indexes": [
+            {
+              "name": "name",
+              "fields": [
+                {
+                  "name": "name",
+                  "datatype": {
+                    "type": "varchar",
+                    "prec": 256
+                  }
+                }
+              ],
+              "is_unique": true
+            },
+            {
+              "name": "lists_id_pkey",
+              "fields": [
+                {
+                  "name": "id",
+                  "datatype": {
+                    "type": "char",
+                    "prec": 36
+                  },
+                  "is_primary": true
+                }
+              ],
+              "is_unique": true,
+              "is_primary": true
+            }
+          ],
+          "manual": true
+        },
+        {
+          "type": "table",
+          "name": "object_target_objtxts",
+          "columns": [
+            {
+              "name": "id",
+              "datatype": {
+                "type": "int"
+              },
+              "is_primary": true,
+              "is_sequence": true
+            },
+            {
+              "name": "object_id",
+              "datatype": {
+                "type": "char",
+                "prec": 36
+              }
+            },
+            {
+              "name": "target_objtxt_id",
+              "datatype": {
+                "type": "int"
+              }
+            },
+            {
+              "name": "created_at",
+              "datatype": {
+                "type": "timestamp"
+              },
+              "default": "CURRENT_TIMESTAMP"
+            },
+            {
+              "name": "updated_at",
+              "datatype": {
+                "type": "timestamp"
+              },
+              "default": "CURRENT_TIMESTAMP"
+            }
+          ],
+          "primary_keys": [
+            {
+              "name": "id",
+              "datatype": {
+                "type": "int"
+              },
+              "is_primary": true,
+              "is_sequence": true
+            }
+          ],
+          "indexes": [
+            {
+              "name": "object_id",
+              "fields": [
+                {
+                  "name": "object_id",
+                  "datatype": {
+                    "type": "char",
+                    "prec": 36
+                  }
+                },
+                {
+                  "name": "target_objtxt_id",
+                  "datatype": {
+                    "type": "int"
+                  }
+                }
+              ],
+              "is_unique": true
+            },
+            {
+              "name": "object_target_objtxts_id_pkey",
+              "fields": [
+                {
+                  "name": "id",
+                  "datatype": {
+                    "type": "int"
+                  },
+                  "is_primary": true,
+                  "is_sequence": true
+                }
+              ],
+              "is_unique": true,
+              "is_primary": true
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "name": "objects",
+          "columns": [
+            {
+              "name": "id",
+              "datatype": {
+                "type": "char",
+                "prec": 36
+              },
+              "is_primary": true
+            },
+            {
+              "name": "user_id",
+              "datatype": {
+                "type": "char",
+                "prec": 36
+              }
+            },
+            {
+              "name": "original_ojbtxt_id",
+              "datatype": {
+                "type": "int"
+              }
+            },
+            {
+              "name": "bbox_ul_x",
+              "datatype": {
+                "type": "float",
+                "nullable": true
+              }
+            },
+            {
+              "name": "bbox_ul_y",
+              "datatype": {
+                "type": "float",
+                "nullable": true
+              }
+            },
+            {
+              "name": "bbox_ll_x",
+              "datatype": {
+                "type": "float",
+                "nullable": true
+              }
+            },
+            {
+              "name": "bbox_ll_y",
+              "datatype": {
+                "type": "float",
+                "nullable": true
+              }
+            },
+            {
+              "name": "bbox_lr_x",
+              "datatype": {
+                "type": "float",
+                "nullable": true
+              }
+            },
+            {
+              "name": "bbox_lr_y",
+              "datatype": {
+                "type": "float",
+                "nullable": true
+              }
+            },
+            {
+              "name": "bbox_ur_x",
+              "datatype": {
+                "type": "float",
+                "nullable": true
+              }
+            },
+            {
+              "name": "bbox_ur_y",
+              "datatype": {
+                "type": "float",
+                "nullable": true
+              }
+            },
+            {
+              "name": "image_url",
+              "datatype": {
+                "type": "varchar",
+                "prec": 1024
+              }
+            },
+            {
+              "name": "caption",
+              "datatype": {
+                "type": "varchar",
+                "prec": 1024,
+                "nullable": true
+              }
+            },
+            {
+              "name": "country",
+              "datatype": {
+                "type": "varchar",
+                "prec": 512,
+                "nullable": true
+              }
+            },
+            {
+              "name": "city",
+              "datatype": {
+                "type": "varchar",
+                "prec": 512,
+                "nullable": true
+              }
+            },
+            {
+              "name": "latitude",
+              "datatype": {
+                "type": "float",
+                "nullable": true
+              }
+            },
+            {
+              "name": "longitude",
+              "datatype": {
+                "type": "float",
+                "nullable": true
+              }
+            },
+            {
+              "name": "liked",
+              "datatype": {
+                "type": "tinyint",
+                "prec": 1
+              },
+              "default": "0"
+            },
+            {
+              "name": "num_failures",
+              "datatype": {
+                "type": "int"
+              },
+              "default": "0"
+            },
+            {
+              "name": "created_at",
+              "datatype": {
+                "type": "timestamp"
+              },
+              "default": "CURRENT_TIMESTAMP"
+            },
+            {
+              "name": "updated_at",
+              "datatype": {
+                "type": "timestamp"
+              },
+              "default": "CURRENT_TIMESTAMP"
+            }
+          ],
+          "primary_keys": [
+            {
+              "name": "id",
+              "datatype": {
+                "type": "char",
+                "prec": 36
+              },
+              "is_primary": true
+            }
+          ],
+          "indexes": [
+            {
+              "name": "original_ojbtxt_id",
+              "fields": [
+                {
+                  "name": "original_ojbtxt_id",
+                  "datatype": {
+                    "type": "int"
+                  }
+                }
+              ],
+              "is_unique": true
+            },
+            {
+              "name": "objects_id_pkey",
+              "fields": [
+                {
+                  "name": "id",
+                  "datatype": {
+                    "type": "char",
+                    "prec": 36
+                  },
+                  "is_primary": true
+                }
+              ],
+              "is_unique": true,
+              "is_primary": true
+            }
+          ],
+          "manual": true
+        },
+        {
+          "type": "table",
+          "name": "objtxts",
+          "columns": [
+            {
+              "name": "id",
+              "datatype": {
+                "type": "int"
+              },
+              "is_primary": true,
+              "is_sequence": true
+            },
+            {
+              "name": "text",
+              "datatype": {
+                "type": "varchar",
+                "prec": 1024
+              }
+            },
+            {
+              "name": "language",
+              "datatype": {
+                "type": "char",
+                "prec": 2
+              }
+            },
+            {
+              "name": "sound_url",
+              "datatype": {
+                "type": "varchar",
+                "prec": 1024,
+                "nullable": true
+              }
+            },
+            {
+              "name": "created_at",
+              "datatype": {
+                "type": "timestamp"
+              },
+              "default": "CURRENT_TIMESTAMP"
+            },
+            {
+              "name": "updated_at",
+              "datatype": {
+                "type": "timestamp"
+              },
+              "default": "CURRENT_TIMESTAMP"
+            }
+          ],
+          "primary_keys": [
+            {
+              "name": "id",
+              "datatype": {
+                "type": "int"
+              },
+              "is_primary": true,
+              "is_sequence": true
+            }
+          ],
+          "indexes": [
+            {
+              "name": "objtxts_id_pkey",
+              "fields": [
+                {
+                  "name": "id",
+                  "datatype": {
+                    "type": "int"
+                  },
+                  "is_primary": true,
+                  "is_sequence": true
+                }
+              ],
+              "is_unique": true,
+              "is_primary": true
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "name": "sessions",
+          "columns": [
+            {
+              "name": "session",
+              "datatype": {
+                "type": "char",
+                "prec": 36
+              },
+              "is_primary": true
+            },
+            {
+              "name": "user_id",
+              "datatype": {
+                "type": "char",
+                "prec": 36
+              }
+            },
+            {
+              "name": "created_at",
+              "datatype": {
+                "type": "timestamp"
+              },
+              "default": "CURRENT_TIMESTAMP"
+            },
+            {
+              "name": "updated_at",
+              "datatype": {
+                "type": "timestamp"
+              },
+              "default": "CURRENT_TIMESTAMP"
+            }
+          ],
+          "primary_keys": [
+            {
+              "name": "session",
+              "datatype": {
+                "type": "char",
+                "prec": 36
+              },
+              "is_primary": true
+            }
+          ],
+          "indexes": [
+            {
+              "name": "sessions_session_pkey",
+              "fields": [
+                {
+                  "name": "session",
+                  "datatype": {
+                    "type": "char",
+                    "prec": 36
+                  },
+                  "is_primary": true
+                }
+              ],
+              "is_unique": true,
+              "is_primary": true
+            }
+          ],
+          "manual": true
+        },
+        {
+          "type": "table",
+          "name": "user_preferred_languages",
+          "columns": [
+            {
+              "name": "id",
+              "datatype": {
+                "type": "int"
+              },
+              "is_primary": true,
+              "is_sequence": true
+            },
+            {
+              "name": "user_id",
+              "datatype": {
+                "type": "char",
+                "prec": 36
+              }
+            },
+            {
+              "name": "language",
+              "datatype": {
+                "type": "char",
+                "prec": 2
+              }
+            },
+            {
+              "name": "created_at",
+              "datatype": {
+                "type": "timestamp"
+              },
+              "default": "CURRENT_TIMESTAMP"
+            },
+            {
+              "name": "updated_at",
+              "datatype": {
+                "type": "timestamp"
+              },
+              "default": "CURRENT_TIMESTAMP"
+            }
+          ],
+          "primary_keys": [
+            {
+              "name": "id",
+              "datatype": {
+                "type": "int"
+              },
+              "is_primary": true,
+              "is_sequence": true
+            }
+          ],
+          "indexes": [
+            {
+              "name": "user_id",
+              "fields": [
+                {
+                  "name": "user_id",
+                  "datatype": {
+                    "type": "char",
+                    "prec": 36
+                  }
+                },
+                {
+                  "name": "language",
+                  "datatype": {
+                    "type": "char",
+                    "prec": 2
+                  }
+                }
+              ],
+              "is_unique": true
+            },
+            {
+              "name": "user_preferred_languages_id_pkey",
+              "fields": [
+                {
+                  "name": "id",
+                  "datatype": {
+                    "type": "int"
+                  },
+                  "is_primary": true,
+                  "is_sequence": true
+                }
+              ],
+              "is_unique": true,
+              "is_primary": true
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "name": "users",
+          "columns": [
+            {
+              "name": "id",
+              "datatype": {
+                "type": "char",
+                "prec": 36
+              },
+              "is_primary": true
+            },
+            {
+              "name": "email",
+              "datatype": {
+                "type": "varchar",
+                "prec": 512
+              }
+            },
+            {
+              "name": "password",
+              "datatype": {
+                "type": "varchar",
+                "prec": 512
+              }
+            },
+            {
+              "name": "first_name",
+              "datatype": {
+                "type": "varchar",
+                "prec": 256
+              }
+            },
+            {
+              "name": "middle_name",
+              "datatype": {
+                "type": "varchar",
+                "prec": 256
+              }
+            },
+            {
+              "name": "last_name",
+              "datatype": {
+                "type": "varchar",
+                "prec": 256
+              }
+            },
+            {
+              "name": "username",
+              "datatype": {
+                "type": "varchar",
+                "prec": 512
+              }
+            },
+            {
+              "name": "language",
+              "datatype": {
+                "type": "char",
+                "prec": 2
+              }
+            },
+            {
+              "name": "created_at",
+              "datatype": {
+                "type": "timestamp"
+              },
+              "default": "CURRENT_TIMESTAMP"
+            },
+            {
+              "name": "updated_at",
+              "datatype": {
+                "type": "timestamp"
+              },
+              "default": "CURRENT_TIMESTAMP"
+            }
+          ],
+          "primary_keys": [
+            {
+              "name": "id",
+              "datatype": {
+                "type": "char",
+                "prec": 36
+              },
+              "is_primary": true
+            }
+          ],
+          "indexes": [
+            {
+              "name": "email",
+              "fields": [
+                {
+                  "name": "email",
+                  "datatype": {
+                    "type": "varchar",
+                    "prec": 512
+                  }
+                }
+              ],
+              "is_unique": true
+            },
+            {
+              "name": "username",
+              "fields": [
+                {
+                  "name": "username",
+                  "datatype": {
+                    "type": "varchar",
+                    "prec": 512
+                  }
+                }
+              ],
+              "is_unique": true
+            },
+            {
+              "name": "users_id_pkey",
+              "fields": [
+                {
+                  "name": "id",
+                  "datatype": {
+                    "type": "char",
+                    "prec": 36
+                  },
+                  "is_primary": true
+                }
+              ],
+              "is_unique": true,
+              "is_primary": true
+            }
+          ],
+          "manual": true
+        }
+      ]
+    }
+  ]
+}
