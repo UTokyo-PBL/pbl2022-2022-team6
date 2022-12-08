@@ -276,8 +276,10 @@ components:
       properties:
         x:
           type: number
+          format: float
         y:
           type: number
+          format: float
     object:
       type: object
       properties:
