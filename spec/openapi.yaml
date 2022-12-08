@@ -177,7 +177,7 @@ paths:
         $ref: "#/components/requestBodies/caption"
       responses:
         200:
-          $ref: "#/components/schemas/object"
+          $ref: "#/components/responses/object"
         404:
           $ref: "#/components/responses/resource-not-found"
   /dashboard/histories/{objectID}/num_failures:
@@ -193,7 +193,7 @@ paths:
         $ref: "#/components/requestBodies/num-failures"
       responses:
         200:
-          $ref: "#/components/schemas/object"
+          $ref: "#/components/responses/object"
         404:
           $ref: "#/components/responses/resource-not-found"
   /dashboard/histories/{objectID}/original:
@@ -209,7 +209,7 @@ paths:
         $ref: "#/components/requestBodies/original"
       responses:
         200:
-          $ref: "#/components/schemas/object"
+          $ref: "#/components/responses/object"
         404:
           $ref: "#/components/responses/resource-not-found"
   /dashboard/lists:
