@@ -1,39 +1,40 @@
 import {
-    AccountCircle,
-    Add,
-    Google,
-    Language,
-    Person,
-  } from "@mui/icons-material";
-  import {
-    Avatar,
-    Button,
-    Box,
-    Checkbox,
-    Divider,
-    Fab,
-    FormControlLabel,
-    InputAdornment,
-    Stack,
-    TextField,
-    Typography,
-  } from "@mui/material";
-  import SignUpAndLoginTop from "../SignUpAndLoginTop";
-  
-  const CreateProfile: React.FC = () => {
-    return (
+  AccountCircle,
+  Add,
+  Google,
+  Language,
+  Person,
+} from "@mui/icons-material";
+import {
+  Avatar,
+  Button,
+  Box,
+  Checkbox,
+  Divider,
+  Fab,
+  FormControlLabel,
+  InputAdornment,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import FillPageWithSidePic from "../../../components/FillPageWithSidePic";
+import SignUpAndLoginTop from "../SignUpAndLoginTop";
+
+const CreateProfile: React.FC = () => {
+  return (
+    <FillPageWithSidePic>
       <Stack>
         <SignUpAndLoginTop
           backTo="/sign-up/confirm-email"
           title="Let's Set Up"
           subtitle="Create your profile here"
         />
-  
+
         <Stack component="form" p={4} spacing={2}>
-          <Box marginX={'auto'}>
+          <Box marginX={"auto"}>
             <Avatar
               sx={{
-                  
                 width: { xs: "150px", sm: "300px" },
                 height: { xs: "150px", sm: "300px" },
               }}
@@ -59,7 +60,7 @@ import {
               {/* <Chip label="+" color="secondary" onClick={() => {}} /> */}
             </Box>
           </Box>
-  
+
           <TextField
             fullWidth
             variant="standard"
@@ -72,7 +73,7 @@ import {
               ),
             }}
           />
-  
+
           <TextField
             fullWidth
             variant="standard"
@@ -87,7 +88,7 @@ import {
               ),
             }}
           />
-  
+
           <TextField
             fullWidth
             variant="standard"
@@ -100,35 +101,35 @@ import {
               ),
             }}
           />
-  
+
           <FormControlLabel
             sx={{ width: "100%" }}
             control={<Checkbox defaultChecked />}
             label="Keep me signed in"
           />
-  
+
           <FormControlLabel
             sx={{ width: "100%" }}
             control={<Checkbox defaultChecked />}
             label="Email me about special pricing and more"
           />
-  
+
           <Button variant="contained" fullWidth>
             Create Account
           </Button>
-  
+
           <Divider>Or sign in with</Divider>
-  
+
           <Button startIcon={<Google />}>Google</Button>
-  
+
           <Button>
             Already have an account?{" "}
             <Typography variant="subtitle2">Log in</Typography>
           </Button>
         </Stack>
       </Stack>
-    );
-  };
-  
-  export default CreateProfile;
-  
+    </FillPageWithSidePic>
+  );
+};
+
+export default CreateProfile;
