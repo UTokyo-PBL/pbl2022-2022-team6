@@ -17,16 +17,16 @@ import { lang_country_two_letter_codes } from "../types/common/common.types";
 import ReactCountryFlag from "react-country-flag";
 
 const FavouriteLanguages: React.FC<{
-  fav_languages: lang_country_two_letter_codes[];
+  fav_languages: Set<lang_country_two_letter_codes>;
 }> = ({ fav_languages }) => {
   return (
     <Stack>
       <Box>
         <Typography variant="caption">Favourite Languages</Typography>
-        <Typography variant="body1">{fav_languages.length}</Typography>
+        <Typography variant="body1">{fav_languages.size}</Typography>
       </Box>
       <Stack direction="row" spacing={1} alignItems="center">
-        {fav_languages.map((lang_and_country_code) => {
+        {[...fav_languages.values()].map((lang_and_country_code) => {
           const country_code = lang_and_country_code.substring(3);
           return (
             <Avatar sx={{border: '2px solid lightgray', bgcolor:"primary.main"}} key={lang_and_country_code}>
