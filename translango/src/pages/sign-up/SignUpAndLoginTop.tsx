@@ -52,7 +52,6 @@ const SignUpAndLoginTop: React.FC<Props> = ({ backTo, title, subtitle }) => {
             <Typography
               variant="h5"
               component="div"
-              noWrap
               sx={{ flexGrow: 1, alignSelf: "flex-end" }}
             >
               {subtitle}
