@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS languages;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS sessions;
+DROP TABLE IF EXISTS user_preferred_languages;
+DROP TABLE IF EXISTS objtxts;
+DROP TABLE IF EXISTS objects;
+DROP TABLE IF EXISTS object_target_objtxts;
+DROP TABLE IF EXISTS lists;
+DROP TABLE IF EXISTS list_objects;
