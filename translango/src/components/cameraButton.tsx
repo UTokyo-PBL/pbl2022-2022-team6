@@ -1,5 +1,5 @@
 import { Button, ThemeProvider } from '@mui/material';
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import theme from '../theme/theme';
 import { Navigate } from "react-router-dom";

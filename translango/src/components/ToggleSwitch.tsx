@@ -1,10 +1,7 @@
-import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import FormGroup from '@mui/material/FormGroup';
-import Switch, { SwitchProps } from '@mui/material/Switch';
+import Switch from '@mui/material/Switch';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import TextFieldsIcon from '@mui/icons-material/TextFields';
 import ViewInArIcon from '@mui/icons-material/ViewInAr';
 import TitleIcon from '@mui/icons-material/Title';
 

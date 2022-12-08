@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, MenuItem } from "@mui/material";
+import { FormControl, MenuItem } from "@mui/material";
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import React from "react";
 import { useTranslation } from 'react-i18next';
