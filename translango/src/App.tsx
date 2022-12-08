@@ -12,6 +12,7 @@ import GetSignUpDetails from './pages/sign-up/get-sign-up-details/GetSignUpDetai
 import ConfirmEmail from './pages/sign-up/confirm-email/ConfirmEmail';
 import CreateProfile from './pages/sign-up/create-profile/CreateProfile';
 import Dashboard from './pages/dashboard/Dashboard';
+import SelectLanguagesPage from './pages/select-languages/SelectLanguagesPage';
 
 
 function App() {
@@ -26,8 +27,9 @@ function App() {
               <Route path='/' element={<WelcomePage />} />
               <Route path="/view-image" element={<ViewImage />} />
               <Route path="/signin" element={<SignInPage />} />
+              <Route path="/select-favourite-languages" element={<SelectLanguagesPage/>} />
               <Route path='/sign-up'>
-              <Route index element={<GetSignUpDetails />}/>
+                <Route index element={<GetSignUpDetails />}/>
                 <Route path='confirm-email' element={<ConfirmEmail />} />
                 <Route path='create-profile' element={<CreateProfile />}/>
               </Route>

@@ -9,7 +9,7 @@ export interface AppContextInterface {
     email?: string;
     profile_pic_url?: string;
     nativeLanguage?: lang_country_two_letter_codes;
-    favouriteLanguages: lang_country_two_letter_codes[];
+    favouriteLanguages: Set<lang_country_two_letter_codes>;
     theme: "light" | "dark";
 };
 
@@ -19,7 +19,7 @@ const defaultCtx: AppContextInterface = {
     lastName: "User!",
     username: "user",
     nativeLanguage: "en-US",
-    favouriteLanguages: ["ja-JP"],
+    favouriteLanguages: new Set<lang_country_two_letter_codes>(["ja-JP"]),
     theme: "light"
 }
 
