@@ -12,7 +12,7 @@ declare module '@mui/material/styles' {
     }
 }
 
-const theme = createTheme({
+const theme = responsiveFontSizes(createTheme({
     palette: {
         background: {
             default: "#FAEEFC",
@@ -48,6 +48,6 @@ const theme = createTheme({
     // },
 
 }
-);
+));
 
-export default responsiveFontSizes(theme);
+export default theme;
