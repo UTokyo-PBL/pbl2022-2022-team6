@@ -1,12 +1,13 @@
-package middleware
+package httpmiddleware
 
 import (
 	"context"
 	"database/sql"
 	"errors"
-	"github.com/UTokyo-PBL/pbl2022-2022-team6/gen/daocore"
 	"net/http"
 	"time"
+
+	"github.com/UTokyo-PBL/pbl2022-2022-team6/gen/daocore"
 
 	"github.com/labstack/echo-contrib/session"
 
