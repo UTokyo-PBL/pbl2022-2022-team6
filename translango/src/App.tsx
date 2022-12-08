@@ -11,6 +11,7 @@ import './i18n.tsx'
 import GetSignUpDetails from './pages/sign-up/get-sign-up-details/GetSignUpDetails';
 import ConfirmEmail from './pages/sign-up/confirm-email/ConfirmEmail';
 import CreateProfile from './pages/sign-up/create-profile/CreateProfile';
+import Dashboard from './pages/dashboard/Dashboard';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <ThemeProvider theme={theme}>
           <Router>
             <Routes>
+              <Route path='/dashboard' element={<Dashboard/>} />
               <Route path='/test' element={<TestImage />} />
               <Route path='/' element={<WelcomePage />} />
               <Route path="/view-image" element={<ViewImage />} />
