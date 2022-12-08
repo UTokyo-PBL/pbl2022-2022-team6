@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"text/template"
 
-	"github.com/nagaseitteam/allocation-app/dao/src/util/name"
+	"github.com/UTokyo-PBL/pbl2022-2022-team6/pkg/name"
 )
 
 var excludeTables = map[string]bool{

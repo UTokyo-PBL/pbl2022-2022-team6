@@ -8,7 +8,7 @@ import (
     "time"
 
     "github.com/Masterminds/squirrel"
-    "github.com/nagaseitteam/allocation-app/dao/src/dberror"
+    "github.com/UTokyo-PBL/pbl2022-2022-team6/pkg/dberror"
 )
 
 {{ template "metadata" . }}
