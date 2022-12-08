@@ -595,7 +595,7 @@ components:
         icon_name:
           type: string
           example: "book"
-        items:
+        objects:
           type: array
           items:
             $ref: "#/components/schemas/object"
