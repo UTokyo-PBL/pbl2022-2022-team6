@@ -1,10 +1,11 @@
-import { ArrowBack } from "@mui/icons-material";
+import { ChevronLeft } from "@mui/icons-material";
 import {
+  AppBar,
   Box,
-  Chip,
-  Stack,
+  IconButton,
+  styled,
+  Toolbar,
   Typography,
-  useTheme,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 interface Props {
@@ -13,18 +14,53 @@ interface Props {
   subtitle: string;
 }
 
+const StyledToolbar = styled(Toolbar)(({ theme }) => ({
+  alignItems: "flex-start",
+  paddingTop: theme.spacing(1),
+  paddingBottom: theme.spacing(2),
+  // Override media queries injected by theme.mixins.toolbar
+  "@media all": {
+    minHeight: 128,
+  },
+}));
+
 const SignUpAndLoginTop: React.FC<Props> = ({ backTo, title, subtitle }) => {
   const navigate = useNavigate();
-  const theme = useTheme();
   return (
-    <Stack bgcolor="primary.main" p={2} color={theme.palette.lightText!.main}>
-      <Box component="span" position="relative">
-        {/* <IconButton component={RouterLink} to={backTo}><ArrowBack/></IconButton> */}
-        <Chip icon={<ArrowBack />} onClick={() => navigate(backTo)} />
-      </Box>
-      <Typography variant="h1">{title}</Typography>
-      <Typography variant="h2">{subtitle}</Typography>
-    </Stack>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static">
+        <StyledToolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            sx={{ mr: 2 }}
+            onClick={() => navigate(backTo)}
+          >
+            <ChevronLeft />
+          </IconButton>
+          <Box sx={{ flexGrow: 1, alignSelf: "flex-end" }}>
+            <Typography
+              variant="h3"
+              noWrap
+              component="div"
+              sx={{ flexGrow: 1, alignSelf: "flex-end" }}
+            >
+              {title}
+            </Typography>
+            <Typography
+              variant="h4"
+              component="div"
+              noWrap
+              sx={{ flexGrow: 1, alignSelf: "flex-end" }}
+            >
+              {subtitle}
+            </Typography>
+          </Box>
+        </StyledToolbar>
+      </AppBar>
+    </Box>
   );
 };
 
