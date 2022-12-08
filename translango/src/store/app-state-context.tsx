@@ -1,17 +1,25 @@
 import { createContext, PropsWithChildren } from "react"
+import { lang_country_two_letter_codes } from "../types/common/common.types";
 
 export interface AppContextInterface {
     isLoggedIn: boolean;
+    firstName?: string;
+    lastName?: string;
     username?: string;
     email?: string;
-    nativeLanguage?: string;
-    favouriteLanguages?: string[];
+    profile_pic_url?: string;
+    nativeLanguage?: lang_country_two_letter_codes;
+    favouriteLanguages: lang_country_two_letter_codes[];
     theme: "light" | "dark";
 };
 
 const defaultCtx: AppContextInterface = {
     isLoggedIn: false,
-    nativeLanguage: "en",
+    firstName: "Hey",
+    lastName: "User!",
+    username: "user",
+    nativeLanguage: "en-US",
+    favouriteLanguages: ["ja-JP"],
     theme: "light"
 }
 
