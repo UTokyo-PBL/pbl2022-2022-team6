@@ -1,5 +1,6 @@
 import { Box, Button, Divider, OutlinedInput, Stack, Typography } from "@mui/material";
 import { useContext } from "react";
+import FillPageWithSidePic from "../../../components/FillPageWithSidePic";
 import AppCtx from "../../../store/app-state-context";
 import SignUpAndLoginTop from "../SignUpAndLoginTop";
 import ConfirmEmailPic from "./confirm-email-logo.svg";
@@ -7,7 +8,7 @@ import ConfirmEmailPic from "./confirm-email-logo.svg";
 const ConfirmEmail: React.FC = () => {
   const ctx = useContext(AppCtx);
   return (
-    <>
+    <FillPageWithSidePic>
       <SignUpAndLoginTop
         backTo="/sign-up"
         title="One more step."
@@ -30,7 +31,7 @@ const ConfirmEmail: React.FC = () => {
 
         <Button fullWidth variant='contained'>Submit</Button>
       </Stack>
-    </>
+    </FillPageWithSidePic>
   );
 };
 
