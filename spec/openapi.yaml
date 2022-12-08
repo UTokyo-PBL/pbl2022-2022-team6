@@ -13,48 +13,14 @@ paths:
       description: "signup page - list available languages"
       responses:
         200:
-          description: "ok"
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  languages:
-                    type: array
-                    items:
-                      type: string
-                      example: "ja"
+          $ref: "#/components/responses/languages"
     post:
       summary: "signup - register user"
       tags:
         - "user"
       description: "register email, password, full name, username, native language and some settings"
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  example: "example@translango.com"
-                password:
-                  type: string
-                  example: "passw0rd"
-                first_name:
-                  type: string
-                  example: "John"
-                middle_name:
-                  type: string
-                last_name:
-                  type: string
-                  example: "Doe"
-                username:
-                  type: string
-                  example: "johndoe123"
-                language:
-                  type: string
-                  example: "ja"
+        $ref: "#/components/requestBodies/user"
       responses:
         204:
           description: "ok"
@@ -104,368 +70,179 @@ paths:
               schema:
                 $ref: "#/components/schemas/message"
   /user/profile:
+    parameters:
+      - $ref: "#/components/parameters/cookie"
     get:
       summary: "user profile"
       tags:
         - "user"
       description: "retrieve user profile"
-      parameters:
-        - $ref: "#/components/parameters/cookie"
       responses:
         200:
-          description: "ok"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/user"
+          $ref: "#/components/responses/user"
     post:
       summary: "edit user profile"
       tags:
         - "user"
       description: "edit user profile"
       requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/user"
+        $ref: "#/components/requestBodies/user"
       responses:
         204:
           description: "ok"
   /dashboard/top:
+    parameters:
+      - $ref: "#/components/parameters/cookie"
     get:
       summary: "dashboard/main - top"
       tags:
         - "dashboard"
       description: "dashboard/main - list preferred languages"
-      parameters:
-        - $ref: "#/components/parameters/cookie"
       responses:
         200:
-          description: "ok"
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  languages:
-                    type: array
-                    items:
-                      type: string
-                      example: "ja"
+          $ref: "#/components/responses/languages"
     post:
       summary: "dashboard/main - update preferred language"
       tags:
         - "dashboard"
       description: "dashboard/main - update preferred languages"
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                languages:
-                  type: array
-                  items:
-                    type: string
-                    example: "ja"
+        $ref: "#/components/requestBodies/preferred_languages"
       responses:
         204:
           description: "ok"
   /dashboard/histories:
+    parameters:
+      - $ref: "#/components/parameters/cookie"
     get:
       summary: "dashboard/histories - list histories"
       tags:
         - "dashboard"
       description: "histories/histories - list histories"
       parameters:
-        - $ref: "#/components/parameters/cookie"
-        - in: query
-          name: key
-          description: "search on your translated words"
-          required: false
-          schema:
-            type: string
-            example: "dog"
-        - in: query
-          name: offset
-          description: "pagination from"
-          required: true
-          schema:
-            type: integer
-            example: 30
-        - in: query
-          name: limit
-          description: "pagination total"
-          required: true
-          schema:
-            type: integer
-            example: 15
+        - $ref: "#/components/parameters/search-query"
       responses:
         200:
-          description: "ok"
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/object"
-                  total:
-                    type: integer
-                    example: 50
-                  has_next:
-                    type: boolean
-                    example: true
-                  next_page_url:
-                    type: string
-                    example: "https://api.tranlango.com/dashboard/hisotries?offset=15&limit=15"
+          $ref: "#/components/responses/objects"
     post:
       summary: "dashboard/camera - add history (detect object or text)"
       tags:
         - "dashboard"
       description: "dashboard/camera - add history (detect object or text)"
       parameters:
-        - $ref: "#/components/parameters/cookie"
-        - name: type
-          in: query
-          required: true
-          schema:
-            type: string
-            enum:
-              - "object"
-              - "text"
+        - $ref: "#/components/parameters/type-query"
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                  format: uuid
-                  example: "617a283a-44e1-42e5-8a65-c5a29afe51fc"
-                image_url:
-                  type: string
-                  example: "https://statics.translango.com/617a283a-44e1-42e5-8a65-c5a29afe51fc.png"
-                original:
-                  type: object
-                  properties:
-                    text:
-                      type: string
-                      example: "Dog"
-                    language:
-                      type: string
-                      example: "English"
-                target:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      text:
-                        type: string
-                        example: "犬"
-                      language:
-                        type: string
-                        example: "ja"
-                country:
-                  type: string
-                  example: "Japan"
-                city:
-                  type: string
-                  example: "Tokyo"
-                latitude:
-                  type: number
-                  format: float
-                longitude:
-                  type: number
-                  format: float
+        $ref: "#/components/requestBodies/object"
       responses:
         200:
-          description: "ok"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/object"
+          $ref: "#/components/responses/object"
   /dashboard/histories/{objectID}:
+    parameters:
+      - $ref: "#/components/parameters/cookie"
+      - $ref: "#/components/parameters/objectID"
     get:
       summary: "dashboard/history - history"
       tags:
         - "dashboard"
       description: "dashboard/history - one history for object"
-      parameters:
-        - $ref: "#/components/parameters/cookie"
-        - $ref: "#/components/parameters/objectID"
       responses:
         200:
-          description: "ok"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/object"
-    patch:
-      summary: "dashboard/history - edit history"
+          $ref: "#/components/responses/object"
+  /dashboard/histories/{objectID}/liked:
+    parameters:
+      - $ref: "#/components/parameters/cookie"
+      - $ref: "#/components/parameters/objectID"
+    post:
+      summary: "dashboard/history - edit liked"
       tags:
         - "dashboard"
-      description: "dashboard/history - edit"
-      parameters:
-        - $ref: "#/components/parameters/cookie"
-        - $ref: "#/components/parameters/objectID"
+      description: "dashboard/history - edit liked"
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                liked:
-                  type: boolean
+        $ref: "#/components/requestBodies/liked"
       responses:
         200:
-          description: "ok"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/object"
+          $ref: "#/components/responses/object"
+        404:
+          $ref: "#/components/responses/resource-not-found"
   /dashboard/histories/{objectID}/caption:
-    patch:
+    parameters:
+      - $ref: "#/components/parameters/objectID"
+      - $ref: "#/components/parameters/cookie"
+    post:
       summary: "dashboard/histories - edit caption"
       tags:
         - "dashboard"
       description: "dashboard/histories - edit caption"
-      parameters:
-        - $ref: "#/components/parameters/objectID"
-        - $ref: "#/components/parameters/cookie"
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                caption:
-                  type: string
+        $ref: "#/components/requestBodies/caption"
       responses:
         200:
           $ref: "#/components/schemas/object"
         404:
-          description: "resource not found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/message"
+          $ref: "#/components/responses/resource-not-found"
   /dashboard/histories/{objectID}/num_failures:
-    patch:
+    parameters:
+      - $ref: "#/components/parameters/objectID"
+      - $ref: "#/components/parameters/cookie"
+    post:
       summary: "dashboard/histories - edit num failures"
       tags:
         - "dashboard"
       description: "dashboard/histories - edit num failures while gaming"
-      parameters:
-        - $ref: "#/components/parameters/objectID"
-        - $ref: "#/components/parameters/cookie"
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                num_failures:
-                  type: integer
+        $ref: "#/components/requestBodies/num-failures"
       responses:
         200:
           $ref: "#/components/schemas/object"
         404:
-          description: "resource not found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/message"
+          $ref: "#/components/responses/resource-not-found"
   /dashboard/histories/{objectID}/original:
-    patch:
+    parameters:
+      - $ref: "#/components/parameters/objectID"
+      - $ref: "#/components/parameters/cookie"
+    post:
       summary: "dashboard/histories - edit original language"
       tags:
         - "dashboard"
       description: "dashboard/histories - edit original language"
-      parameters:
-        - $ref: "#/components/parameters/objectID"
-        - $ref: "#/components/parameters/cookie"
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                original:
-                  type: object
-                  properties:
-                    text:
-                      type: string
-                      example: "Dog"
-                    language:
-                      type: string
-                      example: "English"
+        $ref: "#/components/requestBodies/original"
       responses:
         200:
           $ref: "#/components/schemas/object"
         404:
-          description: "resource not found"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/message"
+          $ref: "#/components/responses/resource-not-found"
   /dashboard/lists:
+    parameters:
+      - $ref: "#/components/parameters/cookie"
     get:
       summary: "dashboard/list - lists"
       tags:
         - "dashboard"
       description: "dashboard/list - list lists"
-      parameters:
-        - $ref: "#/components/parameters/cookie"
       responses:
         200:
-          description: "ok"
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  default_list:
-                    $ref: "#/components/schemas/list"
-                  custom_lists:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/list"
-                  total:
-                    type: integer
-                    example: 3
+          $ref: "#/components/responses/lists"
     post:
       summary: "dashboard/list - add custom list"
       tags:
         - "dashboard"
       description: "dashboard/list - add custom list"
-      parameters:
-        - $ref: "#/components/parameters/cookie"
       requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/list"
+        $ref: "#/components/requestBodies/list"
       responses:
         200:
-          description: "ok"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/list"
+          $ref: "#/components/responses/list"
   /dashboards/lists/{listID}:
+    parameters:
+      - $ref: "#/components/parameters/cookie"
+      - $ref: "#/components/parameters/listID"
     get:
       summary: "dashboard/list - start game"
       tags:
         - "dashboard"
       description: "dashboard/list - start game. FE pick a language up from response"
       parameters:
-        - $ref: "#/components/parameters/cookie"
         - name: num_questions
           in: query
           required: true
@@ -473,39 +250,22 @@ paths:
             type: integer
       responses:
         200:
-          description: "ok"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/list"
+          $ref: "#/components/responses/list"
     put:
       summary: "dashboard - edit list"
       tags:
         - "dashboard"
       description: "list page - edit list"
-      parameters:
-        - $ref: "#/components/parameters/cookie"
-        - $ref: "#/components/parameters/listID"
       requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/list"
+        $ref: "#/components/requestBodies/list"
       responses:
         200:
-          description: "ok"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/list"
+          $ref: "#/components/responses/list"
     delete:
       summary: "dashboard - delete list"
       tags:
         - "dashboard"
       description: "list page - delete list"
-      parameters:
-        - $ref: "#/components/parameters/cookie"
-        - $ref: "#/components/parameters/listID"
       responses:
         204:
           description: "ok"
@@ -524,7 +284,6 @@ components:
         id:
           type: string
           format: uuid
-          example: "617a283a-44e1-42e5-8a65-c5a29afe51fc"
         original:
           type: object
           properties:
@@ -657,3 +416,194 @@ components:
       schema:
         type: string
         example: "d676c916-23e6-4f55-b2ce-48d0eec7ed00"
+    search-query:
+      in: query
+      name: key
+      description: "search on your translated words"
+      required: false
+      schema:
+        type: string
+        example: "dog"
+    type-query:
+      name: type
+      in: query
+      required: true
+      schema:
+        type: string
+        enum:
+          - "object"
+          - "text"
+  requestBodies:
+    user:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/user"
+    preferred_languages:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              languages:
+                type: array
+                items:
+                  type: string
+                  example: "ja"
+    object:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: "617a283a-44e1-42e5-8a65-c5a29afe51fc"
+              image_url:
+                type: string
+                example: "https://statics.translango.com/617a283a-44e1-42e5-8a65-c5a29afe51fc.png"
+              original:
+                type: object
+                properties:
+                  text:
+                    type: string
+                    example: "Dog"
+                  language:
+                    type: string
+                    example: "English"
+              target:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    text:
+                      type: string
+                      example: "犬"
+                    language:
+                      type: string
+                      example: "ja"
+              country:
+                type: string
+                example: "Japan"
+              city:
+                type: string
+                example: "Tokyo"
+              latitude:
+                type: number
+                format: float
+              longitude:
+                type: number
+                format: float
+    liked:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+              liked:
+                type: boolean
+    caption:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              caption:
+                type: string
+    num-failures:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              num_failures:
+                type: integer
+    original:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              original:
+                type: object
+                properties:
+                  text:
+                    type: string
+                    example: "Dog"
+                  language:
+                    type: string
+                    example: "English"
+    list:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/list"
+  responses:
+    languages:
+      description: "ok"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              languages:
+                type: array
+                items:
+                  type: string
+                  example: "ja"
+    user:
+      description: "ok"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/user"
+    objects:
+      description: "ok"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/object"
+              total:
+                type: integer
+    object:
+      description: "ok"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/object"
+    resource-not-found:
+      description: "resource not found"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/message"
+    lists:
+      description: "ok"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              default_list:
+                $ref: "#/components/schemas/list"
+              custom_lists:
+                type: array
+                items:
+                  $ref: "#/components/schemas/list"
+              total:
+                type: integer
+                example: 3
+    list:
+      description: "ok"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/list"
