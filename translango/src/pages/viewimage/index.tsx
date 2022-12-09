@@ -7,7 +7,10 @@ import theme from '../../theme/theme';
 import ToggleSwitch from "../../components/ToggleSwitch";
 import TopNavigation from "../../components/TopNavigation";
 import Copyright from "../../components/Copyright";
-import { uploadFile } from 'react-s3';
+import BottomNavigation from "../../components/BottomNavigation";
+import axios from "axios";
+import CommonTranslationController from "../../api/translation/common.handler";
+// import { uploadFile } from 'react-s3';
 import Resizer from "react-image-file-resizer";
 
 
@@ -88,11 +91,11 @@ export default function ViewImage(props: any) {
             );
         });
 
-    const uploadtoS3 = async (file: any) => {
-        uploadFile(file, config)
-            .then((data: any) => console.log(data))
-            .catch((err: any) => console.error(err));
-    }
+    // const uploadtoS3 = async (file: any) => {
+    //     uploadFile(file, config)
+    //         .then((data: any) => console.log(data))
+    //         .catch((err: any) => console.error(err));
+    // }
     const goScan = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         // console.log(toggledObject);
