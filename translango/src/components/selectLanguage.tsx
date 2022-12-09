@@ -29,14 +29,6 @@ export default function SelectLanguage(props: any) {
         { value: 'ja', text: "日本語" },
     ]
 
-    const language_map = {
-        en: 'English',
-        zh: "中文",
-        hi: "हिन्दी",
-        es: "español",
-        ja: "日本語",
-    }
-
 
     return (
         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
