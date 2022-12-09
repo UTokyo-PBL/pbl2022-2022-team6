@@ -2,7 +2,6 @@ package model
 
 import (
 	"errors"
-
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/gen/daocore"
 
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/gen/api"
@@ -34,9 +33,10 @@ func UserFromAPI(a *api.User) (*User, error) {
 	u.FirstName = *a.FirstName
 
 	if a.MiddleName == nil {
-		return nil, errors.New("middle name cannot be null")
+		u.MiddleName = ""
+	} else {
+		u.MiddleName = *a.MiddleName
 	}
-	u.MiddleName = *a.MiddleName
 
 	if a.LastName == nil || *a.LastName == "" {
 		return nil, errors.New("last name cannot be null")
