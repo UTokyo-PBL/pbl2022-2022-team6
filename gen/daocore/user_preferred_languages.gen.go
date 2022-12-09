@@ -125,6 +125,38 @@ func SelectOneUserPreferredLanguageByUserIDAndLanguage(ctx context.Context, txn 
 	return IterateUserPreferredLanguage(stmt.QueryRowContext(ctx, params...))
 }
 
+func SelectUserPreferredLanguageByUserID(ctx context.Context, txn *sql.Tx, user_id *string) ([]*UserPreferredLanguage, error) {
+	eq := squirrel.Eq{}
+	if user_id != nil {
+		eq["user_id"] = *user_id
+	}
+	query, params, err := squirrel.
+		Select(UserPreferredLanguageAllColumns...).
+		From(UserPreferredLanguageTableName).
+		Where(eq).
+		ToSql()
+	if err != nil {
+		return nil, dberror.MapError(err)
+	}
+	stmt, err := txn.PrepareContext(ctx, query)
+	if err != nil {
+		return nil, dberror.MapError(err)
+	}
+	rows, err := stmt.QueryContext(ctx, params...)
+	if err != nil {
+		return nil, dberror.MapError(err)
+	}
+	res := make([]*UserPreferredLanguage, 0)
+	for rows.Next() {
+		t, err := IterateUserPreferredLanguage(rows)
+		if err != nil {
+			return nil, dberror.MapError(err)
+		}
+		res = append(res, &t)
+	}
+	return res, nil
+}
+
 func SelectOneUserPreferredLanguageByID(ctx context.Context, txn *sql.Tx, id *int) (UserPreferredLanguage, error) {
 	eq := squirrel.Eq{}
 	if id != nil {
@@ -264,6 +296,29 @@ func DeleteOneUserPreferredLanguageByUserIDAndLanguage(ctx context.Context, txn 
 	}
 	if language != nil {
 		eq["language"] = *language
+	}
+
+	query, params, err := squirrel.
+		Delete(UserPreferredLanguageTableName).
+		Where(eq).
+		ToSql()
+	if err != nil {
+		return dberror.MapError(err)
+	}
+	stmt, err := txn.PrepareContext(ctx, query)
+	if err != nil {
+		return dberror.MapError(err)
+	}
+	if _, err = stmt.Exec(params...); err != nil {
+		return dberror.MapError(err)
+	}
+	return nil
+}
+
+func DeleteUserPreferredLanguageByUserID(ctx context.Context, txn *sql.Tx, user_id *string) error {
+	eq := squirrel.Eq{}
+	if user_id != nil {
+		eq["user_id"] = *user_id
 	}
 
 	query, params, err := squirrel.

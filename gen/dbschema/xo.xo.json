@@ -748,6 +748,18 @@
               "is_unique": true
             },
             {
+              "name": "user_id_2",
+              "fields": [
+                {
+                  "name": "user_id",
+                  "datatype": {
+                    "type": "char",
+                    "prec": 36
+                  }
+                }
+              ]
+            },
+            {
               "name": "user_preferred_languages_id_pkey",
               "fields": [
                 {

@@ -34,7 +34,8 @@ CREATE TABLE user_preferred_languages (
     `language` CHAR(2) NOT NULL REFERENCES languages(`language`),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
-    UNIQUE (user_id, `language`)
+    UNIQUE (user_id, `language`),
+    INDEX (user_id)
 );
 
 CREATE TABLE objtxts (

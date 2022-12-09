@@ -16,12 +16,12 @@ func (s *Server) PostUserLogout(ec echo.Context, params api.PostUserLogoutParams
 	ctx, cancel := context.WithCancel(ec.Request().Context())
 	defer cancel()
 
-	user, err := httpmiddleware.GetUserFromSession(ec)
+	userID, err := httpmiddleware.GetUserFromSession(ec)
 	if err != nil {
 		return echoutil.ErrInternal(ec, err)
 	}
 
-	msg, err := service.Logout(ctx, s.repo, user.ID)
+	msg, err := service.Logout(ctx, s.repo, userID)
 	if err != nil {
 		return echoutil.ErrInternal(ec, err)
 	}

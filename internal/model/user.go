@@ -12,89 +12,99 @@ import (
 )
 
 type User struct {
-	ID           string
-	FirstName    string
-	MiddleName   string
-	LastName     string
-	Username     string
-	Email        string
-	Password     string
-	Language     string
-	ProfileImage string
+	ID                 string
+	FirstName          string
+	MiddleName         string
+	LastName           string
+	Username           string
+	Email              string
+	Password           string
+	Language           string
+	ProfileImage       string
+	PreferredLanguages []string
 }
 
-func UserFromAPI(a *api.User) (*User, error) {
-	u := new(User)
+func UserFromAPI(u *api.User) (*User, error) {
+	user := new(User)
 
-	if a.Id == nil || a.Id.String() == "" {
+	if u.Id == nil || u.Id.String() == "" {
 		return nil, errors.New("id cannot be null")
 	}
-	u.ID = a.Id.String()
+	user.ID = u.Id.String()
 
-	if a.FirstName == nil || *a.FirstName == "" {
+	if u.FirstName == nil || *u.FirstName == "" {
 		return nil, errors.New("first name cannot be null")
 	}
-	u.FirstName = *a.FirstName
+	user.FirstName = *u.FirstName
 
-	if a.MiddleName == nil {
-		u.MiddleName = ""
+	if u.MiddleName == nil {
+		user.MiddleName = ""
 	} else {
-		u.MiddleName = *a.MiddleName
+		user.MiddleName = *u.MiddleName
 	}
 
-	if a.LastName == nil || *a.LastName == "" {
+	if u.LastName == nil || *u.LastName == "" {
 		return nil, errors.New("last name cannot be null")
 	}
-	u.LastName = *a.LastName
+	user.LastName = *u.LastName
 
-	if a.Username == nil || *a.Username == "" {
+	if u.Username == nil || *u.Username == "" {
 		return nil, errors.New("username cannot be null")
 	}
-	u.Username = *a.Username
+	user.Username = *u.Username
 
-	if a.Email == nil || *a.Email == "" {
+	if u.Email == nil || *u.Email == "" {
 		return nil, errors.New("email cannot be null")
 	}
-	u.Email = *a.Email
+	user.Email = *u.Email
 
-	if a.Password == nil || *a.Password == "" {
+	if u.Password == nil || *u.Password == "" {
 		return nil, errors.New("password cannot be null")
 	}
-	u.Password = encrypto.Encrypto(*a.Password)
+	user.Password = encrypto.Encrypto(*u.Password)
 
-	if a.Language == nil || *a.Language == "" {
+	if u.Language == nil || *u.Language == "" {
 		return nil, errors.New("language cannot be null")
 	}
-	u.Language = *a.Language
+	user.Language = *u.Language
 
-	if a.ProfileImage == nil {
-		u.ProfileImage = contracts.AnonymousImageURL
+	if u.ProfileImage == nil {
+		user.ProfileImage = contracts.AnonymousImageURL
 	} else {
-		u.ProfileImage = *a.ProfileImage
+		user.ProfileImage = *u.ProfileImage
 	}
 
-	return u, nil
+	if u.PreferredLanguages == nil {
+		user.PreferredLanguages = *u.PreferredLanguages
+	}
+
+	return user, nil
 }
 
-func UserFromDAO(d *daocore.User) *User {
-	return &User{
-		ID:           d.ID,
-		FirstName:    d.FirstName,
-		MiddleName:   d.MiddleName,
-		LastName:     d.LastName,
-		Username:     d.Username,
-		Email:        d.Email,
-		Password:     d.Password,
-		Language:     d.Language,
-		ProfileImage: d.ProfileImage,
+func UserFromDAO(u *daocore.User, ps []*daocore.UserPreferredLanguage) *User {
+	user := &User{
+		ID:                 u.ID,
+		FirstName:          u.FirstName,
+		MiddleName:         u.MiddleName,
+		LastName:           u.LastName,
+		Username:           u.Username,
+		Email:              u.Email,
+		Password:           u.Password,
+		Language:           u.Language,
+		ProfileImage:       u.ProfileImage,
+		PreferredLanguages: make([]string, 0, len(ps)),
 	}
+	for _, p := range ps {
+		user.PreferredLanguages = append(user.PreferredLanguages, p.Language)
+	}
+	return user
 }
 
 func (u *User) IsValidPassword(pw string) bool {
 	return u.Password == encrypto.Encrypto(pw)
 }
 
-func (u *User) ToDAO() *daocore.User {
+func (u *User) ToUserDAO() *daocore.User {
 	return &daocore.User{
 		ID:           u.ID,
 		Email:        u.Email,
@@ -106,4 +116,15 @@ func (u *User) ToDAO() *daocore.User {
 		Language:     u.Language,
 		ProfileImage: u.ProfileImage,
 	}
+}
+
+func (u *User) ToUserPreferredLanguagesDAO() []*daocore.UserPreferredLanguage {
+	ps := make([]*daocore.UserPreferredLanguage, 0, len(u.PreferredLanguages))
+	for _, p := range u.PreferredLanguages {
+		ps = append(ps, &daocore.UserPreferredLanguage{
+			UserID:   u.ID,
+			Language: p,
+		})
+	}
+	return ps
 }

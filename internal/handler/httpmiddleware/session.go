@@ -86,28 +86,23 @@ func SessionMiddleware(db *sql.DB, ignorePaths []string) func(next echo.HandlerF
 			if err != nil {
 				return ec.NoContent(http.StatusUnauthorized)
 			}
-			// user idからuserの取得
-			u, err := daocore.SelectOneUserByID(ctx, txn, &s.UserID)
-			if err != nil {
-				return ec.NoContent(http.StatusUnauthorized)
-			}
 
 			if err := txn.Commit(); err != nil {
 				return ec.NoContent(http.StatusInternalServerError)
 			}
 
 			// contextにuser情報を付与
-			ec.Set(ContextUserKey, u)
+			ec.Set(ContextUserKey, s.UserID)
 
 			return next(ec)
 		}
 	}
 }
 
-func GetUserFromSession(ec echo.Context) (*daocore.User, error) {
-	user, ok := ec.Get(ContextUserKey).(daocore.User)
+func GetUserFromSession(ec echo.Context) (string, error) {
+	userID, ok := ec.Get(ContextUserKey).(string)
 	if !ok {
-		return nil, errors.New("cannot dump context into user struct")
+		return "", errors.New("cannot dump context into user struct")
 	}
-	return &user, nil
+	return userID, nil
 }

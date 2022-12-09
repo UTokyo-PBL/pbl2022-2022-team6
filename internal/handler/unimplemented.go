@@ -75,13 +75,3 @@ func (s *Server) PutDashboardsListsListID(ec echo.Context, listID api.ListID, pa
 	//TODO implement me
 	panic("implement me")
 }
-
-func (s *Server) GetUserProfile(ec echo.Context, params api.GetUserProfileParams) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s *Server) PostUserProfile(ec echo.Context, params api.PostUserProfileParams) error {
-	//TODO implement me
-	panic("implement me")
-}
