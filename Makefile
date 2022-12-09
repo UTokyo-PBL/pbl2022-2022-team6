@@ -45,3 +45,7 @@ gen-xo: __init-db-args
 gen-db:
 	mkdir -p gen/daocore
 	go run ./script/dbgen ./gen/dbschema/xo.xo.json
+
+.PHONY: migrate-db
+migrate-db:
+	for file in $$(find ddl/ -type f -name '*.sql' | sort); do mysql -uroot -padmin12345 -h35.190.225.72 --protocol='tcp' --database=translango < $$file; done
