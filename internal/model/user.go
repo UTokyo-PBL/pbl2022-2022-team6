@@ -2,6 +2,7 @@ package model
 
 import (
 	"errors"
+	"github.com/UTokyo-PBL/pbl2022-2022-team6/gen/daocore"
 
 	"github.com/google/uuid"
 
@@ -61,6 +62,32 @@ func UserFromAPI(a *api.User) (*User, error) {
 	return u, nil
 }
 
+func UserFromDAO(d *daocore.User) *User {
+	return &User{
+		ID:         d.ID,
+		FirstName:  d.FirstName,
+		MiddleName: d.MiddleName,
+		LastName:   d.LastName,
+		Username:   d.Username,
+		Email:      d.Email,
+		Password:   d.Password,
+		Language:   d.Language,
+	}
+}
+
 func (u *User) IsValidPassword(pw string) bool {
 	return u.Password == encrypto.Encrypto(pw)
+}
+
+func (u *User) ToDAO() *daocore.User {
+	return &daocore.User{
+		ID:         u.ID,
+		Email:      u.Email,
+		Password:   u.Password,
+		FirstName:  u.FirstName,
+		MiddleName: u.MiddleName,
+		LastName:   u.LastName,
+		Username:   u.Username,
+		Language:   u.Language,
+	}
 }

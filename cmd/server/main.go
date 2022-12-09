@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/UTokyo-PBL/pbl2022-2022-team6/internal/repository"
 	"net/http"
 	"os"
 
@@ -49,6 +50,8 @@ func run() error {
 		return err
 	}
 
+	repo := repository.New(db)
+
 	ss, err := base64.StdEncoding.DecodeString(env.SessionSecret)
 	if err != nil {
 		return err
@@ -87,7 +90,7 @@ func run() error {
 		}),
 	)
 
-	server := handler.New(db)
+	server := handler.New(repo)
 	api.RegisterHandlers(e, server)
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%v", env.Port)))
 	return nil

@@ -9,7 +9,7 @@ import (
 
 type (
 	Environment struct {
-		Port int `envconfig:"PORT" default:"5000"`
+		Port int `envconfig:"PORT" default:"8000"`
 
 		DBEngine string `envconfig:"DB_ENGINE" default:"mysql"`
 		DBHost   string `envconfig:"DB_HOST" default:"localhost"` // or ip address remotely
