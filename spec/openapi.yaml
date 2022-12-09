@@ -368,6 +368,9 @@ components:
     user:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
         email:
           type: string
           example: "example@translango.com"
