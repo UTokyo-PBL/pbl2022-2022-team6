@@ -13,7 +13,7 @@ type (
 
 		DBEngine string `envconfig:"DB_ENGINE" default:"mysql"`
 		DBHost   string `envconfig:"DB_HOST" default:"localhost"` // or ip address remotely
-		DBPort   int    `envconfig:"DB_PORT" default:"3066"`
+		DBPort   int    `envconfig:"DB_PORT" default:"3306"`
 		DBUser   string `envconfig:"DB_USER" default:"translango"`
 		DBPass   string `envconfig:"DB_PASS" default:"passw0rd"`
 		DBName   string `envconfig:"DB_NAME" default:"translango"`

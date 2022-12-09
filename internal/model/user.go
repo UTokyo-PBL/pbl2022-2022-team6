@@ -5,8 +5,6 @@ import (
 
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/gen/daocore"
 
-	"github.com/google/uuid"
-
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/gen/api"
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/pkg/encrypto"
 )
@@ -23,7 +21,12 @@ type User struct {
 }
 
 func UserFromAPI(a *api.User) (*User, error) {
-	u := &User{ID: uuid.NewString()}
+	u := new(User)
+
+	if a.Id == nil || a.Id.String() == "" {
+		return nil, errors.New("id cannot be null")
+	}
+	u.ID = a.Id.String()
 
 	if a.FirstName == nil || *a.FirstName == "" {
 		return nil, errors.New("first name cannot be null")
