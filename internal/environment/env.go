@@ -12,10 +12,10 @@ type (
 		Port int `envconfig:"PORT" default:"8000"`
 
 		DBEngine string `envconfig:"DB_ENGINE" default:"mysql"`
-		DBHost   string `envconfig:"DB_HOST" default:"localhost"` // or ip address remotely
+		DBHost   string `envconfig:"DB_HOST" default:"35.190.225.72"` // or ip address remotely
 		DBPort   int    `envconfig:"DB_PORT" default:"3306"`
-		DBUser   string `envconfig:"DB_USER" default:"translango"`
-		DBPass   string `envconfig:"DB_PASS" default:"passw0rd"`
+		DBUser   string `envconfig:"DB_USER" default:"root"`
+		DBPass   string `envconfig:"DB_PASS" default:"admin12345"`
 		DBName   string `envconfig:"DB_NAME" default:"translango"`
 
 		SessionSecret         string `envconfig:"SESSION_SECRET" default:"dHJhbnNsYW5nbwo="`
