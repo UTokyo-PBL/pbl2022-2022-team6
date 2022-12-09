@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import AppCtx, { AppContextInterface } from './store/app-state-context';
+import { AppCtxProvider } from './store/app-state-context';
 import { CssBaseline } from '@mui/material';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
@@ -11,16 +11,12 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-const initialAppCtx: AppContextInterface = {
-  isLoggedIn: false
-};
-
 root.render(
   <React.StrictMode>
-    <AppCtx.Provider value={initialAppCtx}>
-      {/* <CssBaseline /> */}
+    <AppCtxProvider>
+      <CssBaseline />
       <App />
-    </AppCtx.Provider>
+    </AppCtxProvider>
   </React.StrictMode>
 );
 

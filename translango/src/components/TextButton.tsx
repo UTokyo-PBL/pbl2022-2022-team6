@@ -1,6 +1,5 @@
-import { Avatar, Box, Button, makeStyles, SvgIcon, SvgIconProps, ThemeProvider } from '@mui/material';
-import React, { Component } from 'react';
-import TextRecognitionIcon from '../assets/TextRecognitionIcon.svg';
+import { Button, SvgIcon, SvgIconProps, ThemeProvider } from '@mui/material';
+import { Component } from 'react';
 import theme from '../theme/theme';
 import { withTranslation, WithTranslation } from 'react-i18next';
 

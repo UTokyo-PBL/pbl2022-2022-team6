@@ -1,4 +1,4 @@
-import { Box, Button, CardActions, CardHeader, CssBaseline, Paper, Stack, ThemeProvider } from "@mui/material";
+import { Button, CardActions, CardHeader, CssBaseline, ThemeProvider } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import React, { useState } from "react";
