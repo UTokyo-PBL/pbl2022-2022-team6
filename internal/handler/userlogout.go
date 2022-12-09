@@ -2,12 +2,14 @@ package handler
 
 import (
 	"context"
+	"net/http"
+
+	"github.com/labstack/echo/v4"
+
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/gen/api"
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/internal/handler/httpmiddleware"
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/internal/service"
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/pkg/echoutil"
-	"github.com/labstack/echo/v4"
-	"net/http"
 )
 
 func (s *Server) PostUserLogout(ec echo.Context, params api.PostUserLogoutParams) error {
