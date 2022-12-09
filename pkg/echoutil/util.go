@@ -55,3 +55,15 @@ func ErrBadPassword(ec echo.Context, err error, opts ...ErrOptionFunc) error {
 		"msg":          opt.msg,
 	})
 }
+
+func ResourceConflict(ec echo.Context, err error, opts ...ErrOptionFunc) error {
+	opt := errOption{}
+	for _, f := range opts {
+		f(&opt)
+	}
+	return ec.JSON(http.StatusConflict, map[string]interface{}{
+		"error":        "resource conflict",
+		"error_detail": err.Error(),
+		"msg":          opt.msg,
+	})
+}
