@@ -826,6 +826,13 @@
               }
             },
             {
+              "name": "profile_image",
+              "datatype": {
+                "type": "varchar",
+                "prec": 1024
+              }
+            },
+            {
               "name": "created_at",
               "datatype": {
                 "type": "timestamp"

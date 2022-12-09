@@ -23,6 +23,7 @@ var UserAllColumns = []string{
 	"last_name",
 	"username",
 	"language",
+	"profile_image",
 	"created_at",
 	"updated_at",
 }
@@ -36,6 +37,7 @@ var UserColumnsWOMagics = []string{
 	"last_name",
 	"username",
 	"language",
+	"profile_image",
 }
 
 var UserPrimaryKeyColumns = []string{
@@ -43,16 +45,17 @@ var UserPrimaryKeyColumns = []string{
 }
 
 type User struct {
-	ID         string
-	Email      string
-	Password   string
-	FirstName  string
-	MiddleName string
-	LastName   string
-	Username   string
-	Language   string
-	CreatedAt  *time.Time
-	UpdatedAt  *time.Time
+	ID           string
+	Email        string
+	Password     string
+	FirstName    string
+	MiddleName   string
+	LastName     string
+	Username     string
+	Language     string
+	ProfileImage string
+	CreatedAt    *time.Time
+	UpdatedAt    *time.Time
 }
 
 func (t *User) Values() []interface{} {
@@ -65,19 +68,21 @@ func (t *User) Values() []interface{} {
 		t.LastName,
 		t.Username,
 		t.Language,
+		t.ProfileImage,
 	}
 }
 
 func (t *User) SetMap() map[string]interface{} {
 	return map[string]interface{}{
-		"id":          t.ID,
-		"email":       t.Email,
-		"password":    t.Password,
-		"first_name":  t.FirstName,
-		"middle_name": t.MiddleName,
-		"last_name":   t.LastName,
-		"username":    t.Username,
-		"language":    t.Language,
+		"id":            t.ID,
+		"email":         t.Email,
+		"password":      t.Password,
+		"first_name":    t.FirstName,
+		"middle_name":   t.MiddleName,
+		"last_name":     t.LastName,
+		"username":      t.Username,
+		"language":      t.Language,
+		"profile_image": t.ProfileImage,
 	}
 }
 
@@ -91,6 +96,7 @@ func (t *User) Ptrs() []interface{} {
 		&t.LastName,
 		&t.Username,
 		&t.Language,
+		&t.ProfileImage,
 		&t.CreatedAt,
 		&t.UpdatedAt,
 	}

@@ -118,6 +118,9 @@ type Objects struct {
 // ResourceNotFound defines model for resource-not-found.
 type ResourceNotFound = Message
 
+// Unauthorized defines model for unauthorized.
+type Unauthorized = Message
+
 // Caption defines model for caption.
 type Caption struct {
 	Caption *string `json:"caption,omitempty"`
@@ -247,6 +250,12 @@ type PostUserLoginJSONBody struct {
 	Password *string `json:"password,omitempty"`
 }
 
+// PostUserLogoutParams defines parameters for PostUserLogout.
+type PostUserLogoutParams struct {
+	// cookie for identifying user
+	Cookie Cookie `json:"cookie"`
+}
+
 // GetUserProfileParams defines parameters for GetUserProfile.
 type GetUserProfileParams struct {
 	// cookie for identifying user
@@ -339,6 +348,9 @@ type ServerInterface interface {
 	// login
 	// (POST /user/login)
 	PostUserLogin(ctx echo.Context) error
+	// logout
+	// (POST /user/logout)
+	PostUserLogout(ctx echo.Context, params PostUserLogoutParams) error
 	// user profile
 	// (GET /user/profile)
 	GetUserProfile(ctx echo.Context, params GetUserProfileParams) error
@@ -875,6 +887,37 @@ func (w *ServerInterfaceWrapper) PostUserLogin(ctx echo.Context) error {
 	return err
 }
 
+// PostUserLogout converts echo context to params.
+func (w *ServerInterfaceWrapper) PostUserLogout(ctx echo.Context) error {
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PostUserLogoutParams
+
+	headers := ctx.Request().Header
+	// ------------- Required header parameter "cookie" -------------
+	if valueList, found := headers[http.CanonicalHeaderKey("cookie")]; found {
+		var Cookie Cookie
+		n := len(valueList)
+		if n != 1 {
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Expected one value for cookie, got %d", n))
+		}
+
+		err = runtime.BindStyledParameterWithLocation("simple", false, "cookie", runtime.ParamLocationHeader, valueList[0], &Cookie)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter cookie: %s", err))
+		}
+
+		params.Cookie = Cookie
+	} else {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Header parameter cookie is required, but not found"))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PostUserLogout(ctx, params)
+	return err
+}
+
 // GetUserProfile converts echo context to params.
 func (w *ServerInterfaceWrapper) GetUserProfile(ctx echo.Context) error {
 	var err error
@@ -998,6 +1041,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/dashboards/lists/:listID", wrapper.GetDashboardsListsListID)
 	router.PUT(baseURL+"/dashboards/lists/:listID", wrapper.PutDashboardsListsListID)
 	router.POST(baseURL+"/user/login", wrapper.PostUserLogin)
+	router.POST(baseURL+"/user/logout", wrapper.PostUserLogout)
 	router.GET(baseURL+"/user/profile", wrapper.GetUserProfile)
 	router.POST(baseURL+"/user/profile", wrapper.PostUserProfile)
 	router.GET(baseURL+"/user/signup", wrapper.GetUserSignup)
