@@ -55,6 +55,58 @@ export default class ItemController {
 
     // Get the items to retrieve
     const { data, total, has_next, next_page_url } = await axiosResponse.json();
-    return { data, total, has_next, next_page_url } as { data : itemType[], total : number, has_next : boolean, next_page_url : string};
+    return { data, total, has_next, next_page_url } as {
+      data: itemType[];
+      total: number;
+      has_next: boolean;
+      next_page_url: string;
+    };
+  }
+
+  /*
+        Description: Retrieves a single item from database
+        Usage example> 
+            @getItem = 'SocialSelfController.getItem ({objectID: <some_ID>})'
+        Expected inputs
+          - objectID : string (any keyword required for the information to be retrieved),
+        Expected output:
+            - responseBody
+    */
+
+  static async getItem ({
+    // REVIEWED
+    objectID
+  }: {
+    objectID : string
+  }) {
+    // Send the request via AXIOS
+    const axiosResponse: Response = await $axios.get(
+      ITEMS_ENDPOINTS.GET_ITEM.url,
+      {
+        params: {
+          key,
+          offset,
+          limit,
+        },
+      }
+    );
+
+    // Check the response
+    if (
+      !ITEMS_ENDPOINTS.GET_ITEMS.statusCodes!.success?.includes(
+        axiosResponse.status
+      )
+    ) {
+      throw new Error("Invalid status code");
+    }
+
+    // Get the items to retrieve
+    const { data, total, has_next, next_page_url } = await axiosResponse.json();
+    return { data, total, has_next, next_page_url } as {
+      data: itemType[];
+      total: number;
+      has_next: boolean;
+      next_page_url: string;
+    };
   }
 }

@@ -1,8 +1,9 @@
-import { locationType } from "./../../types/common/common.types";
+import {
+  ISO639_1LanguageCodeType,
+} from "./../../types/common/common.types";
 import { TRANSLATION_COMMON_ENDPOINTS } from "./../../constants/translation/common.constants";
 import {
   itemType,
-  languageType,
   listType,
 } from "./../../types/common/database.types";
 import { $axios } from "../../constants/common/axios.constants";
@@ -18,10 +19,11 @@ export default class CommonTranslationController {
             @onGetAvailableLanguagesForTranslation = 'CommonTranslationController.getAvailableLanguages ()'
         Expected inputs (NONE)
         Expected output:
-            - languages : languageType []
+            - languages : ISO639_1LanguageCodeType []
     */
 
   static async getAvailableLanguages() {
+    // REVIEWED
     // Send the request via AXIOS
     const axiosResponse: Response = await $axios.get(
       TRANSLATION_COMMON_ENDPOINTS.GET_AVAILABLE_LANGUAGES.url
@@ -38,7 +40,7 @@ export default class CommonTranslationController {
 
     // Get the items to retrieve
     const { languages } = await axiosResponse.json();
-    return languages as languageType[];
+    return languages as ISO639_1LanguageCodeType[];
   }
 
   /*
@@ -51,8 +53,8 @@ export default class CommonTranslationController {
             - total : number
     */
 
-  static async getAvailableLists() // REVIEWED
-  {
+  static async getAvailableLists() {
+    // REVIEWED
     // Send the request via AXIOS
     const axiosResponse: Response = await $axios.get(
       TRANSLATION_COMMON_ENDPOINTS.AVAILABLE_LISTS.url
@@ -87,28 +89,39 @@ export default class CommonTranslationController {
 
   static async detectFromImage({
     type,
+    id,
     image_url,
-    location,
+    original,
+    target,
+    coutry,
     city,
-    country,
-    preferred_language,
+    latitude,
+    longitude,
   }: {
     type: "object" | "text";
+    id?: string;
     image_url: string;
-    location: locationType;
+    // original?: { text: string; language: ISO639_1LanguageCodeType };
+    target: { text: string; language: ISO639_1LanguageCodeType }[];
+    coutry: string;
     city: string;
-    country: string;
-    preferred_language: languageType;
+    latitude?: number;
+    longitude?: number;
   }) {
+    // REVIEWED
     // Send the referred URL to axios
     const axiosResponse: Response = await $axios.post(
       TRANSLATION_COMMON_ENDPOINTS.IMAGE_RECOGNITION.url,
       {
+        id,
         image_url,
-        location,
+        original,
+        target,
+        coutry,
         city,
-        country,
-        preferred_language,
+        latitude,
+        longitude,
+
       },
       {
         params: {
@@ -127,8 +140,8 @@ export default class CommonTranslationController {
     }
 
     // Get the items to retrieve
-    const { detectedObjects } = await axiosResponse.json();
-    return detectedObjects as itemType;
+    const responseBody = await axiosResponse.json();
+    return { detectedObjects: responseBody };
   }
 
   /*

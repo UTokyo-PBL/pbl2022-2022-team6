@@ -30,35 +30,26 @@ export default class SessionController {
       }
     );
 
-    // Check the response
-    if (
-      !SESSION_ENDPOINTS.LOGIN.statusCodes!.success?.includes(
-        axiosResponse.status
-      )
-    ) {
-      throw new Error("Invalid status code");
-    }
-
     // Check the response from the server
-    const { caseDescription, userId } = await axiosResponse.json();
+    const { set_cookie, message } = await axiosResponse.json();
 
     // If the userId is available, set it to a cookie
-    if (userId) {
+    if (set_cookie) {
       CookieController.setCookie({
         cookieName: "userId",
-        cookieValue: userId,
+        cookieValue: set_cookie,
         expirationDays: 14,
       });
     }
 
     // Return a response
-    return { caseDescription, userId } as {
-      caseDescription:
+    return { userId: set_cookie, caseDescription: message } as {
+      userId: string;
+      caseDescription?:
         | "LOGGED"
         | "INVALID_USER"
         | "INVALID_PASSWORD"
         | "BLOCKED_ACCOUNT";
-      userId: string;
     };
   }
 

@@ -14,16 +14,16 @@ export const COMMON_STATUS_CODES = {
 
 // INSTANCE: Create an Axios client
 export const $axios = axios.create({
-  baseURL: 'https://set.this.up'
+  baseURL: 'https://'
 });
 
 // INSTANCES: Axios request interceptors
 $axios.interceptors.request.use(async (request: any) => {
   // Get the cookie's userId parameter
-  const userId = CookieController.getCookie({ cookieName: "userId" });
+  const cookie = CookieController.getCookie({ cookieName: "userId" });
 
   // Set it as a new parameter
-  request.headers = { userId };
+  request.headers = { cookie };
 
   console.log(request)
 

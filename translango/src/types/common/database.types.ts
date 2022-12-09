@@ -45,6 +45,7 @@ export type userType = {
   middle_name?: string;
   last_name?: string;
   username?: string;
-  language: languageType;
-  loginAttempts?: number;
+  language: ISO639_1LanguageCodeType;
+  login_attempts?: number;
+  preferred_languages? : ISO639_1LanguageCodeType[]
 };

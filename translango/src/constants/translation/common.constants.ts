@@ -8,10 +8,9 @@ import { COMMON_STATUS_CODES } from "../common/axios.constants";
 // --------->>> INSTANCES
 //INSTANCES: All the entrypoints for https requests
 export const TRANSLATION_COMMON_ENDPOINTS: endpointsType = {
-  // TODO: Set the entrypoint URL
   GET_AVAILABLE_LANGUAGES: {
     description: "Endpoint for getting a list of available languages",
-    url: "/<setithere>",
+    url: "/user/signup",
     statusCodes: {
       success: COMMON_STATUS_CODES.success,
       failure: COMMON_STATUS_CODES.failure,
@@ -28,7 +27,7 @@ export const TRANSLATION_COMMON_ENDPOINTS: endpointsType = {
   },
   IMAGE_RECOGNITION: {
     description: "Endpoint for translating an image to text",
-    url: "/dashboard/camera",
+    url: "/dashboard/histories",
     statusCodes: {
       success: COMMON_STATUS_CODES.success,
       failure: COMMON_STATUS_CODES.failure,

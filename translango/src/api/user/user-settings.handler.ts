@@ -1,5 +1,4 @@
-import { languageType } from "./../../types/common/database.types";
-import { ISO639_1LanguageCodeType } from "../../types/common/common.types";
+import { userType } from "./../../types/common/database.types";
 import { USER_SETTINGS_ENDPOINTS } from "../../constants/user/user-settings.constants";
 import { $axios } from "../../constants/common/axios.constants";
 
@@ -9,23 +8,24 @@ import { $axios } from "../../constants/common/axios.constants";
 
 export default class UserSettingsController {
   /*
-        Description: Get the user's preferred language list from database
+        Description: Get the user's entire profile (including the preferredLanguages)
         Usage example> 
-            @getPreferredLanguages = 'UserSettingsController.getPreferredLanguages ()'
+            @getInfoFromUser = 'UserSettingsController.getUserProfile ({})'
         Expected inputs: (NONE)
         Expected output:
-           - preferredLanguages: languageType[]
+           - user: userType
     */
 
-  static async getPreferredLanguages() {
+  static async getUserProfile() {
+    // REVIEWED
     // Send the request via AXIOS
     const axiosResponse: Response = await $axios.get(
-      USER_SETTINGS_ENDPOINTS.SET_PREFERRED_LANGUAGES.url
+      USER_SETTINGS_ENDPOINTS.GET_USER_INFO.url
     );
 
     // Check the response
     if (
-      !USER_SETTINGS_ENDPOINTS.SET_PREFERRED_LANGUAGES.statusCodes!.success?.includes(
+      !USER_SETTINGS_ENDPOINTS.GET_USER_INFO.statusCodes!.success?.includes(
         axiosResponse.status
       )
     ) {
@@ -33,35 +33,39 @@ export default class UserSettingsController {
     }
 
     // Set the response
-    const { preferredLanguages } = await axiosResponse.json();
-    return preferredLanguages as languageType[];
+    const jsonResponse = await axiosResponse.json();
+    return jsonResponse as userType[];
   }
 
   /*
-        Description: Updates the prefered languages of the user
+        Description: Update the user's entire profile (including the preferredLanguages)
         Usage example> 
-            @updatePreferredLanguages = 'UserSettingsController.updatePreferredLanguages ({languages : ISO639_1LanguageCodeType[]})'
-        Expected inputs:
-            - languages: ISO639_1LanguageCodeType[]
-        Expected output (NONE)
+            @updateUserInfo = 'UserSettingsController.updateUserInfo ({ user : userType})'
+        Expected inputs: 
+          - user : userType
+        Expected output: (NONE)
     */
 
-  static async updatePreferredLanguages({
-    languages,
-  }: {
-    languages: ISO639_1LanguageCodeType[];
-  }) {
+  static async updateUserProfile({ user }: { user: userType }) {
+    // REVIEWED
     // Send the request via AXIOS
     const axiosResponse: Response = await $axios.post(
-      USER_SETTINGS_ENDPOINTS.SET_PREFERRED_LANGUAGES.url,
+      USER_SETTINGS_ENDPOINTS.UPDATE_USER_PROFILE.url,
       {
-        languages,
+        email: user.email,
+        password: user.password,
+        first_name: user.first_name,
+        middle_name: user.middle_name,
+        last_name: user.last_name,
+        username: user.username,
+        language: user.language,
+        preferred_languages: user.preferred_languages,
       }
     );
 
     // Check the response
     if (
-      !USER_SETTINGS_ENDPOINTS.SET_PREFERRED_LANGUAGES.statusCodes!.success?.includes(
+      !USER_SETTINGS_ENDPOINTS.UPDATE_USER_PROFILE.statusCodes!.success?.includes(
         axiosResponse.status
       )
     ) {

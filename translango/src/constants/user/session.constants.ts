@@ -12,7 +12,7 @@ export const SESSION_ENDPOINTS: endpointsType = {
     description: "Endpoint for setting a session in the server side",
     url: "/user/login",
     statusCodes: {
-      success: COMMON_STATUS_CODES.success,
+      success: [204].concat(COMMON_STATUS_CODES.success),
       failure: COMMON_STATUS_CODES.failure,
     },
   },

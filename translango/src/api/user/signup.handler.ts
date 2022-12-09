@@ -14,7 +14,7 @@ export default class SignupController {
         Expected inputs:
             - user: userType
         Expected output:
-            - number
+            - number (204 success, 401 expired confirmation email, 409 already exists)
     */
 
   static async createUser({ user }: { user: userType }) {
@@ -23,11 +23,17 @@ export default class SignupController {
     const axiosResponse: Response = await $axios.post(
       SIGNUP_ENDPOINTS.CREATE_USER.url,
       {
-        user,
+        email: user.email,
+        password: user.password,
+        first_name: user.first_name,
+        middle_name: user.middle_name,
+        last_name: user.last_name,
+        username: user.username,
+        language: user.language,
       }
     );
 
-    // Return the status code as response
+    // Return the status code as response (204 success, 401 expired confirmation email, 409 already exists)
     return axiosResponse.status;
   }
 
