@@ -2,6 +2,7 @@ package model
 
 import (
 	"errors"
+
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/gen/daocore"
 
 	"github.com/google/uuid"

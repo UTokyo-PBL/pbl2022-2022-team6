@@ -3,9 +3,11 @@ package repository
 import (
 	"context"
 	"database/sql"
+
+	"github.com/pkg/errors"
+
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/gen/daocore"
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/internal/model"
-	"github.com/pkg/errors"
 )
 
 func (c *Client) CreateUser(ctx context.Context, user *model.User) error {

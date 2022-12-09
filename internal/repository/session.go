@@ -3,9 +3,11 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"github.com/UTokyo-PBL/pbl2022-2022-team6/gen/daocore"
+
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
+
+	"github.com/UTokyo-PBL/pbl2022-2022-team6/gen/daocore"
 )
 
 func (c *Client) CreateNewSession(ctx context.Context, userID string) (string, error) {

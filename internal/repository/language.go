@@ -3,8 +3,10 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"github.com/UTokyo-PBL/pbl2022-2022-team6/gen/daocore"
+
 	"github.com/pkg/errors"
+
+	"github.com/UTokyo-PBL/pbl2022-2022-team6/gen/daocore"
 )
 
 func (c *Client) ListLanguages(ctx context.Context) ([]string, error) {
