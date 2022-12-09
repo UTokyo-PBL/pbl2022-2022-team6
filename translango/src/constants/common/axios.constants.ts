@@ -3,30 +3,27 @@
 */
 
 import axios from "axios";
-import CookieController from "../../api/common/cookie.handler";
 
 // --------->>> INSTANCES
 // INSTANCES: Generic responseCodes
-export const COMMON_STATUS_CODES = {
-  success: [200],
-  failure: [400],
+export const RESPONSE_STATUS_CODES = {
+  // SUCCESS Codes
+  200: "SUCCESS",
+  204: [
+    "USER_CREATED_SUCCESSFULY",
+    "USER_LOGGED_SUCCESSFULY",
+    "USER_EDITED_SUCESSFULY",
+  ],
+
+  // FAIL Codes
+  400: "FAIL",
+  401: ["EMAIL_CONFIRMATION_HAS_EXPIRED", "INVALID_INFO_INPUTED"],
+  404: "RESOURCE_NOT_FOUND",
+  409: "USER_ALREADY_EXISTS",
 };
 
 // INSTANCE: Create an Axios client
 export const $axios = axios.create({
-  baseURL: 'https://set.this.up'
-});
-
-// INSTANCES: Axios request interceptors
-$axios.interceptors.request.use(async (request: any) => {
-  // Get the cookie's userId parameter
-  const userId = CookieController.getCookie({ cookieName: "userId" });
-
-  // Set it as a new parameter
-  request.headers = { userId };
-
-  console.log(request)
-
-  // Allow the promise to continue
-  return request;
+  baseURL: "http://104.198.116.249",
+  withCredentials: true,
 });
