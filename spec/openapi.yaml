@@ -24,12 +24,6 @@ paths:
       responses:
         204:
           description: "ok"
-        401:
-          description: "email confirmation has been expired"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/message"
         409:
           description: "user already exists"
           content:
@@ -64,11 +58,20 @@ paths:
                 format: uuid
               description: "session id for authentication"
         401:
-          description: "invalid info input"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/message"
+          $ref: "#/components/responses/unauthorized"
+  /user/logout:
+    parameters:
+      - $ref: "#/components/parameters/cookie"
+    post:
+      summary: "logout"
+      tags:
+        - "user"
+      description: "logout"
+      responses:
+        204:
+          description: "successfully logged out"
+        401:
+          $ref: "#/components/responses/unauthorized"
   /user/profile:
     parameters:
       - $ref: "#/components/parameters/cookie"
@@ -585,6 +588,12 @@ components:
             $ref: "#/components/schemas/object"
     resource-not-found:
       description: "resource not found"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/message"
+    unauthorized:
+      description: "authorization failed"
       content:
         application/json:
           schema:
