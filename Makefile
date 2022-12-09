@@ -49,3 +49,13 @@ gen-db:
 .PHONY: migrate-db
 migrate-db:
 	for file in $$(find ddl/ -type f -name '*.sql' | sort); do mysql -uroot -padmin12345 -h35.190.225.72 --protocol='tcp' --database=translango < $$file; done
+
+.PHONY: build
+build:
+	env GOOS=linux GOARCH=amd64 go build -o build/serve cmd/server/main.go
+
+.PHONY: deploy
+deploy:
+	ssh team6 "pkill serve"
+	scp ./build/serve team6:~/
+	ssh team6 "nohup ./serve > $$(date "+%Y%m%d%H%M").log & && disown %1"
