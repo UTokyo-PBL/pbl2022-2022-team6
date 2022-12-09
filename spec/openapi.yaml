@@ -471,6 +471,9 @@ components:
               original:
                 type: object
                 properties:
+                  text:
+                    type: string
+                    description: "nullable when object detection"
                   language:
                     type: string
                     example: "English"
