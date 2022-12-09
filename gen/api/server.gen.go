@@ -83,7 +83,7 @@ type User struct {
 }
 
 // Cookie defines model for cookie.
-type Cookie = openapi_types.UUID
+type Cookie = string
 
 // ListID defines model for listID.
 type ListID = string
