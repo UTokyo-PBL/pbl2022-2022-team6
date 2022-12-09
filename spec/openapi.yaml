@@ -471,9 +471,6 @@ components:
               original:
                 type: object
                 properties:
-                  text:
-                    type: string
-                    example: "Dog"
                   language:
                     type: string
                     example: "English"
@@ -482,9 +479,6 @@ components:
                 items:
                   type: object
                   properties:
-                    text:
-                      type: string
-                      example: "犬"
                     language:
                       type: string
                       example: "ja"
