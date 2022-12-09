@@ -645,6 +645,19 @@
           ],
           "indexes": [
             {
+              "name": "user_id",
+              "fields": [
+                {
+                  "name": "user_id",
+                  "datatype": {
+                    "type": "char",
+                    "prec": 36
+                  }
+                }
+              ],
+              "is_unique": true
+            },
+            {
               "name": "sessions_session_pkey",
               "fields": [
                 {

@@ -96,6 +96,26 @@ func SelectAllSession(ctx context.Context, txn *sql.Tx) ([]*Session, error) {
 	return res, nil
 }
 
+func SelectOneSessionByUserID(ctx context.Context, txn *sql.Tx, user_id *string) (Session, error) {
+	eq := squirrel.Eq{}
+	if user_id != nil {
+		eq["user_id"] = *user_id
+	}
+	query, params, err := squirrel.
+		Select(SessionAllColumns...).
+		From(SessionTableName).
+		Where(eq).
+		ToSql()
+	if err != nil {
+		return Session{}, dberror.MapError(err)
+	}
+	stmt, err := txn.PrepareContext(ctx, query)
+	if err != nil {
+		return Session{}, dberror.MapError(err)
+	}
+	return IterateSession(stmt.QueryRowContext(ctx, params...))
+}
+
 func SelectOneSessionBySession(ctx context.Context, txn *sql.Tx, session *string) (Session, error) {
 	eq := squirrel.Eq{}
 	if session != nil {
@@ -223,6 +243,29 @@ func TruncateSession(ctx context.Context, txn *sql.Tx) error {
 		return dberror.MapError(err)
 	}
 	if _, err = stmt.Exec(); err != nil {
+		return dberror.MapError(err)
+	}
+	return nil
+}
+
+func DeleteOneSessionByUserID(ctx context.Context, txn *sql.Tx, user_id *string) error {
+	eq := squirrel.Eq{}
+	if user_id != nil {
+		eq["user_id"] = *user_id
+	}
+
+	query, params, err := squirrel.
+		Delete(SessionTableName).
+		Where(eq).
+		ToSql()
+	if err != nil {
+		return dberror.MapError(err)
+	}
+	stmt, err := txn.PrepareContext(ctx, query)
+	if err != nil {
+		return dberror.MapError(err)
+	}
+	if _, err = stmt.Exec(params...); err != nil {
 		return dberror.MapError(err)
 	}
 	return nil

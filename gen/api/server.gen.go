@@ -68,11 +68,12 @@ type Object struct {
 
 // User defines model for user.
 type User struct {
-	Email      *string `json:"email,omitempty"`
-	FirstName  *string `json:"first_name,omitempty"`
-	Language   *string `json:"language,omitempty"`
-	LastName   *string `json:"last_name,omitempty"`
-	MiddleName *string `json:"middle_name,omitempty"`
+	Email      *string             `json:"email,omitempty"`
+	FirstName  *string             `json:"first_name,omitempty"`
+	Id         *openapi_types.UUID `json:"id,omitempty"`
+	Language   *string             `json:"language,omitempty"`
+	LastName   *string             `json:"last_name,omitempty"`
+	MiddleName *string             `json:"middle_name,omitempty"`
 
 	// null in response
 	Password           *string   `json:"password,omitempty"`
