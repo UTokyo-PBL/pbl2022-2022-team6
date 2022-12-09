@@ -33,7 +33,7 @@ func UserFromAPI(a *api.User) (*User, error) {
 	}
 	u.FirstName = *a.FirstName
 
-	if a.MiddleName == nil || *a.MiddleName == "" {
+	if a.MiddleName == nil {
 		return nil, errors.New("middle name cannot be null")
 	}
 	u.MiddleName = *a.MiddleName
