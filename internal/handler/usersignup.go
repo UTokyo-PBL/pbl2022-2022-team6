@@ -2,7 +2,10 @@ package handler
 
 import (
 	"context"
+	"errors"
 	"net/http"
+
+	"github.com/UTokyo-PBL/pbl2022-2022-team6/internal/failures"
 
 	"github.com/labstack/echo/v4"
 
@@ -34,7 +37,14 @@ func (s *Server) PostUserSignup(ec echo.Context) error {
 
 	msg, err := service.Register(ctx, s.repo, req)
 	if err != nil {
-		return echoutil.ErrInternal(ec, err)
+		switch true {
+		case errors.Is(failures.InvalidUserParams, errors.Unwrap(err)):
+			return echoutil.ErrBadRequest(ec, err)
+		case errors.Is(failures.UserAlreadyExists, errors.Unwrap(err)):
+			return echoutil.ResourceConflict(ec, err)
+		default:
+			return echoutil.ErrInternal(ec, err)
+		}
 	}
 
 	return ec.JSON(http.StatusOK, msg)

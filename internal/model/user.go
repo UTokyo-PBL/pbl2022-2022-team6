@@ -3,6 +3,8 @@ package model
 import (
 	"errors"
 
+	"github.com/UTokyo-PBL/pbl2022-2022-team6/internal/contracts"
+
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/gen/daocore"
 
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/gen/api"
@@ -10,14 +12,15 @@ import (
 )
 
 type User struct {
-	ID         string
-	FirstName  string
-	MiddleName string
-	LastName   string
-	Username   string
-	Email      string
-	Password   string
-	Language   string
+	ID           string
+	FirstName    string
+	MiddleName   string
+	LastName     string
+	Username     string
+	Email        string
+	Password     string
+	Language     string
+	ProfileImage string
 }
 
 func UserFromAPI(a *api.User) (*User, error) {
@@ -64,19 +67,26 @@ func UserFromAPI(a *api.User) (*User, error) {
 	}
 	u.Language = *a.Language
 
+	if a.ProfileImage == nil {
+		u.ProfileImage = contracts.AnonymousImageURL
+	} else {
+		u.ProfileImage = *a.ProfileImage
+	}
+
 	return u, nil
 }
 
 func UserFromDAO(d *daocore.User) *User {
 	return &User{
-		ID:         d.ID,
-		FirstName:  d.FirstName,
-		MiddleName: d.MiddleName,
-		LastName:   d.LastName,
-		Username:   d.Username,
-		Email:      d.Email,
-		Password:   d.Password,
-		Language:   d.Language,
+		ID:           d.ID,
+		FirstName:    d.FirstName,
+		MiddleName:   d.MiddleName,
+		LastName:     d.LastName,
+		Username:     d.Username,
+		Email:        d.Email,
+		Password:     d.Password,
+		Language:     d.Language,
+		ProfileImage: d.ProfileImage,
 	}
 }
 
@@ -86,13 +96,14 @@ func (u *User) IsValidPassword(pw string) bool {
 
 func (u *User) ToDAO() *daocore.User {
 	return &daocore.User{
-		ID:         u.ID,
-		Email:      u.Email,
-		Password:   u.Password,
-		FirstName:  u.FirstName,
-		MiddleName: u.MiddleName,
-		LastName:   u.LastName,
-		Username:   u.Username,
-		Language:   u.Language,
+		ID:           u.ID,
+		Email:        u.Email,
+		Password:     u.Password,
+		FirstName:    u.FirstName,
+		MiddleName:   u.MiddleName,
+		LastName:     u.LastName,
+		Username:     u.Username,
+		Language:     u.Language,
+		ProfileImage: u.ProfileImage,
 	}
 }
