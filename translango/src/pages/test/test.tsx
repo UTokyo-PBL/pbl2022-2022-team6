@@ -1,6 +1,6 @@
 import { ThemeProvider } from "@mui/material";
-import CookieController from "../../api/common/cookie.handler";
-import TestController from "../../api/common/test.handler";
+import CookieController from "../../api/common/cookie.controller";
+import TestController from "../../api/common/test.controller";
 import theme from '../../theme/theme';
 
 // background: 'linear-gradient(to right bottom, #430089, #82ffa1)'
