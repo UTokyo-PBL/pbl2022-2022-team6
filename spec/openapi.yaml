@@ -388,6 +388,8 @@ components:
         username:
           type: string
           example: "johndoe123"
+        profile_image:
+          type: string
         language:
           type: string
           example: "ja"

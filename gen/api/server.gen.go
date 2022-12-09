@@ -78,6 +78,7 @@ type User struct {
 	// null in response
 	Password           *string   `json:"password,omitempty"`
 	PreferredLanguages *[]string `json:"preferred_languages,omitempty"`
+	ProfileImage       *string   `json:"profile_image,omitempty"`
 	Username           *string   `json:"username,omitempty"`
 }
 
