@@ -55,7 +55,6 @@ paths:
             set-cookie:
               schema:
                 type: string
-                format: uuid
               description: "session id for authentication"
         401:
           $ref: "#/components/responses/unauthorized"
@@ -408,7 +407,6 @@ components:
       description: "cookie for identifying user"
       schema:
         type: string
-        format: uuid
       required: true
     objectID:
       in: path
