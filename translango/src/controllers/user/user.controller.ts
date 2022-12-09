@@ -5,13 +5,13 @@ import {
 
 // --------->>> MAIN CLASS
 export default class UserController {
-  // GET: signup page - list available languages
-  // -> /user/signup
+  // ---------> GET: signup page - list available languages
+  // ROUTE: /user/signup
   // COMMENTS :
   // 1.- Skipped as FE will manage this
 
-  // POST : signup - register user
-  // -> /user/signup
+  // ---------> POST : signup - register user
+  // ROUTE: /user/signup
   // COMMENTS :
   // 1.- id property should be managed in BE. Maybe consider removing it?
   // 2.- Response code 401 is kinda misleading. Maybe it should be put in the login function?
@@ -23,7 +23,7 @@ export default class UserController {
     middle_name,
     last_name,
     username,
-    preferred_language,
+    preferred_languages,
   }: {
     id?: string;
     email: string;
@@ -32,7 +32,7 @@ export default class UserController {
     middle_name: string;
     last_name: string;
     username: string;
-    preferred_language: string[];
+    preferred_languages: string[];
   }) {
     // Call the AXIOS request
     $axios
@@ -44,7 +44,7 @@ export default class UserController {
         middle_name,
         last_name,
         username,
-        preferred_language,
+        preferred_languages,
       })
       .then((axiosResponse) => {
         // Return the status code
@@ -52,8 +52,8 @@ export default class UserController {
       });
   }
 
-  // POST : login - submit email & password
-  // -> /user/login
+  // ---------> POST : login - submit email & password
+  // ROUTE: /user/login
   // COMMENTS:
   // 1.- Should there be a responseCode for unconfirmed email?
   // 2.- Please check if cookie is being set. Else, consider sending it back as part of the body response setting it manually
@@ -70,14 +70,15 @@ export default class UserController {
       });
   }
 
-  // GET : user profile - retrieve user profile
-  // -> /user/profile
+  // ---------> GET : user profile - retrieve user profile
+  // ROUTE: /user/profile
   // COMMENTS:
   // 1.- Added the user_profile_pic property on the expected response
   static async getUserProfile() {
     // Call the AXIOS request
     $axios.get("/user/profile").then((axiosResponse) => {
       // Return the status data contained
+      const responseCodeInfo = RESPONSE_STATUS_CODES[axiosResponse.status];
       const {
         id,
         email,
@@ -87,10 +88,11 @@ export default class UserController {
         last_name,
         username,
         language,
-        preferred_language,
+        preferred_languages,
         user_profile_pic,
       } = axiosResponse.data;
       return {
+        responseCodeInfo,
         id,
         email,
         password,
@@ -99,14 +101,14 @@ export default class UserController {
         last_name,
         username,
         language,
-        preferred_language,
+        preferred_languages,
         user_profile_pic,
       };
     });
   }
 
-  // POST : edit user profile - edit user profile
-  // -> /user/profile
+  // ---------> POST : edit user profile - edit user profile
+  // ROUTE: /user/profile
   // COMMENTS:
   // 1.- Added the user_profile_pic property on the expected response
   static async editUserProfile({
@@ -118,7 +120,7 @@ export default class UserController {
     last_name,
     username,
     language,
-    preferred_language,
+    preferred_languages,
     user_profile_pic,
   }: {
     id: string;
@@ -129,7 +131,7 @@ export default class UserController {
     last_name: string;
     username: string;
     language: string;
-    preferred_language: string;
+    preferred_languages: string;
     user_profile_pic: string[];
   }) {
     // Call the AXIOS request
@@ -143,7 +145,7 @@ export default class UserController {
         last_name,
         username,
         language,
-        preferred_language,
+        preferred_languages,
         user_profile_pic,
       })
       .then((axiosResponse) => {
