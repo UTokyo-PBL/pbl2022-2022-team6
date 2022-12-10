@@ -47,7 +47,7 @@ gen-db:
 
 .PHONY: migrate-db
 migrate-db:
-	for file in $$(find ddl/ -type f -name '*.sql' | sort); do mysql -uroot -padmin12345 -h35.190.225.72 --protocol='tcp' --database=translango < $$file; done
+	for file in $$(find ddl/ -type f -name '*.sql' | sort); do mysql -u$(DB_USER) -p$(DB_PASS) -h$(DB_HOST) --protocol='tcp' --database=$(DB_NAME) < $$file; done
 
 .PHONY: build
 build:
