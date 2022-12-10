@@ -12,15 +12,15 @@ import (
 
 func handle(ec echo.Context, err error) error {
 	switch true {
-	case errors.Is(failures.InvalidUserParams, errors.Unwrap(err)):
+	case errors.Is(errors.Unwrap(err), failures.InvalidUserParams):
 		return echoutil.ErrBadRequest(ec, err)
-	case errors.Is(failures.UserAlreadyExists, errors.Unwrap(err)):
+	case errors.Is(errors.Unwrap(err), failures.UserAlreadyExists):
 		return echoutil.ResourceConflict(ec, err)
-	case errors.Is(failures.UserNotExists, errors.Unwrap(err)):
+	case errors.Is(errors.Unwrap(err), failures.UserNotExists):
 		return echoutil.ErrBadPassword(ec, err)
-	case errors.Is(failures.InvalidPassword, errors.Unwrap(err)):
+	case errors.Is(errors.Unwrap(err), failures.InvalidPassword):
 		return echoutil.ErrBadPassword(ec, err)
-	case errors.Is(failures.UnknownError, errors.Unwrap(err)):
+	case errors.Is(errors.Unwrap(err), failures.UnknownError):
 		return echoutil.ErrInternal(ec, err)
 	default:
 		fmt.Errorf("unknown error type: %w", err)
