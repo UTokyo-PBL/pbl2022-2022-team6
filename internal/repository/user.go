@@ -37,21 +37,21 @@ func (c *Client) CreateUser(ctx context.Context, user *model.User) error {
 }
 
 func (c *Client) SelectUserByID(ctx context.Context, id string) (*model.User, error) {
-	txn, err := c.db.BeginTx(ctx, &sql.TxOptions{
-		Isolation: sql.LevelDefault,
-		ReadOnly:  true,
-	})
-	if err != nil {
-		return nil, errors.Wrap(err, "SelectUserByID failed to c.db.BeginTx")
-	}
-	defer txn.Rollback()
-
 	var ok1, ok2 bool
 	var u daocore.User
 	var ps []*daocore.UserPreferredLanguage
 
 	eg, ctx := errgroup.WithContext(ctx)
 	eg.Go(func() error {
+		txn, err := c.db.BeginTx(ctx, &sql.TxOptions{
+			Isolation: sql.LevelDefault,
+			ReadOnly:  true,
+		})
+		if err != nil {
+			return errors.Wrap(err, "SelectUserByID failed to c.db.BeginTx")
+		}
+		defer txn.Rollback()
+
 		u, err = daocore.SelectOneUserByID(ctx, txn, &id)
 		switch true {
 		case err != nil && !errors.Is(err, sql.ErrNoRows):
@@ -63,6 +63,15 @@ func (c *Client) SelectUserByID(ctx context.Context, id string) (*model.User, er
 		return nil
 	})
 	eg.Go(func() error {
+		txn, err := c.db.BeginTx(ctx, &sql.TxOptions{
+			Isolation: sql.LevelDefault,
+			ReadOnly:  true,
+		})
+		if err != nil {
+			return errors.Wrap(err, "SelectUserByID failed to c.db.BeginTx")
+		}
+		defer txn.Rollback()
+
 		ps, err = daocore.SelectUserPreferredLanguageByUserID(ctx, txn, &id)
 		switch true {
 		case err != nil && !errors.Is(err, sql.ErrNoRows):

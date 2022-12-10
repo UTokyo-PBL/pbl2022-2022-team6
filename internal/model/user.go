@@ -79,6 +79,8 @@ func UserFromAPI(u *api.User) (*User, error) {
 	}
 
 	if u.PreferredLanguages == nil {
+		user.PreferredLanguages = make([]string, 0)
+	} else {
 		user.PreferredLanguages = *u.PreferredLanguages
 	}
 
