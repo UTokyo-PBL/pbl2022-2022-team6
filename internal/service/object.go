@@ -117,7 +117,7 @@ func GetObject(ctx context.Context, repo repository.Interface, userID, id string
 
 	if object.UserID != userID {
 		err = errors.Wrapf(err, "GetObject: User %s have no access to %s ", userID, id)
-		return nil, errors.Wrap(failures.InvalidObjectParams, err.Error())
+		return nil, errors.Wrap(failures.InvalidObjectAccess, err.Error())
 	}
 
 	if err != nil {
@@ -133,7 +133,7 @@ func UpdateCaption(ctx context.Context, repo repository.Interface, userID, id, c
 
 	if object.UserID != userID {
 		err = errors.Wrapf(err, "UpdateCaption: User %s have no access to %s", userID, id)
-		return nil, errors.Wrap(failures.InvalidObjectParams, err.Error())
+		return nil, errors.Wrap(failures.InvalidObjectAccess, err.Error())
 	}
 
 	object.Caption = caption
@@ -153,7 +153,7 @@ func UpdateLiked(ctx context.Context, repo repository.Interface, userID, id stri
 
 	if object.UserID != userID {
 		err = errors.Wrapf(err, "UpdateLiked: User %s have no access to %s", userID, id)
-		return nil, errors.Wrap(failures.InvalidObjectParams, err.Error())
+		return nil, errors.Wrap(failures.InvalidObjectAccess, err.Error())
 	}
 
 	object.Liked = liked
@@ -173,7 +173,7 @@ func UpdateNumFailures(ctx context.Context, repo repository.Interface, userID, i
 
 	if object.UserID != userID {
 		err = errors.Wrapf(err, "UpdateLiked: User %s have no access to %s", userID, id)
-		return nil, errors.Wrap(failures.InvalidObjectParams, err.Error())
+		return nil, errors.Wrap(failures.InvalidObjectAccess, err.Error())
 	}
 
 	object.NumFailures = numFailures
@@ -193,7 +193,7 @@ func UpdateOriginal(ctx context.Context, translationClient translation.Interface
 
 	if object.UserID != userID {
 		err = errors.Wrapf(err, "UpdateOriginal: User %s have no access to %s", userID, id)
-		return nil, errors.Wrap(failures.InvalidObjectParams, err.Error())
+		return nil, errors.Wrap(failures.InvalidObjectAccess, err.Error())
 	}
 
 	if original.Language != nil {
