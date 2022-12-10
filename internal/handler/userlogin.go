@@ -4,10 +4,6 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/pkg/errors"
-
-	"github.com/UTokyo-PBL/pbl2022-2022-team6/internal/failures"
-
 	"github.com/labstack/echo/v4"
 
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/gen/api"
@@ -27,16 +23,7 @@ func (s *Server) PostUserLogin(ec echo.Context) error {
 
 	msg, id, err := service.Login(ctx, s.repo, req)
 	if err != nil {
-		switch true {
-		case errors.Is(failures.InvalidUserParams, errors.Unwrap(err)):
-			return echoutil.ErrBadRequest(ec, err)
-		case errors.Is(failures.UserNotExists, errors.Unwrap(err)):
-			return echoutil.ErrBadPassword(ec, err)
-		case errors.Is(failures.InvalidPassword, errors.Unwrap(err)):
-			return echoutil.ErrBadPassword(ec, err)
-		default:
-			return echoutil.ErrInternal(ec, err)
-		}
+		return handle(ec, err)
 	}
 
 	ec, err = httpmiddleware.SetCookie(ec, id)

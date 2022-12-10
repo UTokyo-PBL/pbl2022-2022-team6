@@ -287,7 +287,6 @@ components:
       properties:
         id:
           type: string
-          format: uuid
         original:
           type: object
           properties:
@@ -350,7 +349,6 @@ components:
       properties:
         id:
           type: string
-          format: uuid
           example: "0af7024f-c8fe-4790-8a96-c59abd904652"
         name:
           type: string
@@ -372,7 +370,6 @@ components:
       properties:
         id:
           type: string
-          format: uuid
         email:
           type: string
           example: "example@translango.com"
@@ -466,7 +463,6 @@ components:
             properties:
               id:
                 type: string
-                format: uuid
                 example: "617a283a-44e1-42e5-8a65-c5a29afe51fc"
               image_url:
                 type: string

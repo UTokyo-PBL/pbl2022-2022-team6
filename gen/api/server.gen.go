@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	"github.com/deepmap/oapi-codegen/pkg/runtime"
-	openapi_types "github.com/deepmap/oapi-codegen/pkg/types"
 	"github.com/labstack/echo/v4"
 )
 
@@ -26,10 +25,10 @@ type Coordinate struct {
 
 // List defines model for list.
 type List struct {
-	IconName *string             `json:"icon_name,omitempty"`
-	Id       *openapi_types.UUID `json:"id,omitempty"`
-	Name     *string             `json:"name,omitempty"`
-	Objects  *[]Object           `json:"objects,omitempty"`
+	IconName *string   `json:"icon_name,omitempty"`
+	Id       *string   `json:"id,omitempty"`
+	Name     *string   `json:"name,omitempty"`
+	Objects  *[]Object `json:"objects,omitempty"`
 }
 
 // Message defines model for message.
@@ -45,15 +44,15 @@ type Object struct {
 		UpperLeft  *Coordinate `json:"upper_left,omitempty"`
 		UpperRight *Coordinate `json:"upper_right,omitempty"`
 	} `json:"bbox,omitempty"`
-	Caption     *string             `json:"caption,omitempty"`
-	City        *string             `json:"city,omitempty"`
-	Country     *string             `json:"country,omitempty"`
-	Id          *openapi_types.UUID `json:"id,omitempty"`
-	ImageUrl    *string             `json:"image_url,omitempty"`
-	Latitude    *float32            `json:"latitude,omitempty"`
-	Liked       *bool               `json:"liked,omitempty"`
-	Longitude   *float32            `json:"longitude,omitempty"`
-	NumFailures *int                `json:"num_failures,omitempty"`
+	Caption     *string  `json:"caption,omitempty"`
+	City        *string  `json:"city,omitempty"`
+	Country     *string  `json:"country,omitempty"`
+	Id          *string  `json:"id,omitempty"`
+	ImageUrl    *string  `json:"image_url,omitempty"`
+	Latitude    *float32 `json:"latitude,omitempty"`
+	Liked       *bool    `json:"liked,omitempty"`
+	Longitude   *float32 `json:"longitude,omitempty"`
+	NumFailures *int     `json:"num_failures,omitempty"`
 	Original    *struct {
 		Language *string `json:"language,omitempty"`
 		SoundUrl *string `json:"sound_url,omitempty"`
@@ -68,12 +67,12 @@ type Object struct {
 
 // User defines model for user.
 type User struct {
-	Email      *string             `json:"email,omitempty"`
-	FirstName  *string             `json:"first_name,omitempty"`
-	Id         *openapi_types.UUID `json:"id,omitempty"`
-	Language   *string             `json:"language,omitempty"`
-	LastName   *string             `json:"last_name,omitempty"`
-	MiddleName *string             `json:"middle_name,omitempty"`
+	Email      *string `json:"email,omitempty"`
+	FirstName  *string `json:"first_name,omitempty"`
+	Id         *string `json:"id,omitempty"`
+	Language   *string `json:"language,omitempty"`
+	LastName   *string `json:"last_name,omitempty"`
+	MiddleName *string `json:"middle_name,omitempty"`
 
 	// null in response
 	Password           *string   `json:"password,omitempty"`

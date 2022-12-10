@@ -27,10 +27,10 @@ type User struct {
 func UserFromAPI(u *api.User) (*User, error) {
 	user := new(User)
 
-	if u.Id == nil || u.Id.String() == "" {
+	if u.Id == nil || *u.Id == "" {
 		return nil, errors.New("id cannot be null")
 	}
-	user.ID = u.Id.String()
+	user.ID = *u.Id
 
 	if u.FirstName == nil || *u.FirstName == "" {
 		return nil, errors.New("first name cannot be null")
@@ -104,7 +104,7 @@ func (u *User) IsValidPassword(pw string) bool {
 	return u.Password == encrypto.Encrypto(pw)
 }
 
-func (u *User) ToUserDAO() *daocore.User {
+func (u *User) UserDAO() *daocore.User {
 	return &daocore.User{
 		ID:           u.ID,
 		Email:        u.Email,
@@ -118,7 +118,7 @@ func (u *User) ToUserDAO() *daocore.User {
 	}
 }
 
-func (u *User) ToUserPreferredLanguagesDAO() []*daocore.UserPreferredLanguage {
+func (u *User) UserPreferredLanguagesDAO() []*daocore.UserPreferredLanguage {
 	ps := make([]*daocore.UserPreferredLanguage, 0, len(u.PreferredLanguages))
 	for _, p := range u.PreferredLanguages {
 		ps = append(ps, &daocore.UserPreferredLanguage{
@@ -127,4 +127,19 @@ func (u *User) ToUserPreferredLanguagesDAO() []*daocore.UserPreferredLanguage {
 		})
 	}
 	return ps
+}
+
+func (u *User) API() *api.User {
+	return &api.User{
+		Email:              &u.Email,
+		FirstName:          &u.FirstName,
+		Id:                 &u.ID,
+		Language:           &u.Language,
+		LastName:           &u.LastName,
+		MiddleName:         &u.MiddleName,
+		Password:           &u.Password,
+		PreferredLanguages: &u.PreferredLanguages,
+		ProfileImage:       &u.ProfileImage,
+		Username:           &u.Username,
+	}
 }

@@ -58,10 +58,8 @@ func Login(ctx context.Context, repo repository.Interface, user *api.User) (*api
 		return nil, "", errors.Wrap(failures.UnknownError, err.Error())
 	}
 
-	msg := "successfully logged in"
-
 	return &api.Message{
-		Message: &msg,
+		Message: ptr.String("successfully logged in"),
 	}, session, nil
 }
 
@@ -71,9 +69,7 @@ func Logout(ctx context.Context, repo repository.Interface, userID string) (*api
 		return nil, errors.Wrap(failures.UnknownError, err.Error())
 	}
 
-	msg := "successfully logged out"
-
 	return &api.Message{
-		Message: &msg,
+		Message: ptr.String("successfully logged out"),
 	}, nil
 }

@@ -22,10 +22,10 @@ func (c *Client) CreateUser(ctx context.Context, user *model.User) error {
 	}
 	defer txn.Rollback()
 
-	if err := daocore.InsertUser(ctx, txn, []*daocore.User{user.ToUserDAO()}); err != nil {
+	if err := daocore.InsertUser(ctx, txn, []*daocore.User{user.UserDAO()}); err != nil {
 		return errors.Wrap(err, "CreateUser failed to daocore.InsertUser")
 	}
-	if err := daocore.InsertUserPreferredLanguage(ctx, txn, user.ToUserPreferredLanguagesDAO()); err != nil {
+	if err := daocore.InsertUserPreferredLanguage(ctx, txn, user.UserPreferredLanguagesDAO()); err != nil {
 		return errors.Wrap(err, "CreateUser failed to daocore.InsertUserPreferredLanguage")
 	}
 
@@ -150,4 +150,34 @@ func (c *Client) SelectUserByUsernameOrEmail(ctx context.Context, q string) (*mo
 	}
 
 	return nil, errors.Wrapf(sql.ErrNoRows, "SelectUserByUsernameOrEmail failed to find user %s", q)
+}
+
+func (c *Client) UpdateUser(ctx context.Context, id string, user *model.User) error {
+	if id != user.ID {
+		return errors.Errorf("UpdateUser: User %s cannot update user %s", id, user.ID)
+	}
+	txn, err := c.db.BeginTx(ctx, &sql.TxOptions{
+		Isolation: sql.LevelDefault,
+		ReadOnly:  false,
+	})
+	if err != nil {
+		return errors.Wrap(err, "UpdateUser failed to c.db.BeginTx")
+	}
+	defer txn.Rollback()
+
+	if err := daocore.UpdateUser(ctx, txn, *user.UserDAO()); err != nil {
+		return errors.Wrap(err, "UpdateUser failed to daocore.UpdateUser")
+	}
+	if err := daocore.DeleteUserPreferredLanguageByUserID(ctx, txn, &id); err != nil {
+		return errors.Wrap(err, "UpdateUser failed to daocore.DeleteUserPreferredLanguageByUserID")
+	}
+	if err := daocore.InsertUserPreferredLanguage(ctx, txn, user.UserPreferredLanguagesDAO()); err != nil {
+		return errors.Wrap(err, "UpdateUser failed to daocore.InsertUserPreferredLanguage")
+	}
+
+	if err := txn.Commit(); err != nil {
+		return errors.Wrap(err, "UpdateUser failed to txn.Commit")
+	}
+
+	return nil
 }

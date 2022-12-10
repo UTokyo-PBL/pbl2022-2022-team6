@@ -23,7 +23,7 @@ func (s *Server) PostUserLogout(ec echo.Context, params api.PostUserLogoutParams
 
 	msg, err := service.Logout(ctx, s.repo, userID)
 	if err != nil {
-		return echoutil.ErrInternal(ec, err)
+		return handle(ec, err)
 	}
 
 	return ec.JSON(http.StatusOK, msg)
