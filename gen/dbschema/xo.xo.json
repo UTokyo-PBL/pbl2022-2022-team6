@@ -351,56 +351,28 @@
               }
             },
             {
-              "name": "bbox_ul_x",
+              "name": "bbox_x",
               "datatype": {
                 "type": "float",
                 "nullable": true
               }
             },
             {
-              "name": "bbox_ul_y",
+              "name": "bbox_y",
               "datatype": {
                 "type": "float",
                 "nullable": true
               }
             },
             {
-              "name": "bbox_ll_x",
+              "name": "bbox_w",
               "datatype": {
                 "type": "float",
                 "nullable": true
               }
             },
             {
-              "name": "bbox_ll_y",
-              "datatype": {
-                "type": "float",
-                "nullable": true
-              }
-            },
-            {
-              "name": "bbox_lr_x",
-              "datatype": {
-                "type": "float",
-                "nullable": true
-              }
-            },
-            {
-              "name": "bbox_lr_y",
-              "datatype": {
-                "type": "float",
-                "nullable": true
-              }
-            },
-            {
-              "name": "bbox_ur_x",
-              "datatype": {
-                "type": "float",
-                "nullable": true
-              }
-            },
-            {
-              "name": "bbox_ur_y",
+              "name": "bbox_h",
               "datatype": {
                 "type": "float",
                 "nullable": true

@@ -273,15 +273,6 @@ paths:
           description: "ok"
 components:
   schemas:
-    coordinate:
-      type: object
-      properties:
-        x:
-          type: number
-          format: float
-        y:
-          type: number
-          format: float
     object:
       type: object
       properties:
@@ -314,14 +305,18 @@ components:
         bbox:
           type: object
           properties:
-            upper_left:
-              $ref: "#/components/schemas/coordinate"
-            lower_left:
-              $ref: "#/components/schemas/coordinate"
-            lower_right:
-              $ref: "#/components/schemas/coordinate"
-            upper_right:
-              $ref: "#/components/schemas/coordinate"
+            x:
+              type: number
+              format: float
+            y:
+              type: number
+              format: float
+            w:
+              type: number
+              format: float
+            h:
+              type: number
+              format: float
         image_url:
           type: string
           example: "https://statics.translango.com/617a283a-44e1-42e5-8a65-c5a29afe51fc.png"

@@ -17,12 +17,6 @@ const (
 	TypeQueryText   TypeQuery = "text"
 )
 
-// Coordinate defines model for coordinate.
-type Coordinate struct {
-	True *float32 `json:"true,omitempty"`
-	X    *float32 `json:"x,omitempty"`
-}
-
 // List defines model for list.
 type List struct {
 	IconName *string   `json:"icon_name,omitempty"`
@@ -39,10 +33,10 @@ type Message struct {
 // Object defines model for object.
 type Object struct {
 	Bbox *struct {
-		LowerLeft  *Coordinate `json:"lower_left,omitempty"`
-		LowerRight *Coordinate `json:"lower_right,omitempty"`
-		UpperLeft  *Coordinate `json:"upper_left,omitempty"`
-		UpperRight *Coordinate `json:"upper_right,omitempty"`
+		H    *float32 `json:"h,omitempty"`
+		True *float32 `json:"true,omitempty"`
+		W    *float32 `json:"w,omitempty"`
+		X    *float32 `json:"x,omitempty"`
 	} `json:"bbox,omitempty"`
 	Caption     *string  `json:"caption,omitempty"`
 	City        *string  `json:"city,omitempty"`

@@ -18,14 +18,10 @@ var ObjectAllColumns = []string{
 	"id",
 	"user_id",
 	"original_ojbtxt_id",
-	"bbox_ul_x",
-	"bbox_ul_y",
-	"bbox_ll_x",
-	"bbox_ll_y",
-	"bbox_lr_x",
-	"bbox_lr_y",
-	"bbox_ur_x",
-	"bbox_ur_y",
+	"bbox_x",
+	"bbox_y",
+	"bbox_w",
+	"bbox_h",
 	"image_url",
 	"caption",
 	"country",
@@ -42,14 +38,10 @@ var ObjectColumnsWOMagics = []string{
 	"id",
 	"user_id",
 	"original_ojbtxt_id",
-	"bbox_ul_x",
-	"bbox_ul_y",
-	"bbox_ll_x",
-	"bbox_ll_y",
-	"bbox_lr_x",
-	"bbox_lr_y",
-	"bbox_ur_x",
-	"bbox_ur_y",
+	"bbox_x",
+	"bbox_y",
+	"bbox_w",
+	"bbox_h",
 	"image_url",
 	"caption",
 	"country",
@@ -68,14 +60,10 @@ type Object struct {
 	ID               string
 	UserID           string
 	OriginalOjbtxtID int
-	BboxUlX          float32
-	BboxUlY          float32
-	BboxLlX          float32
-	BboxLlY          float32
-	BboxLrX          float32
-	BboxLrY          float32
-	BboxUrX          float32
-	BboxUrY          float32
+	BboxX            float32
+	BboxY            float32
+	BboxW            float32
+	BboxH            float32
 	ImageUrl         string
 	Caption          string
 	Country          string
@@ -93,14 +81,10 @@ func (t *Object) Values() []interface{} {
 		t.ID,
 		t.UserID,
 		t.OriginalOjbtxtID,
-		t.BboxUlX,
-		t.BboxUlY,
-		t.BboxLlX,
-		t.BboxLlY,
-		t.BboxLrX,
-		t.BboxLrY,
-		t.BboxUrX,
-		t.BboxUrY,
+		t.BboxX,
+		t.BboxY,
+		t.BboxW,
+		t.BboxH,
 		t.ImageUrl,
 		t.Caption,
 		t.Country,
@@ -117,14 +101,10 @@ func (t *Object) SetMap() map[string]interface{} {
 		"id":                 t.ID,
 		"user_id":            t.UserID,
 		"original_ojbtxt_id": t.OriginalOjbtxtID,
-		"bbox_ul_x":          t.BboxUlX,
-		"bbox_ul_y":          t.BboxUlY,
-		"bbox_ll_x":          t.BboxLlX,
-		"bbox_ll_y":          t.BboxLlY,
-		"bbox_lr_x":          t.BboxLrX,
-		"bbox_lr_y":          t.BboxLrY,
-		"bbox_ur_x":          t.BboxUrX,
-		"bbox_ur_y":          t.BboxUrY,
+		"bbox_x":             t.BboxX,
+		"bbox_y":             t.BboxY,
+		"bbox_w":             t.BboxW,
+		"bbox_h":             t.BboxH,
 		"image_url":          t.ImageUrl,
 		"caption":            t.Caption,
 		"country":            t.Country,
@@ -141,14 +121,10 @@ func (t *Object) Ptrs() []interface{} {
 		&t.ID,
 		&t.UserID,
 		&t.OriginalOjbtxtID,
-		&t.BboxUlX,
-		&t.BboxUlY,
-		&t.BboxLlX,
-		&t.BboxLlY,
-		&t.BboxLrX,
-		&t.BboxLrY,
-		&t.BboxUrX,
-		&t.BboxUrY,
+		&t.BboxX,
+		&t.BboxY,
+		&t.BboxW,
+		&t.BboxH,
 		&t.ImageUrl,
 		&t.Caption,
 		&t.Country,
