@@ -6,31 +6,6 @@ import (
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/gen/api"
 )
 
-func (s *Server) GetDashboardHistoriesObjectID(ec echo.Context, objectID api.ObjectID, params api.GetDashboardHistoriesObjectIDParams) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s *Server) PostDashboardHistoriesObjectIDCaption(ec echo.Context, objectID api.ObjectID, params api.PostDashboardHistoriesObjectIDCaptionParams) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s *Server) PostDashboardHistoriesObjectIDLiked(ec echo.Context, objectID api.ObjectID, params api.PostDashboardHistoriesObjectIDLikedParams) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s *Server) PostDashboardHistoriesObjectIDNumFailures(ec echo.Context, objectID api.ObjectID, params api.PostDashboardHistoriesObjectIDNumFailuresParams) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s *Server) PostDashboardHistoriesObjectIDOriginal(ec echo.Context, objectID api.ObjectID, params api.PostDashboardHistoriesObjectIDOriginalParams) error {
-	//TODO implement me
-	panic("implement me")
-}
-
 func (s *Server) GetDashboardLists(ec echo.Context, params api.GetDashboardListsParams) error {
 	//TODO implement me
 	panic("implement me")

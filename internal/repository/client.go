@@ -18,6 +18,7 @@ type Interface interface {
 	CreateObject(ctx context.Context, object *model.Object) error
 	UpdateObject(ctx context.Context, id string, object *model.Object) error
 	SelectObjectByID(ctx context.Context, id string) (*model.Object, error)
+	SelectObjectsByUserID(ctx context.Context, userID string) ([]*model.Object, error)
 }
 
 type Client struct {

@@ -17,7 +17,7 @@ func (s *Server) PostUserLogin(ec echo.Context) error {
 	defer cancel()
 
 	req := &api.User{}
-	if err := ec.Bind(&req); err != nil {
+	if err := ec.Bind(req); err != nil {
 		return echoutil.ErrBadRequest(ec, err)
 	}
 

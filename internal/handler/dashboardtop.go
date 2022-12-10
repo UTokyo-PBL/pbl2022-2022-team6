@@ -39,7 +39,7 @@ func (s *Server) PostDashboardTop(ec echo.Context, params api.PostDashboardTopPa
 	}
 
 	req := &api.PreferredLanguages{}
-	if err := ec.Bind(&req); err != nil {
+	if err := ec.Bind(req); err != nil {
 		return echoutil.ErrBadRequest(ec, err)
 	}
 
