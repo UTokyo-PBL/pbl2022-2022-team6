@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/UTokyo-PBL/pbl2022-2022-team6/internal/httpclient/detection"
+	"github.com/UTokyo-PBL/pbl2022-2022-team6/internal/httpclient/translation"
 	"net/http"
 	"os"
 
@@ -51,8 +53,17 @@ func run() error {
 		return err
 	}
 
+	// repo
 	repo := repository.New(db)
 
+	// httpclient
+	dc := detection.NewFake(env.DetectionAddress)
+	tc := translation.NewFake(env.TranslationAddress)
+
+	// handler
+	server := handler.New(repo, dc, tc)
+
+	// server
 	ss, err := base64.StdEncoding.DecodeString(env.SessionSecret)
 	if err != nil {
 		return err
@@ -91,7 +102,6 @@ func run() error {
 		}),
 	)
 
-	server := handler.New(repo)
 	api.RegisterHandlers(e, server)
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%v", env.Port)))
 	return nil

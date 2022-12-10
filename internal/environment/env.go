@@ -18,6 +18,9 @@ type (
 		DBPass   string `envconfig:"DB_PASS" default:"admin12345"`
 		DBName   string `envconfig:"DB_NAME" default:"translango"`
 
+		DetectionAddress   string `envconfig:"DETECTION_ADDRESS" default:"http://dummy/api/detection"`
+		TranslationAddress string `envconfig:"TRANSLATION_ADDRESS" default:"http://dummy/api/translation"`
+
 		SessionSecret         string `envconfig:"SESSION_SECRET" default:"dHJhbnNsYW5nbwo="`
 		SessionMaxAge         int    `envconfig:"SESSION_MAX_AGE" default:"3600"`
 		SessionCookieInsecure bool   `envconfig:"SESSION_COOKIE_INSECURE" default:"true"`
