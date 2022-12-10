@@ -276,6 +276,8 @@ components:
     objtxt:
       type: object
       properties:
+        id:
+          type: string
         text:
           type: string
           example: "Dog"
@@ -349,7 +351,12 @@ components:
         objects:
           type: array
           items:
-            $ref: "#/components/schemas/object"
+            type: object
+            properties:
+              id:
+                type: string
+              object:
+                $ref: "#/components/schemas/object"
     message:
       type: object
       properties:
@@ -521,6 +528,8 @@ components:
               original:
                 type: object
                 properties:
+                  id:
+                    type: string
                   text:
                     type: string
                     example: "Dog"

@@ -33,7 +33,7 @@ var ListObjectPrimaryKeyColumns = []string{
 }
 
 type ListObject struct {
-	ID        int
+	ID        string
 	ListID    string
 	ObjectID  string
 	CreatedAt *time.Time
@@ -125,7 +125,71 @@ func SelectOneListObjectByListIDAndObjectID(ctx context.Context, txn *sql.Tx, li
 	return IterateListObject(stmt.QueryRowContext(ctx, params...))
 }
 
-func SelectOneListObjectByID(ctx context.Context, txn *sql.Tx, id *int) (ListObject, error) {
+func SelectListObjectByListID(ctx context.Context, txn *sql.Tx, list_id *string) ([]*ListObject, error) {
+	eq := squirrel.Eq{}
+	if list_id != nil {
+		eq["list_id"] = *list_id
+	}
+	query, params, err := squirrel.
+		Select(ListObjectAllColumns...).
+		From(ListObjectTableName).
+		Where(eq).
+		ToSql()
+	if err != nil {
+		return nil, dberror.MapError(err)
+	}
+	stmt, err := txn.PrepareContext(ctx, query)
+	if err != nil {
+		return nil, dberror.MapError(err)
+	}
+	rows, err := stmt.QueryContext(ctx, params...)
+	if err != nil {
+		return nil, dberror.MapError(err)
+	}
+	res := make([]*ListObject, 0)
+	for rows.Next() {
+		t, err := IterateListObject(rows)
+		if err != nil {
+			return nil, dberror.MapError(err)
+		}
+		res = append(res, &t)
+	}
+	return res, nil
+}
+
+func SelectListObjectByObjectID(ctx context.Context, txn *sql.Tx, object_id *string) ([]*ListObject, error) {
+	eq := squirrel.Eq{}
+	if object_id != nil {
+		eq["object_id"] = *object_id
+	}
+	query, params, err := squirrel.
+		Select(ListObjectAllColumns...).
+		From(ListObjectTableName).
+		Where(eq).
+		ToSql()
+	if err != nil {
+		return nil, dberror.MapError(err)
+	}
+	stmt, err := txn.PrepareContext(ctx, query)
+	if err != nil {
+		return nil, dberror.MapError(err)
+	}
+	rows, err := stmt.QueryContext(ctx, params...)
+	if err != nil {
+		return nil, dberror.MapError(err)
+	}
+	res := make([]*ListObject, 0)
+	for rows.Next() {
+		t, err := IterateListObject(rows)
+		if err != nil {
+			return nil, dberror.MapError(err)
+		}
+		res = append(res, &t)
+	}
+	return res, nil
+}
+
+func SelectOneListObjectByID(ctx context.Context, txn *sql.Tx, id *string) (ListObject, error) {
 	eq := squirrel.Eq{}
 	if id != nil {
 		eq["id"] = *id
@@ -145,7 +209,7 @@ func SelectOneListObjectByID(ctx context.Context, txn *sql.Tx, id *int) (ListObj
 	return IterateListObject(stmt.QueryRowContext(ctx, params...))
 }
 
-func SelectListObjectsByIDs(ctx context.Context, txn *sql.Tx, ids []int) ([]*ListObject, error) {
+func SelectListObjectsByIDs(ctx context.Context, txn *sql.Tx, ids []string) ([]*ListObject, error) {
 	query, params, err := squirrel.
 		Select(ListObjectAllColumns...).
 		From(ListObjectTableName).
@@ -283,7 +347,53 @@ func DeleteOneListObjectByListIDAndObjectID(ctx context.Context, txn *sql.Tx, li
 	return nil
 }
 
-func DeleteOneListObjectByID(ctx context.Context, txn *sql.Tx, id *int) error {
+func DeleteListObjectByListID(ctx context.Context, txn *sql.Tx, list_id *string) error {
+	eq := squirrel.Eq{}
+	if list_id != nil {
+		eq["list_id"] = *list_id
+	}
+
+	query, params, err := squirrel.
+		Delete(ListObjectTableName).
+		Where(eq).
+		ToSql()
+	if err != nil {
+		return dberror.MapError(err)
+	}
+	stmt, err := txn.PrepareContext(ctx, query)
+	if err != nil {
+		return dberror.MapError(err)
+	}
+	if _, err = stmt.Exec(params...); err != nil {
+		return dberror.MapError(err)
+	}
+	return nil
+}
+
+func DeleteListObjectByObjectID(ctx context.Context, txn *sql.Tx, object_id *string) error {
+	eq := squirrel.Eq{}
+	if object_id != nil {
+		eq["object_id"] = *object_id
+	}
+
+	query, params, err := squirrel.
+		Delete(ListObjectTableName).
+		Where(eq).
+		ToSql()
+	if err != nil {
+		return dberror.MapError(err)
+	}
+	stmt, err := txn.PrepareContext(ctx, query)
+	if err != nil {
+		return dberror.MapError(err)
+	}
+	if _, err = stmt.Exec(params...); err != nil {
+		return dberror.MapError(err)
+	}
+	return nil
+}
+
+func DeleteOneListObjectByID(ctx context.Context, txn *sql.Tx, id *string) error {
 	eq := squirrel.Eq{}
 	if id != nil {
 		eq["id"] = *id

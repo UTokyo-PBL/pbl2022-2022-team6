@@ -72,10 +72,10 @@
             {
               "name": "id",
               "datatype": {
-                "type": "int"
+                "type": "char",
+                "prec": 36
               },
-              "is_primary": true,
-              "is_sequence": true
+              "is_primary": true
             },
             {
               "name": "list_id",
@@ -110,10 +110,10 @@
             {
               "name": "id",
               "datatype": {
-                "type": "int"
+                "type": "char",
+                "prec": 36
               },
-              "is_primary": true,
-              "is_sequence": true
+              "is_primary": true
             }
           ],
           "indexes": [
@@ -138,21 +138,46 @@
               "is_unique": true
             },
             {
+              "name": "list_id_2",
+              "fields": [
+                {
+                  "name": "list_id",
+                  "datatype": {
+                    "type": "char",
+                    "prec": 36
+                  }
+                }
+              ]
+            },
+            {
+              "name": "object_id",
+              "fields": [
+                {
+                  "name": "object_id",
+                  "datatype": {
+                    "type": "char",
+                    "prec": 36
+                  }
+                }
+              ]
+            },
+            {
               "name": "list_objects_id_pkey",
               "fields": [
                 {
                   "name": "id",
                   "datatype": {
-                    "type": "int"
+                    "type": "char",
+                    "prec": 36
                   },
-                  "is_primary": true,
-                  "is_sequence": true
+                  "is_primary": true
                 }
               ],
               "is_unique": true,
               "is_primary": true
             }
-          ]
+          ],
+          "manual": true
         },
         {
           "type": "table",
@@ -260,7 +285,8 @@
             {
               "name": "target_objtxt_id",
               "datatype": {
-                "type": "int"
+                "type": "char",
+                "prec": 36
               }
             },
             {
@@ -302,11 +328,36 @@
                 {
                   "name": "target_objtxt_id",
                   "datatype": {
-                    "type": "int"
+                    "type": "char",
+                    "prec": 36
                   }
                 }
               ],
               "is_unique": true
+            },
+            {
+              "name": "object_id_2",
+              "fields": [
+                {
+                  "name": "object_id",
+                  "datatype": {
+                    "type": "char",
+                    "prec": 36
+                  }
+                }
+              ]
+            },
+            {
+              "name": "target_objtxt_id",
+              "fields": [
+                {
+                  "name": "target_objtxt_id",
+                  "datatype": {
+                    "type": "char",
+                    "prec": 36
+                  }
+                }
+              ]
             },
             {
               "name": "object_target_objtxts_id_pkey",
@@ -347,7 +398,8 @@
             {
               "name": "original_ojbtxt_id",
               "datatype": {
-                "type": "int"
+                "type": "char",
+                "prec": 36
               }
             },
             {
@@ -470,11 +522,24 @@
                 {
                   "name": "original_ojbtxt_id",
                   "datatype": {
-                    "type": "int"
+                    "type": "char",
+                    "prec": 36
                   }
                 }
               ],
               "is_unique": true
+            },
+            {
+              "name": "user_id",
+              "fields": [
+                {
+                  "name": "user_id",
+                  "datatype": {
+                    "type": "char",
+                    "prec": 36
+                  }
+                }
+              ]
             },
             {
               "name": "objects_id_pkey",
@@ -501,10 +566,10 @@
             {
               "name": "id",
               "datatype": {
-                "type": "int"
+                "type": "char",
+                "prec": 36
               },
-              "is_primary": true,
-              "is_sequence": true
+              "is_primary": true
             },
             {
               "name": "text",
@@ -547,10 +612,10 @@
             {
               "name": "id",
               "datatype": {
-                "type": "int"
+                "type": "char",
+                "prec": 36
               },
-              "is_primary": true,
-              "is_sequence": true
+              "is_primary": true
             }
           ],
           "indexes": [
@@ -560,16 +625,17 @@
                 {
                   "name": "id",
                   "datatype": {
-                    "type": "int"
+                    "type": "char",
+                    "prec": 36
                   },
-                  "is_primary": true,
-                  "is_sequence": true
+                  "is_primary": true
                 }
               ],
               "is_unique": true,
               "is_primary": true
             }
-          ]
+          ],
+          "manual": true
         },
         {
           "type": "table",

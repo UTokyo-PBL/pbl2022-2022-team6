@@ -35,7 +35,7 @@ var ObjtxtPrimaryKeyColumns = []string{
 }
 
 type Objtxt struct {
-	ID        int
+	ID        string
 	Text      string
 	Language  string
 	SoundUrl  string
@@ -108,7 +108,7 @@ func SelectAllObjtxt(ctx context.Context, txn *sql.Tx) ([]*Objtxt, error) {
 	return res, nil
 }
 
-func SelectOneObjtxtByID(ctx context.Context, txn *sql.Tx, id *int) (Objtxt, error) {
+func SelectOneObjtxtByID(ctx context.Context, txn *sql.Tx, id *string) (Objtxt, error) {
 	eq := squirrel.Eq{}
 	if id != nil {
 		eq["id"] = *id
@@ -128,7 +128,7 @@ func SelectOneObjtxtByID(ctx context.Context, txn *sql.Tx, id *int) (Objtxt, err
 	return IterateObjtxt(stmt.QueryRowContext(ctx, params...))
 }
 
-func SelectObjtxtsByIDs(ctx context.Context, txn *sql.Tx, ids []int) ([]*Objtxt, error) {
+func SelectObjtxtsByIDs(ctx context.Context, txn *sql.Tx, ids []string) ([]*Objtxt, error) {
 	query, params, err := squirrel.
 		Select(ObjtxtAllColumns...).
 		From(ObjtxtTableName).
@@ -240,7 +240,7 @@ func TruncateObjtxt(ctx context.Context, txn *sql.Tx) error {
 	return nil
 }
 
-func DeleteOneObjtxtByID(ctx context.Context, txn *sql.Tx, id *int) error {
+func DeleteOneObjtxtByID(ctx context.Context, txn *sql.Tx, id *string) error {
 	eq := squirrel.Eq{}
 	if id != nil {
 		eq["id"] = *id

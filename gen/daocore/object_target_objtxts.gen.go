@@ -35,7 +35,7 @@ var ObjectTargetObjtxtPrimaryKeyColumns = []string{
 type ObjectTargetObjtxt struct {
 	ID             int
 	ObjectID       string
-	TargetObjtxtID int
+	TargetObjtxtID string
 	CreatedAt      *time.Time
 	UpdatedAt      *time.Time
 }
@@ -102,7 +102,7 @@ func SelectAllObjectTargetObjtxt(ctx context.Context, txn *sql.Tx) ([]*ObjectTar
 	return res, nil
 }
 
-func SelectOneObjectTargetObjtxtByObjectIDAndTargetObjtxtID(ctx context.Context, txn *sql.Tx, object_id *string, target_objtxt_id *int) (ObjectTargetObjtxt, error) {
+func SelectOneObjectTargetObjtxtByObjectIDAndTargetObjtxtID(ctx context.Context, txn *sql.Tx, object_id *string, target_objtxt_id *string) (ObjectTargetObjtxt, error) {
 	eq := squirrel.Eq{}
 	if object_id != nil {
 		eq["object_id"] = *object_id
@@ -123,6 +123,70 @@ func SelectOneObjectTargetObjtxtByObjectIDAndTargetObjtxtID(ctx context.Context,
 		return ObjectTargetObjtxt{}, dberror.MapError(err)
 	}
 	return IterateObjectTargetObjtxt(stmt.QueryRowContext(ctx, params...))
+}
+
+func SelectObjectTargetObjtxtByObjectID(ctx context.Context, txn *sql.Tx, object_id *string) ([]*ObjectTargetObjtxt, error) {
+	eq := squirrel.Eq{}
+	if object_id != nil {
+		eq["object_id"] = *object_id
+	}
+	query, params, err := squirrel.
+		Select(ObjectTargetObjtxtAllColumns...).
+		From(ObjectTargetObjtxtTableName).
+		Where(eq).
+		ToSql()
+	if err != nil {
+		return nil, dberror.MapError(err)
+	}
+	stmt, err := txn.PrepareContext(ctx, query)
+	if err != nil {
+		return nil, dberror.MapError(err)
+	}
+	rows, err := stmt.QueryContext(ctx, params...)
+	if err != nil {
+		return nil, dberror.MapError(err)
+	}
+	res := make([]*ObjectTargetObjtxt, 0)
+	for rows.Next() {
+		t, err := IterateObjectTargetObjtxt(rows)
+		if err != nil {
+			return nil, dberror.MapError(err)
+		}
+		res = append(res, &t)
+	}
+	return res, nil
+}
+
+func SelectObjectTargetObjtxtByTargetObjtxtID(ctx context.Context, txn *sql.Tx, target_objtxt_id *string) ([]*ObjectTargetObjtxt, error) {
+	eq := squirrel.Eq{}
+	if target_objtxt_id != nil {
+		eq["target_objtxt_id"] = *target_objtxt_id
+	}
+	query, params, err := squirrel.
+		Select(ObjectTargetObjtxtAllColumns...).
+		From(ObjectTargetObjtxtTableName).
+		Where(eq).
+		ToSql()
+	if err != nil {
+		return nil, dberror.MapError(err)
+	}
+	stmt, err := txn.PrepareContext(ctx, query)
+	if err != nil {
+		return nil, dberror.MapError(err)
+	}
+	rows, err := stmt.QueryContext(ctx, params...)
+	if err != nil {
+		return nil, dberror.MapError(err)
+	}
+	res := make([]*ObjectTargetObjtxt, 0)
+	for rows.Next() {
+		t, err := IterateObjectTargetObjtxt(rows)
+		if err != nil {
+			return nil, dberror.MapError(err)
+		}
+		res = append(res, &t)
+	}
+	return res, nil
 }
 
 func SelectOneObjectTargetObjtxtByID(ctx context.Context, txn *sql.Tx, id *int) (ObjectTargetObjtxt, error) {
@@ -257,11 +321,57 @@ func TruncateObjectTargetObjtxt(ctx context.Context, txn *sql.Tx) error {
 	return nil
 }
 
-func DeleteOneObjectTargetObjtxtByObjectIDAndTargetObjtxtID(ctx context.Context, txn *sql.Tx, object_id *string, target_objtxt_id *int) error {
+func DeleteOneObjectTargetObjtxtByObjectIDAndTargetObjtxtID(ctx context.Context, txn *sql.Tx, object_id *string, target_objtxt_id *string) error {
 	eq := squirrel.Eq{}
 	if object_id != nil {
 		eq["object_id"] = *object_id
 	}
+	if target_objtxt_id != nil {
+		eq["target_objtxt_id"] = *target_objtxt_id
+	}
+
+	query, params, err := squirrel.
+		Delete(ObjectTargetObjtxtTableName).
+		Where(eq).
+		ToSql()
+	if err != nil {
+		return dberror.MapError(err)
+	}
+	stmt, err := txn.PrepareContext(ctx, query)
+	if err != nil {
+		return dberror.MapError(err)
+	}
+	if _, err = stmt.Exec(params...); err != nil {
+		return dberror.MapError(err)
+	}
+	return nil
+}
+
+func DeleteObjectTargetObjtxtByObjectID(ctx context.Context, txn *sql.Tx, object_id *string) error {
+	eq := squirrel.Eq{}
+	if object_id != nil {
+		eq["object_id"] = *object_id
+	}
+
+	query, params, err := squirrel.
+		Delete(ObjectTargetObjtxtTableName).
+		Where(eq).
+		ToSql()
+	if err != nil {
+		return dberror.MapError(err)
+	}
+	stmt, err := txn.PrepareContext(ctx, query)
+	if err != nil {
+		return dberror.MapError(err)
+	}
+	if _, err = stmt.Exec(params...); err != nil {
+		return dberror.MapError(err)
+	}
+	return nil
+}
+
+func DeleteObjectTargetObjtxtByTargetObjtxtID(ctx context.Context, txn *sql.Tx, target_objtxt_id *string) error {
+	eq := squirrel.Eq{}
 	if target_objtxt_id != nil {
 		eq["target_objtxt_id"] = *target_objtxt_id
 	}

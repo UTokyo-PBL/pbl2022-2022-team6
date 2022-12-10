@@ -27,10 +27,13 @@ type Bbox struct {
 
 // List defines model for list.
 type List struct {
-	IconName *string   `json:"icon_name,omitempty"`
-	Id       *string   `json:"id,omitempty"`
-	Name     *string   `json:"name,omitempty"`
-	Objects  *[]Object `json:"objects,omitempty"`
+	IconName *string `json:"icon_name,omitempty"`
+	Id       *string `json:"id,omitempty"`
+	Name     *string `json:"name,omitempty"`
+	Objects  *[]struct {
+		Id     *string `json:"id,omitempty"`
+		Object *Object `json:"object,omitempty"`
+	} `json:"objects,omitempty"`
 }
 
 // Message defines model for message.
@@ -56,6 +59,7 @@ type Object struct {
 
 // Objtxt defines model for objtxt.
 type Objtxt struct {
+	Id       *string `json:"id,omitempty"`
 	Language *string `json:"language,omitempty"`
 	SoundUrl *string `json:"sound_url,omitempty"`
 	Text     *string `json:"text,omitempty"`
@@ -135,6 +139,7 @@ type NumFailures struct {
 // Original defines model for original.
 type Original struct {
 	Original *struct {
+		Id       *string `json:"id,omitempty"`
 		Language *string `json:"language,omitempty"`
 		Text     *string `json:"text,omitempty"`
 	} `json:"original,omitempty"`

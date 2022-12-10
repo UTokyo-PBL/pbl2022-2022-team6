@@ -15,8 +15,8 @@ type Interface interface {
 	SelectUserByUsernameOrEmail(ctx context.Context, q string) (*model.User, error)
 	CreateNewSession(ctx context.Context, userID string) (string, error)
 	DeleteOneSessionByUserID(ctx context.Context, userID string) error
-	CreateObject(ctx context.Context, history *model.Object) error
-	UpdateObject(ctx context.Context, id string, history *model.Object) error
+	CreateObject(ctx context.Context, object *model.Object) error
+	UpdateObject(ctx context.Context, id string, object *model.Object) error
 	SelectObjectByID(ctx context.Context, id string) (*model.Object, error)
 }
 

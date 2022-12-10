@@ -11,6 +11,7 @@ import (
 )
 
 type Objtxt struct {
+	ID       string
 	Text     string
 	Language string
 	SoundURL string
@@ -25,6 +26,7 @@ type BBox struct {
 
 type Object struct {
 	ID          string
+	UserID      string
 	Original    *Objtxt
 	Target      []*Objtxt
 	BBox        *BBox
@@ -38,12 +40,14 @@ type Object struct {
 	NumFailures int
 }
 
-func ObjectFromAPI(h *api.Object) (*Object, error) {
+func ObjectFromAPI(userID string, h *api.Object) (*Object, error) {
 	o := new(Object)
 
 	if h == nil {
 		return nil, errors.New("object have not been parsed")
 	}
+
+	o.UserID = userID
 
 	if h.Id == nil || *h.Id == "" {
 		return nil, errors.New("id cannot be null")
@@ -108,10 +112,15 @@ func ObjectFromAPI(h *api.Object) (*Object, error) {
 		return nil, errors.New("original cannot be null")
 	}
 	o.Original = &Objtxt{}
+	if h.Original.Id == nil {
+		return nil, errors.New("original.id cannot be null")
+	}
+	o.Original.ID = *h.Original.Id
 	if h.Original.Language == nil {
 		return nil, errors.New("original.language cannot be null")
 	}
 	o.Original.Language = *h.Original.Language
+
 	if h.Original.Text != nil {
 		o.Original.Text = *h.Original.Text
 	}
@@ -125,10 +134,15 @@ func ObjectFromAPI(h *api.Object) (*Object, error) {
 	o.Target = make([]*Objtxt, 0, len(*h.Target))
 	for i, t := range *h.Target {
 		r := &Objtxt{}
+		if t.Id != nil {
+			return nil, fmt.Errorf("target[%d].id cannot be null", i)
+		}
+		r.ID = *t.Id
 		if t.Language == nil {
 			return nil, fmt.Errorf("target[%d].language cannot be null", i)
 		}
 		r.Language = *t.Language
+
 		if t.Text != nil {
 			r.Text = *t.Text
 		}
@@ -164,8 +178,10 @@ func ObjectFromAPI(h *api.Object) (*Object, error) {
 
 func ObjectFromDAO(o *daocore.Object, oo *daocore.Objtxt, tos []*daocore.Objtxt) *Object {
 	object := &Object{
-		ID: o.ID,
+		ID:     o.ID,
+		UserID: o.UserID,
 		Original: &Objtxt{
+			ID:       oo.ID,
 			Text:     oo.Text,
 			Language: oo.Language,
 			SoundURL: oo.SoundUrl,
@@ -188,6 +204,7 @@ func ObjectFromDAO(o *daocore.Object, oo *daocore.Objtxt, tos []*daocore.Objtxt)
 	}
 	for _, to := range tos {
 		object.Target = append(object.Target, &Objtxt{
+			ID:       to.ID,
 			Text:     to.Text,
 			Language: to.Language,
 			SoundURL: to.SoundUrl,
@@ -197,11 +214,11 @@ func ObjectFromDAO(o *daocore.Object, oo *daocore.Objtxt, tos []*daocore.Objtxt)
 	return object
 }
 
-func (o *Object) ObjectDAO(userID string, originalObjtxtID int) *daocore.Object {
+func (o *Object) ObjectDAO() *daocore.Object {
 	return &daocore.Object{
 		ID:               o.ID,
-		UserID:           userID,
-		OriginalOjbtxtID: originalObjtxtID,
+		UserID:           o.UserID,
+		OriginalOjbtxtID: o.Original.ID,
 		BboxX:            o.BBox.X,
 		BboxY:            o.BBox.Y,
 		BboxW:            o.BBox.W,
@@ -217,8 +234,9 @@ func (o *Object) ObjectDAO(userID string, originalObjtxtID int) *daocore.Object 
 	}
 }
 
-func (o *Object) OriginalObjtxtDAO() *daocore.Objtxt {
+func (o *Object) OriginalObjtxtsDAO() *daocore.Objtxt {
 	return &daocore.Objtxt{
+		ID:       o.Original.ID,
 		Text:     o.Original.Text,
 		Language: o.Original.Language,
 		SoundUrl: o.Original.SoundURL,
@@ -226,22 +244,38 @@ func (o *Object) OriginalObjtxtDAO() *daocore.Objtxt {
 }
 
 func (o *Object) TargetObjtxtsDAO() []*daocore.Objtxt {
-	os := make([]*daocore.Objtxt, 0, len(o.Target))
-	for _, o := range o.Target {
-		os = append(os, &daocore.Objtxt{
-			Text:     o.Text,
-			Language: o.Language,
-			SoundUrl: o.SoundURL,
+	tos := make([]*daocore.Objtxt, 0, len(o.Target))
+	for _, to := range o.Target {
+		tos = append(tos, &daocore.Objtxt{
+			ID:       to.ID,
+			Text:     to.Text,
+			Language: to.Language,
+			SoundUrl: to.SoundURL,
 		})
 	}
-	return os
+	return tos
+}
+
+func (o *Object) ObjectTargetObjtxtsDAO() []*daocore.ObjectTargetObjtxt {
+	oos := make([]*daocore.ObjectTargetObjtxt, 0, len(o.Target))
+	for _, oo := range o.Target {
+		oos = append(oos, &daocore.ObjectTargetObjtxt{
+			ObjectID:       o.ID,
+			TargetObjtxtID: oo.ID,
+		})
+	}
+	return oos
+}
+
+func (o *Object) AllObjtxtsDAO() []*daocore.Objtxt {
+	return append([]*daocore.Objtxt{o.OriginalObjtxtsDAO()}, o.TargetObjtxtsDAO()...)
 }
 
 func (o *Object) API() *api.Object {
-
 	tos := make([]api.Objtxt, 0, len(o.Target))
 	for _, t := range o.Target {
 		tos = append(tos, api.Objtxt{
+			Id:       &t.ID,
 			Language: &t.Language,
 			SoundUrl: &t.SoundURL,
 			Text:     &t.Text,
@@ -265,6 +299,7 @@ func (o *Object) API() *api.Object {
 		Longitude:   &o.Longitude,
 		NumFailures: &o.NumFailures,
 		Original: &api.Objtxt{
+			Id:       &o.Original.ID,
 			Language: &o.Original.Language,
 			SoundUrl: &o.Original.SoundURL,
 			Text:     &o.Original.Text,
