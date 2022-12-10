@@ -47,3 +47,11 @@ $ curl -XPOST \
   -H "Cookie: ${SESSION}" \
   http://104.198.116.249/user/logout
 ```
+
+profile
+
+```shell
+$ curl \
+  -H "Cookie: ${SESSION}" \
+  http://104.198.116.249/user/profile
+```

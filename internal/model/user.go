@@ -137,7 +137,6 @@ func (u *User) API() *api.User {
 		Language:           &u.Language,
 		LastName:           &u.LastName,
 		MiddleName:         &u.MiddleName,
-		Password:           &u.Password,
 		PreferredLanguages: &u.PreferredLanguages,
 		ProfileImage:       &u.ProfileImage,
 		Username:           &u.Username,
