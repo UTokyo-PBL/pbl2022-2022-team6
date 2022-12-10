@@ -17,6 +17,14 @@ const (
 	TypeQueryText   TypeQuery = "text"
 )
 
+// Bbox defines model for bbox.
+type Bbox struct {
+	Hh *float32 `json:"hh,omitempty"`
+	Ww *float32 `json:"ww,omitempty"`
+	Xx *float32 `json:"xx,omitempty"`
+	Yy *float32 `json:"yy,omitempty"`
+}
+
 // List defines model for list.
 type List struct {
 	IconName *string   `json:"icon_name,omitempty"`
@@ -32,31 +40,25 @@ type Message struct {
 
 // Object defines model for object.
 type Object struct {
-	Bbox *struct {
-		H    *float32 `json:"h,omitempty"`
-		True *float32 `json:"true,omitempty"`
-		W    *float32 `json:"w,omitempty"`
-		X    *float32 `json:"x,omitempty"`
-	} `json:"bbox,omitempty"`
-	Caption     *string  `json:"caption,omitempty"`
-	City        *string  `json:"city,omitempty"`
-	Country     *string  `json:"country,omitempty"`
-	Id          *string  `json:"id,omitempty"`
-	ImageUrl    *string  `json:"image_url,omitempty"`
-	Latitude    *float32 `json:"latitude,omitempty"`
-	Liked       *bool    `json:"liked,omitempty"`
-	Longitude   *float32 `json:"longitude,omitempty"`
-	NumFailures *int     `json:"num_failures,omitempty"`
-	Original    *struct {
-		Language *string `json:"language,omitempty"`
-		SoundUrl *string `json:"sound_url,omitempty"`
-		Text     *string `json:"text,omitempty"`
-	} `json:"original,omitempty"`
-	Target *[]struct {
-		Language *string `json:"language,omitempty"`
-		SoundUrl *string `json:"sound_url,omitempty"`
-		Text     *string `json:"text,omitempty"`
-	} `json:"target,omitempty"`
+	Bbox        *Bbox     `json:"bbox,omitempty"`
+	Caption     *string   `json:"caption,omitempty"`
+	City        *string   `json:"city,omitempty"`
+	Country     *string   `json:"country,omitempty"`
+	Id          *string   `json:"id,omitempty"`
+	ImageUrl    *string   `json:"image_url,omitempty"`
+	Latitude    *float32  `json:"latitude,omitempty"`
+	Liked       *bool     `json:"liked,omitempty"`
+	Longitude   *float32  `json:"longitude,omitempty"`
+	NumFailures *int      `json:"num_failures,omitempty"`
+	Original    *Objtxt   `json:"original,omitempty"`
+	Target      *[]Objtxt `json:"target,omitempty"`
+}
+
+// Objtxt defines model for objtxt.
+type Objtxt struct {
+	Language *string `json:"language,omitempty"`
+	SoundUrl *string `json:"sound_url,omitempty"`
+	Text     *string `json:"text,omitempty"`
 }
 
 // User defines model for user.

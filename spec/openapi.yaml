@@ -273,50 +273,45 @@ paths:
           description: "ok"
 components:
   schemas:
+    objtxt:
+      type: object
+      properties:
+        text:
+          type: string
+          example: "Dog"
+        language:
+          type: string
+          example: "English"
+        sound_url:
+          type: string
+    bbox:
+      type: object
+      properties:
+        xx:
+          type: number
+          format: float
+        yy:
+          type: number
+          format: float
+        ww:
+          type: number
+          format: float
+        hh:
+          type: number
+          format: float
     object:
       type: object
       properties:
         id:
           type: string
         original:
-          type: object
-          properties:
-            text:
-              type: string
-              example: "Dog"
-            language:
-              type: string
-              example: "English"
-            sound_url:
-              type: string
+          $ref: "#/components/schemas/objtxt"
         target:
           type: array
           items:
-            type: object
-            properties:
-              text:
-                type: string
-                example: "犬"
-              language:
-                type: string
-                example: "ja"
-              sound_url:
-                type: string
+            $ref: "#/components/schemas/objtxt"
         bbox:
-          type: object
-          properties:
-            x:
-              type: number
-              format: float
-            y:
-              type: number
-              format: float
-            w:
-              type: number
-              format: float
-            h:
-              type: number
-              format: float
+          $ref: "#/components/schemas/bbox"
         image_url:
           type: string
           example: "https://statics.translango.com/617a283a-44e1-42e5-8a65-c5a29afe51fc.png"

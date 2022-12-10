@@ -6,10 +6,11 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/UTokyo-PBL/pbl2022-2022-team6/internal/httpclient/detection"
-	"github.com/UTokyo-PBL/pbl2022-2022-team6/internal/httpclient/translation"
 	"net/http"
 	"os"
+
+	"github.com/UTokyo-PBL/pbl2022-2022-team6/internal/httpclient/detection"
+	"github.com/UTokyo-PBL/pbl2022-2022-team6/internal/httpclient/translation"
 
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/internal/repository"
 
