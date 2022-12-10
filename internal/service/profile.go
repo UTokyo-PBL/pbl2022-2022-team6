@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/UTokyo-PBL/pbl2022-2022-team6/pkg/failures"
 
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/internal/model"
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/pkg/ptr"
@@ -9,7 +10,6 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/gen/api"
-	"github.com/UTokyo-PBL/pbl2022-2022-team6/internal/failures"
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/internal/repository"
 )
 

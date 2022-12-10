@@ -2,11 +2,11 @@ package handler
 
 import (
 	"fmt"
+	"github.com/UTokyo-PBL/pbl2022-2022-team6/pkg/failures"
 
 	"github.com/labstack/echo/v4"
 	"github.com/pkg/errors"
 
-	"github.com/UTokyo-PBL/pbl2022-2022-team6/internal/failures"
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/pkg/echoutil"
 )
 
