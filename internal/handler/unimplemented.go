@@ -51,16 +51,6 @@ func (s *Server) PostDashboardLists(ec echo.Context, params api.PostDashboardLis
 	panic("implement me")
 }
 
-func (s *Server) GetDashboardTop(ec echo.Context, params api.GetDashboardTopParams) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s *Server) PostDashboardTop(ec echo.Context, params api.PostDashboardTopParams) error {
-	//TODO implement me
-	panic("implement me")
-}
-
 func (s *Server) DeleteDashboardsListsListID(ec echo.Context, listID api.ListID, params api.DeleteDashboardsListsListIDParams) error {
 	//TODO implement me
 	panic("implement me")

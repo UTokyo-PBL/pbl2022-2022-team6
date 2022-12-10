@@ -40,3 +40,28 @@ func PutProfile(ctx context.Context, repo repository.Interface, userID string, u
 		Message: ptr.String("successfully updated"),
 	}, nil
 }
+
+func PutPreferredLanguages(ctx context.Context, repo repository.Interface, userID string, languages *api.PreferredLanguages) (*api.Message, error) {
+	if languages == nil || languages.Languages == nil {
+		err := errors.New("PutPreferredLanguages : languages cannot be null")
+		return nil, errors.Wrap(failures.InvalidUserParams, err.Error())
+	}
+
+	user, err := repo.SelectUserByID(ctx, userID)
+
+	if err != nil {
+		err = errors.Wrap(err, "PutPreferredLanguages failed to repo.SelectUserByID")
+		return nil, errors.Wrap(failures.UnknownError, err.Error())
+	}
+
+	user.PreferredLanguages = *languages.Languages
+
+	if err := repo.UpdateUser(ctx, userID, user); err != nil {
+		err = errors.Wrap(err, "PutPreferredLanguages failed to repo.UpdateUser")
+		return nil, errors.Wrap(failures.UnknownError, err.Error())
+	}
+
+	return &api.Message{
+		Message: ptr.String("successfully updated"),
+	}, nil
+}

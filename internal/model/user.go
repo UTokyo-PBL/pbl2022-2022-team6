@@ -27,6 +27,10 @@ type User struct {
 func UserFromAPI(u *api.User) (*User, error) {
 	user := new(User)
 
+	if u == nil {
+		return nil, errors.New("user have not been parsed")
+	}
+
 	if u.Id == nil || *u.Id == "" {
 		return nil, errors.New("id cannot be null")
 	}

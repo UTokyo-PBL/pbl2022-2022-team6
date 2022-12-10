@@ -55,3 +55,32 @@ $ curl \
   -H "Cookie: ${SESSION}" \
   http://104.198.116.249/user/profile
 ```
+
+edit profile
+
+
+```shell
+$ curl -XPOST \
+  -d '{"id":"210e4cee-ba0b-4cb7-848c-2901e3310cee","email":"example@translango.com","password":"passw0rd","first_name":"nakai","last_name":"yu","username":"nakai-yu","language":"ja"}' \
+  -H "content-type: application/json" \
+  -H "Cookie: ${SESSION}" \
+  http://104.198.116.249/user/profile
+```
+
+dashboard/top
+
+```shell
+$ curl \
+  -H "Cookie: ${SESSION}" \
+  http://104.198.116.249/dashboard/top
+```
+
+edit dashboard/top
+
+```shell
+$ curl -XPOST \
+  -d '{"languages": ["ja"]}' \
+  -H "content-type: application/json" \
+  -H "Cookie: ${SESSION}" \
+  http://104.198.116.249/dashboard/top
+```
