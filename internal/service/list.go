@@ -15,17 +15,32 @@ import (
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/pkg/ptr"
 )
 
-func ListLists(ctx context.Context, repo repository.Interface, userID string) (*api.Lists, error) {
+func allList(ctx context.Context, repo repository.Interface, userID string) (*api.List, error) {
 	object, err := repo.ListObjectsByUserID(ctx, userID)
 
 	if err != nil {
-		err = errors.Wrap(err, "ListLists failed to repo.SelectObjectsByUserID")
+		err = errors.Wrap(err, "allList failed to repo.SelectObjectsByUserID")
 		return nil, errors.Wrap(failures.UnknownError, err.Error())
 	}
 
 	objects := make([]api.Object, 0, len(object))
 	for _, o := range object {
 		objects = append(objects, *o.API())
+	}
+
+	return &api.List{
+		Id:       &userID,
+		IconName: ptr.String("all"),
+		Name:     ptr.String("all"),
+		Objects:  &objects,
+	}, nil
+}
+
+func ListLists(ctx context.Context, repo repository.Interface, userID string) (*api.Lists, error) {
+	all, err := allList(ctx, repo, userID)
+	if err != nil {
+		err = errors.Wrap(err, "ListLists failed to allList")
+		return nil, errors.Wrap(failures.UnknownError, err.Error())
 	}
 
 	ls, err := repo.ListListsByUserID(ctx, userID)
@@ -42,11 +57,7 @@ func ListLists(ctx context.Context, repo repository.Interface, userID string) (*
 	total := 1 + len(lists)
 
 	return &api.Lists{
-		DefaultList: &api.List{
-			IconName: ptr.String("all"),
-			Name:     ptr.String("all"),
-			Objects:  &objects,
-		},
+		DefaultList: all,
 		CustomLists: &lists,
 		Total:       &total,
 	}, nil
@@ -70,19 +81,30 @@ func PostList(ctx context.Context, repo repository.Interface, userID string, lis
 }
 
 func GetListByRandom(ctx context.Context, repo repository.Interface, userID, id string, num int) (*api.List, error) {
-	list, err := repo.SelectListByID(ctx, id)
+	var err error
+	var l *api.List
 
-	if err != nil {
-		err = errors.Wrap(err, "GetList failed to repo.SelectListByID")
-		return nil, errors.Wrap(failures.ResourceNotFound, err.Error())
+	switch true {
+	case userID == id:
+		l, err = allList(ctx, repo, userID)
+		if err != nil {
+			err = errors.Wrap(err, "GetListByRandom failed to allList")
+		}
+	default:
+		list, err := repo.SelectListByID(ctx, id)
+
+		if err != nil {
+			err = errors.Wrap(err, "GetListByRandom failed to repo.SelectListByID")
+			return nil, errors.Wrap(failures.ResourceNotFound, err.Error())
+		}
+
+		if list.UserID != userID {
+			err = errors.Wrapf(err, "GetList: User %s have no access to %s ", userID, id)
+			return nil, errors.Wrap(failures.InvalidListAccess, err.Error())
+		}
+
+		l = list.API()
 	}
-
-	if list.UserID != userID {
-		err = errors.Wrapf(err, "GetList: User %s have no access to %s ", userID, id)
-		return nil, errors.Wrap(failures.InvalidListAccess, err.Error())
-	}
-
-	l := list.API()
 
 	rand.Seed(time.Now().UnixNano())
 	rand.Shuffle(len(*l.Objects), func(i, j int) {
@@ -93,7 +115,7 @@ func GetListByRandom(ctx context.Context, repo repository.Interface, userID, id 
 		*l.Objects = (*l.Objects)[:num]
 	}
 
-	return list.API(), nil
+	return l, nil
 }
 
 func DeleteList(ctx context.Context, repo repository.Interface, userID, id string) (*api.Message, error) {
