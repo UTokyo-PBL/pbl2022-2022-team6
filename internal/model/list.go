@@ -46,11 +46,12 @@ func ListFromAPI(userID string, a *api.List) (*List, error) {
 	}
 	l.Objects = make([]*Object, 0, len(*a.Objects))
 	for _, o := range *a.Objects {
-		object, err := ObjectFromAPI(userID, &o)
-		if err != nil {
-			return nil, errors.Wrap(err, "ListFromAPI failed to ObjectFromAPI")
+		if o.Id == nil || *o.Id == "" {
+			return nil, errors.New("id cannot be null")
 		}
-		l.Objects = append(l.Objects, object)
+		l.Objects = append(l.Objects, &Object{
+			ID: *o.Id,
+		})
 	}
 
 	return l, nil

@@ -243,7 +243,7 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/list"
-  /dashboards/lists/{listID}:
+  /dashboard/lists/{listID}:
     parameters:
       - $ref: "#/components/parameters/cookie"
       - $ref: "#/components/parameters/listID"

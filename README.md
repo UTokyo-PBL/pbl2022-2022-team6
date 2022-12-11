@@ -169,3 +169,46 @@ $ curl -XPOST \
   "http://104.198.116.249/dashboard/histories/8d5eeaff-654d-4cde-a075-07d2a04c26be/original"
 ```
 
+list
+
+```shell
+$ curl \
+  -H "Cookie: ${SESSION}" \
+  "http://104.198.116.249/dashboard/lists"
+```
+
+create custom list
+
+```shell
+$ curl -XPOST \
+  -d '{"id":"8e23947f-5fc0-41a5-b24b-7adc1d4b8bf9","icon-name":"US","name":"english","objects":[{"id":"8d5eeaff-654d-4cde-a075-07d2a04c26be"}]}' \
+  -H "content-type: application/json" \
+  -H "Cookie: ${SESSION}" \
+  "http://104.198.116.249/dashboard/lists"
+```
+
+get custom list
+
+```shell
+$ curl \
+  -H "Cookie: ${SESSION}" \
+  "http://104.198.116.249/dashboard/lists/8e23947f-5fc0-41a5-b24b-7adc1d4b8bf9?num_questions=2"
+```
+
+update custom list
+
+```shell
+$ curl -XPUT \
+  -d '{"id":"8e23947f-5fc0-41a5-b24b-7adc1d4b8bf9","icon-name":"US","name":"english","objects":[{"id":"8d5eeaff-654d-4cde-a075-07d2a04c26be"}]}' \
+  -H "content-type: application/json" \
+  -H "Cookie: ${SESSION}" \
+  "http://104.198.116.249/dashboard/lists/8e23947f-5fc0-41a5-b24b-7adc1d4b8bf9"
+```
+
+delete custom list
+
+```shell
+$ curl -XDELETE \
+  -H "Cookie: ${SESSION}" \
+  "http://104.198.116.249/dashboard/lists/8e23947f-5fc0-41a5-b24b-7adc1d4b8bf9"
+```

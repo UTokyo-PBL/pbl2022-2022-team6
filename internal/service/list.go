@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"math/rand"
+	"time"
 
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/internal/model"
 
@@ -67,7 +69,7 @@ func PostList(ctx context.Context, repo repository.Interface, userID string, lis
 	}, nil
 }
 
-func GetList(ctx context.Context, repo repository.Interface, userID, id string) (*api.List, error) {
+func GetListByRandom(ctx context.Context, repo repository.Interface, userID, id string, num int) (*api.List, error) {
 	list, err := repo.SelectListByID(ctx, id)
 
 	if err != nil {
@@ -78,6 +80,17 @@ func GetList(ctx context.Context, repo repository.Interface, userID, id string) 
 	if list.UserID != userID {
 		err = errors.Wrapf(err, "GetList: User %s have no access to %s ", userID, id)
 		return nil, errors.Wrap(failures.InvalidListAccess, err.Error())
+	}
+
+	l := list.API()
+
+	rand.Seed(time.Now().UnixNano())
+	rand.Shuffle(len(*l.Objects), func(i, j int) {
+		(*l.Objects)[i], (*l.Objects)[j] = (*l.Objects)[j], (*l.Objects)[i]
+	})
+
+	if len(*l.Objects) > num {
+		*l.Objects = (*l.Objects)[:num]
 	}
 
 	return list.API(), nil

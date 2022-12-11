@@ -215,6 +215,26 @@ type PostDashboardListsParams struct {
 	Cookie Cookie `json:"cookie"`
 }
 
+// DeleteDashboardListsListIDParams defines parameters for DeleteDashboardListsListID.
+type DeleteDashboardListsListIDParams struct {
+	// cookie for identifying user
+	Cookie Cookie `json:"cookie"`
+}
+
+// GetDashboardListsListIDParams defines parameters for GetDashboardListsListID.
+type GetDashboardListsListIDParams struct {
+	NumQuestions int `form:"num_questions" json:"num_questions"`
+
+	// cookie for identifying user
+	Cookie Cookie `json:"cookie"`
+}
+
+// PutDashboardListsListIDParams defines parameters for PutDashboardListsListID.
+type PutDashboardListsListIDParams struct {
+	// cookie for identifying user
+	Cookie Cookie `json:"cookie"`
+}
+
 // GetDashboardTopParams defines parameters for GetDashboardTop.
 type GetDashboardTopParams struct {
 	// cookie for identifying user
@@ -223,26 +243,6 @@ type GetDashboardTopParams struct {
 
 // PostDashboardTopParams defines parameters for PostDashboardTop.
 type PostDashboardTopParams struct {
-	// cookie for identifying user
-	Cookie Cookie `json:"cookie"`
-}
-
-// DeleteDashboardsListsListIDParams defines parameters for DeleteDashboardsListsListID.
-type DeleteDashboardsListsListIDParams struct {
-	// cookie for identifying user
-	Cookie Cookie `json:"cookie"`
-}
-
-// GetDashboardsListsListIDParams defines parameters for GetDashboardsListsListID.
-type GetDashboardsListsListIDParams struct {
-	NumQuestions int `form:"num_questions" json:"num_questions"`
-
-	// cookie for identifying user
-	Cookie Cookie `json:"cookie"`
-}
-
-// PutDashboardsListsListIDParams defines parameters for PutDashboardsListsListID.
-type PutDashboardsListsListIDParams struct {
 	// cookie for identifying user
 	Cookie Cookie `json:"cookie"`
 }
@@ -289,11 +289,11 @@ type PostDashboardHistoriesObjectIDOriginalJSONRequestBody Original
 // PostDashboardListsJSONRequestBody defines body for PostDashboardLists for application/json ContentType.
 type PostDashboardListsJSONRequestBody = List
 
+// PutDashboardListsListIDJSONRequestBody defines body for PutDashboardListsListID for application/json ContentType.
+type PutDashboardListsListIDJSONRequestBody = List
+
 // PostDashboardTopJSONRequestBody defines body for PostDashboardTop for application/json ContentType.
 type PostDashboardTopJSONRequestBody PreferredLanguages
-
-// PutDashboardsListsListIDJSONRequestBody defines body for PutDashboardsListsListID for application/json ContentType.
-type PutDashboardsListsListIDJSONRequestBody = List
 
 // PostUserLoginJSONRequestBody defines body for PostUserLogin for application/json ContentType.
 type PostUserLoginJSONRequestBody PostUserLoginJSONBody
@@ -336,21 +336,21 @@ type ServerInterface interface {
 	// dashboard/list - add custom list
 	// (POST /dashboard/lists)
 	PostDashboardLists(ctx echo.Context, params PostDashboardListsParams) error
+	// dashboard - delete list
+	// (DELETE /dashboard/lists/{listID})
+	DeleteDashboardListsListID(ctx echo.Context, listID ListID, params DeleteDashboardListsListIDParams) error
+	// dashboard/list - start game
+	// (GET /dashboard/lists/{listID})
+	GetDashboardListsListID(ctx echo.Context, listID ListID, params GetDashboardListsListIDParams) error
+	// dashboard - edit list
+	// (PUT /dashboard/lists/{listID})
+	PutDashboardListsListID(ctx echo.Context, listID ListID, params PutDashboardListsListIDParams) error
 	// dashboard/main - top
 	// (GET /dashboard/top)
 	GetDashboardTop(ctx echo.Context, params GetDashboardTopParams) error
 	// dashboard/main - update preferred language
 	// (POST /dashboard/top)
 	PostDashboardTop(ctx echo.Context, params PostDashboardTopParams) error
-	// dashboard - delete list
-	// (DELETE /dashboards/lists/{listID})
-	DeleteDashboardsListsListID(ctx echo.Context, listID ListID, params DeleteDashboardsListsListIDParams) error
-	// dashboard/list - start game
-	// (GET /dashboards/lists/{listID})
-	GetDashboardsListsListID(ctx echo.Context, listID ListID, params GetDashboardsListsListIDParams) error
-	// dashboard - edit list
-	// (PUT /dashboards/lists/{listID})
-	PutDashboardsListsListID(ctx echo.Context, listID ListID, params PutDashboardsListsListIDParams) error
 	// login
 	// (POST /user/login)
 	PostUserLogin(ctx echo.Context) error
@@ -740,6 +740,126 @@ func (w *ServerInterfaceWrapper) PostDashboardLists(ctx echo.Context) error {
 	return err
 }
 
+// DeleteDashboardListsListID converts echo context to params.
+func (w *ServerInterfaceWrapper) DeleteDashboardListsListID(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "listID" -------------
+	var listID ListID
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "listID", runtime.ParamLocationPath, ctx.Param("listID"), &listID)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter listID: %s", err))
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params DeleteDashboardListsListIDParams
+
+	headers := ctx.Request().Header
+	// ------------- Required header parameter "cookie" -------------
+	if valueList, found := headers[http.CanonicalHeaderKey("cookie")]; found {
+		var Cookie Cookie
+		n := len(valueList)
+		if n != 1 {
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Expected one value for cookie, got %d", n))
+		}
+
+		err = runtime.BindStyledParameterWithLocation("simple", false, "cookie", runtime.ParamLocationHeader, valueList[0], &Cookie)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter cookie: %s", err))
+		}
+
+		params.Cookie = Cookie
+	} else {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Header parameter cookie is required, but not found"))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.DeleteDashboardListsListID(ctx, listID, params)
+	return err
+}
+
+// GetDashboardListsListID converts echo context to params.
+func (w *ServerInterfaceWrapper) GetDashboardListsListID(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "listID" -------------
+	var listID ListID
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "listID", runtime.ParamLocationPath, ctx.Param("listID"), &listID)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter listID: %s", err))
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetDashboardListsListIDParams
+	// ------------- Required query parameter "num_questions" -------------
+
+	err = runtime.BindQueryParameter("form", true, true, "num_questions", ctx.QueryParams(), &params.NumQuestions)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter num_questions: %s", err))
+	}
+
+	headers := ctx.Request().Header
+	// ------------- Required header parameter "cookie" -------------
+	if valueList, found := headers[http.CanonicalHeaderKey("cookie")]; found {
+		var Cookie Cookie
+		n := len(valueList)
+		if n != 1 {
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Expected one value for cookie, got %d", n))
+		}
+
+		err = runtime.BindStyledParameterWithLocation("simple", false, "cookie", runtime.ParamLocationHeader, valueList[0], &Cookie)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter cookie: %s", err))
+		}
+
+		params.Cookie = Cookie
+	} else {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Header parameter cookie is required, but not found"))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetDashboardListsListID(ctx, listID, params)
+	return err
+}
+
+// PutDashboardListsListID converts echo context to params.
+func (w *ServerInterfaceWrapper) PutDashboardListsListID(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "listID" -------------
+	var listID ListID
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "listID", runtime.ParamLocationPath, ctx.Param("listID"), &listID)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter listID: %s", err))
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PutDashboardListsListIDParams
+
+	headers := ctx.Request().Header
+	// ------------- Required header parameter "cookie" -------------
+	if valueList, found := headers[http.CanonicalHeaderKey("cookie")]; found {
+		var Cookie Cookie
+		n := len(valueList)
+		if n != 1 {
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Expected one value for cookie, got %d", n))
+		}
+
+		err = runtime.BindStyledParameterWithLocation("simple", false, "cookie", runtime.ParamLocationHeader, valueList[0], &Cookie)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter cookie: %s", err))
+		}
+
+		params.Cookie = Cookie
+	} else {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Header parameter cookie is required, but not found"))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutDashboardListsListID(ctx, listID, params)
+	return err
+}
+
 // GetDashboardTop converts echo context to params.
 func (w *ServerInterfaceWrapper) GetDashboardTop(ctx echo.Context) error {
 	var err error
@@ -799,126 +919,6 @@ func (w *ServerInterfaceWrapper) PostDashboardTop(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PostDashboardTop(ctx, params)
-	return err
-}
-
-// DeleteDashboardsListsListID converts echo context to params.
-func (w *ServerInterfaceWrapper) DeleteDashboardsListsListID(ctx echo.Context) error {
-	var err error
-	// ------------- Path parameter "listID" -------------
-	var listID ListID
-
-	err = runtime.BindStyledParameterWithLocation("simple", false, "listID", runtime.ParamLocationPath, ctx.Param("listID"), &listID)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter listID: %s", err))
-	}
-
-	// Parameter object where we will unmarshal all parameters from the context
-	var params DeleteDashboardsListsListIDParams
-
-	headers := ctx.Request().Header
-	// ------------- Required header parameter "cookie" -------------
-	if valueList, found := headers[http.CanonicalHeaderKey("cookie")]; found {
-		var Cookie Cookie
-		n := len(valueList)
-		if n != 1 {
-			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Expected one value for cookie, got %d", n))
-		}
-
-		err = runtime.BindStyledParameterWithLocation("simple", false, "cookie", runtime.ParamLocationHeader, valueList[0], &Cookie)
-		if err != nil {
-			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter cookie: %s", err))
-		}
-
-		params.Cookie = Cookie
-	} else {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Header parameter cookie is required, but not found"))
-	}
-
-	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.DeleteDashboardsListsListID(ctx, listID, params)
-	return err
-}
-
-// GetDashboardsListsListID converts echo context to params.
-func (w *ServerInterfaceWrapper) GetDashboardsListsListID(ctx echo.Context) error {
-	var err error
-	// ------------- Path parameter "listID" -------------
-	var listID ListID
-
-	err = runtime.BindStyledParameterWithLocation("simple", false, "listID", runtime.ParamLocationPath, ctx.Param("listID"), &listID)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter listID: %s", err))
-	}
-
-	// Parameter object where we will unmarshal all parameters from the context
-	var params GetDashboardsListsListIDParams
-	// ------------- Required query parameter "num_questions" -------------
-
-	err = runtime.BindQueryParameter("form", true, true, "num_questions", ctx.QueryParams(), &params.NumQuestions)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter num_questions: %s", err))
-	}
-
-	headers := ctx.Request().Header
-	// ------------- Required header parameter "cookie" -------------
-	if valueList, found := headers[http.CanonicalHeaderKey("cookie")]; found {
-		var Cookie Cookie
-		n := len(valueList)
-		if n != 1 {
-			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Expected one value for cookie, got %d", n))
-		}
-
-		err = runtime.BindStyledParameterWithLocation("simple", false, "cookie", runtime.ParamLocationHeader, valueList[0], &Cookie)
-		if err != nil {
-			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter cookie: %s", err))
-		}
-
-		params.Cookie = Cookie
-	} else {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Header parameter cookie is required, but not found"))
-	}
-
-	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GetDashboardsListsListID(ctx, listID, params)
-	return err
-}
-
-// PutDashboardsListsListID converts echo context to params.
-func (w *ServerInterfaceWrapper) PutDashboardsListsListID(ctx echo.Context) error {
-	var err error
-	// ------------- Path parameter "listID" -------------
-	var listID ListID
-
-	err = runtime.BindStyledParameterWithLocation("simple", false, "listID", runtime.ParamLocationPath, ctx.Param("listID"), &listID)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter listID: %s", err))
-	}
-
-	// Parameter object where we will unmarshal all parameters from the context
-	var params PutDashboardsListsListIDParams
-
-	headers := ctx.Request().Header
-	// ------------- Required header parameter "cookie" -------------
-	if valueList, found := headers[http.CanonicalHeaderKey("cookie")]; found {
-		var Cookie Cookie
-		n := len(valueList)
-		if n != 1 {
-			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Expected one value for cookie, got %d", n))
-		}
-
-		err = runtime.BindStyledParameterWithLocation("simple", false, "cookie", runtime.ParamLocationHeader, valueList[0], &Cookie)
-		if err != nil {
-			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter cookie: %s", err))
-		}
-
-		params.Cookie = Cookie
-	} else {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Header parameter cookie is required, but not found"))
-	}
-
-	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.PutDashboardsListsListID(ctx, listID, params)
 	return err
 }
 
@@ -1080,11 +1080,11 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.POST(baseURL+"/dashboard/histories/:objectID/original", wrapper.PostDashboardHistoriesObjectIDOriginal)
 	router.GET(baseURL+"/dashboard/lists", wrapper.GetDashboardLists)
 	router.POST(baseURL+"/dashboard/lists", wrapper.PostDashboardLists)
+	router.DELETE(baseURL+"/dashboard/lists/:listID", wrapper.DeleteDashboardListsListID)
+	router.GET(baseURL+"/dashboard/lists/:listID", wrapper.GetDashboardListsListID)
+	router.PUT(baseURL+"/dashboard/lists/:listID", wrapper.PutDashboardListsListID)
 	router.GET(baseURL+"/dashboard/top", wrapper.GetDashboardTop)
 	router.POST(baseURL+"/dashboard/top", wrapper.PostDashboardTop)
-	router.DELETE(baseURL+"/dashboards/lists/:listID", wrapper.DeleteDashboardsListsListID)
-	router.GET(baseURL+"/dashboards/lists/:listID", wrapper.GetDashboardsListsListID)
-	router.PUT(baseURL+"/dashboards/lists/:listID", wrapper.PutDashboardsListsListID)
 	router.POST(baseURL+"/user/login", wrapper.PostUserLogin)
 	router.POST(baseURL+"/user/logout", wrapper.PostUserLogout)
 	router.GET(baseURL+"/user/profile", wrapper.GetUserProfile)

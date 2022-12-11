@@ -52,7 +52,7 @@ func (s *Server) PostDashboardLists(ec echo.Context, params api.PostDashboardLis
 	return ec.JSON(http.StatusOK, msg)
 }
 
-func (s *Server) DeleteDashboardsListsListID(ec echo.Context, listID api.ListID, params api.DeleteDashboardsListsListIDParams) error {
+func (s *Server) DeleteDashboardListsListID(ec echo.Context, listID api.ListID, params api.DeleteDashboardListsListIDParams) error {
 	ctx, cancel := context.WithCancel(ec.Request().Context())
 	defer cancel()
 
@@ -69,7 +69,7 @@ func (s *Server) DeleteDashboardsListsListID(ec echo.Context, listID api.ListID,
 	return ec.JSON(http.StatusOK, msg)
 }
 
-func (s *Server) GetDashboardsListsListID(ec echo.Context, listID api.ListID, params api.GetDashboardsListsListIDParams) error {
+func (s *Server) GetDashboardListsListID(ec echo.Context, listID api.ListID, params api.GetDashboardListsListIDParams) error {
 	ctx, cancel := context.WithCancel(ec.Request().Context())
 	defer cancel()
 
@@ -78,7 +78,7 @@ func (s *Server) GetDashboardsListsListID(ec echo.Context, listID api.ListID, pa
 		return echoutil.ErrInternal(ec, err)
 	}
 
-	list, err := service.GetList(ctx, s.repo, userID, listID)
+	list, err := service.GetListByRandom(ctx, s.repo, userID, listID, params.NumQuestions)
 	if err != nil {
 		return handle(ec, err)
 	}
@@ -86,7 +86,7 @@ func (s *Server) GetDashboardsListsListID(ec echo.Context, listID api.ListID, pa
 	return ec.JSON(http.StatusOK, list)
 }
 
-func (s *Server) PutDashboardsListsListID(ec echo.Context, listID api.ListID, params api.PutDashboardsListsListIDParams) error {
+func (s *Server) PutDashboardListsListID(ec echo.Context, listID api.ListID, params api.PutDashboardListsListIDParams) error {
 	ctx, cancel := context.WithCancel(ec.Request().Context())
 	defer cancel()
 
