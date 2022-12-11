@@ -195,6 +195,14 @@ $ curl \
   "http://104.198.116.249/dashboard/lists/8e23947f-5fc0-41a5-b24b-7adc1d4b8bf9?num_questions=2"
 ```
 
+get all list
+
+```shell
+$ curl \
+  -H "Cookie: ${SESSION}" \
+  "http://104.198.116.249/dashboard/lists/210e4cee-ba0b-4cb7-848c-2901e3310cee?num_questions=2"
+```
+
 update custom list
 
 ```shell
