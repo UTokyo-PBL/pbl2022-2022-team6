@@ -12,4 +12,5 @@ var (
 	DetectionFailed     = errors.New("detection failed")
 	TranslationFailed   = errors.New("translation failed")
 	InvalidObjectAccess = errors.New("invalid object access")
+	ResourceNotFound    = errors.New("resource not found")
 )

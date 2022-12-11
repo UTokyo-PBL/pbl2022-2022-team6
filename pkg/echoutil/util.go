@@ -67,3 +67,15 @@ func ResourceConflict(ec echo.Context, err error, opts ...ErrOptionFunc) error {
 		"msg":          opt.msg,
 	})
 }
+
+func ResourceNotFound(ec echo.Context, err error, opts ...ErrOptionFunc) error {
+	opt := errOption{}
+	for _, f := range opts {
+		f(&opt)
+	}
+	return ec.JSON(http.StatusNotFound, map[string]interface{}{
+		"error":        "resource not found",
+		"error_detail": err.Error(),
+		"msg":          opt.msg,
+	})
+}

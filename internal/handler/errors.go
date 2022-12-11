@@ -31,6 +31,8 @@ func handle(ec echo.Context, err error) error {
 		return echoutil.ErrInternal(ec, err)
 	case errors.Is(errors.Unwrap(err), failures.InvalidObjectAccess):
 		return echoutil.ErrBadPassword(ec, err)
+	case errors.Is(errors.Unwrap(err), failures.ResourceNotFound):
+		return echoutil.ResourceNotFound(ec, err)
 	default:
 		fmt.Errorf("unknown error type: %w", err)
 		return echoutil.ErrInternal(ec, err)

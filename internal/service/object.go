@@ -43,6 +43,10 @@ func DetectObject(
 		err = errors.Wrap(err, "PostObject failed to model.ObjectFromAPI")
 		return nil, errors.Wrap(failures.InvalidObjectParams, err.Error())
 	}
+	if o.ImageURL == "" {
+		err = errors.New("image url cannot be null on detecting object")
+		return nil, errors.Wrap(failures.InvalidObjectParams, err.Error())
+	}
 
 	// detection
 	bbox, err := detectionClient.Detect(ctx, o.ImageURL)
@@ -115,21 +119,47 @@ func TranslateObject(
 func GetObject(ctx context.Context, repo repository.Interface, userID, id string) (*api.Object, error) {
 	object, err := repo.SelectObjectByID(ctx, id)
 
+	if err != nil {
+		err = errors.Wrap(err, "GetObject failed to repo.SelectObjectByID")
+		return nil, errors.Wrap(failures.ResourceNotFound, err.Error())
+	}
+
 	if object.UserID != userID {
 		err = errors.Wrapf(err, "GetObject: User %s have no access to %s ", userID, id)
 		return nil, errors.Wrap(failures.InvalidObjectAccess, err.Error())
 	}
 
+	return object.API(), nil
+}
+
+func DeleteObject(ctx context.Context, repo repository.Interface, userID, id string) error {
+	object, err := repo.SelectObjectByID(ctx, id)
+
 	if err != nil {
 		err = errors.Wrap(err, "GetObject failed to repo.SelectObjectByID")
-		return nil, errors.Wrap(failures.UnknownError, err.Error())
+		return errors.Wrap(failures.UnknownError, err.Error())
 	}
 
-	return object.API(), nil
+	if object.UserID != userID {
+		err = errors.Wrapf(err, "GetObject: User %s have no access to %s ", userID, id)
+		return errors.Wrap(failures.InvalidObjectAccess, err.Error())
+	}
+
+	if err := repo.DeleteObject(ctx, id, object); err != nil {
+		return errors.Wrap(failures.UnknownError, err.Error())
+	}
+
+	return nil
+
 }
 
 func UpdateCaption(ctx context.Context, repo repository.Interface, userID, id, caption string) (*api.Message, error) {
 	object, err := repo.SelectObjectByID(ctx, id)
+
+	if err != nil {
+		err = errors.Wrap(err, "GetObject failed to repo.SelectObjectByID")
+		return nil, errors.Wrap(failures.UnknownError, err.Error())
+	}
 
 	if object.UserID != userID {
 		err = errors.Wrapf(err, "UpdateCaption: User %s have no access to %s", userID, id)
@@ -151,6 +181,11 @@ func UpdateCaption(ctx context.Context, repo repository.Interface, userID, id, c
 func UpdateLiked(ctx context.Context, repo repository.Interface, userID, id string, liked bool) (*api.Message, error) {
 	object, err := repo.SelectObjectByID(ctx, id)
 
+	if err != nil {
+		err = errors.Wrap(err, "GetObject failed to repo.SelectObjectByID")
+		return nil, errors.Wrap(failures.UnknownError, err.Error())
+	}
+
 	if object.UserID != userID {
 		err = errors.Wrapf(err, "UpdateLiked: User %s have no access to %s", userID, id)
 		return nil, errors.Wrap(failures.InvalidObjectAccess, err.Error())
@@ -171,6 +206,11 @@ func UpdateLiked(ctx context.Context, repo repository.Interface, userID, id stri
 func UpdateNumFailures(ctx context.Context, repo repository.Interface, userID, id string, numFailures int) (*api.Message, error) {
 	object, err := repo.SelectObjectByID(ctx, id)
 
+	if err != nil {
+		err = errors.Wrap(err, "GetObject failed to repo.SelectObjectByID")
+		return nil, errors.Wrap(failures.UnknownError, err.Error())
+	}
+
 	if object.UserID != userID {
 		err = errors.Wrapf(err, "UpdateLiked: User %s have no access to %s", userID, id)
 		return nil, errors.Wrap(failures.InvalidObjectAccess, err.Error())
@@ -190,6 +230,11 @@ func UpdateNumFailures(ctx context.Context, repo repository.Interface, userID, i
 
 func UpdateOriginal(ctx context.Context, translationClient translation.Interface, repo repository.Interface, userID, id string, original *api.Objtxt) (*api.Message, error) {
 	object, err := repo.SelectObjectByID(ctx, id)
+
+	if err != nil {
+		err = errors.Wrap(err, "GetObject failed to repo.SelectObjectByID")
+		return nil, errors.Wrap(failures.UnknownError, err.Error())
+	}
 
 	if object.UserID != userID {
 		err = errors.Wrapf(err, "UpdateOriginal: User %s have no access to %s", userID, id)

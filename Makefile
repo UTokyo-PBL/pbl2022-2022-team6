@@ -57,4 +57,4 @@ build:
 deploy:
 	ssh team6 "pkill serve"
 	scp ./build/serve team6:~/
-	ssh team6 "nohup ./serve > $$(date "+%Y%m%d%H%M").log & disown %1"
+	ssh team6 "source .env; nohup ./serve > $$(date "+%Y%m%d%H%M").log & disown %1"

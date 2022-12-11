@@ -60,6 +60,11 @@ func (c *Client) UpdateObject(ctx context.Context, id string, object *model.Obje
 	if err := daocore.DeleteObjectTargetObjtxtByObjectID(ctx, txn, &object.ID); err != nil {
 		return errors.Wrap(err, "UpdateObject failed to daocore.DeleteObjectTargetObjtxtByObjectID")
 	}
+	for _, t := range object.TargetObjtxtsDAO() {
+		if err := daocore.DeleteOneObjtxtByID(ctx, txn, &t.ID); err != nil {
+			return errors.Wrap(err, "UpdateObject failed to daocore.daocore.DeleteOneObjtxtByID")
+		}
+	}
 	if err := daocore.InsertObjtxt(ctx, txn, object.TargetObjtxtsDAO()); err != nil {
 		return errors.Wrap(err, "UpdateObject failed to daocore.InsertObjtxt")
 	}
@@ -74,8 +79,40 @@ func (c *Client) UpdateObject(ctx context.Context, id string, object *model.Obje
 	return nil
 }
 
+func (c *Client) DeleteObject(ctx context.Context, id string, object *model.Object) error {
+	txn, err := c.db.BeginTx(ctx, &sql.TxOptions{
+		Isolation: sql.LevelDefault,
+		ReadOnly:  false,
+	})
+	if err != nil {
+		return errors.Wrap(err, "DeleteObject failed to c.db.BeginTx")
+	}
+	defer txn.Rollback()
+
+	if err := daocore.DeleteOneObjectByID(ctx, txn, &id); err != nil {
+		return errors.Wrap(err, "DeleteObject failed to daocore.DeleteOneObject")
+	}
+	if err := daocore.DeleteOneObjtxtByID(ctx, txn, &object.Original.ID); err != nil {
+		return errors.Wrap(err, "DeleteObject failed to daocore.DeleteOneObjtxtByID")
+	}
+	if err := daocore.DeleteObjectTargetObjtxtByObjectID(ctx, txn, &id); err != nil {
+		return errors.Wrap(err, "DeleteObject failed to daocore.DeleteObjectTargetObjtxtByObjectID")
+	}
+	for _, t := range object.Target {
+		if err := daocore.DeleteOneObjtxtByID(ctx, txn, &t.ID); err != nil {
+			return errors.Wrap(err, "DeleteObject failed to daocore.DeleteOneObjtxtByID")
+		}
+	}
+
+	if err := txn.Commit(); err != nil {
+		return errors.Wrap(err, "DeleteObject failed to txn.Commit")
+	}
+
+	return nil
+}
+
 func (c *Client) SelectObjectByID(ctx context.Context, id string) (*model.Object, error) {
-	var ok1, ok2, ok3 bool
+	var ok1, ok2, ok3, ok4 bool
 	var o daocore.Object
 	var oo daocore.Objtxt
 	var tos []*daocore.Objtxt
@@ -87,7 +124,7 @@ func (c *Client) SelectObjectByID(ctx context.Context, id string) (*model.Object
 			ReadOnly:  true,
 		})
 		if err != nil {
-			return errors.Wrap(err, "SelectUserByID failed to c.db.BeginTx")
+			return errors.Wrap(err, "SelectObjectByID failed to c.db.BeginTx")
 		}
 		defer txn.Rollback()
 
@@ -100,19 +137,8 @@ func (c *Client) SelectObjectByID(ctx context.Context, id string) (*model.Object
 		}
 
 		ok1 = true
-		return nil
-	})
-	eg.Go(func() error {
-		txn, err := c.db.BeginTx(ctx, &sql.TxOptions{
-			Isolation: sql.LevelDefault,
-			ReadOnly:  true,
-		})
-		if err != nil {
-			return errors.Wrap(err, "SelectUserByID failed to c.db.BeginTx")
-		}
-		defer txn.Rollback()
 
-		oo, err = daocore.SelectOneObjtxtByID(ctx, txn, &id)
+		oo, err = daocore.SelectOneObjtxtByID(ctx, txn, &o.OriginalOjbtxtID)
 		switch true {
 		case err != nil && !errors.Is(err, sql.ErrNoRows):
 			return err
@@ -129,7 +155,7 @@ func (c *Client) SelectObjectByID(ctx context.Context, id string) (*model.Object
 			ReadOnly:  true,
 		})
 		if err != nil {
-			return errors.Wrap(err, "SelectUserByID failed to c.db.BeginTx")
+			return errors.Wrap(err, "SelectObjectByID failed to c.db.BeginTx")
 		}
 		defer txn.Rollback()
 
@@ -140,6 +166,8 @@ func (c *Client) SelectObjectByID(ctx context.Context, id string) (*model.Object
 		case err != nil && errors.Is(err, sql.ErrNoRows):
 			return nil
 		}
+
+		ok3 = true
 
 		ids := make([]string, 0, len(ots))
 		for _, ot := range ots {
@@ -154,15 +182,22 @@ func (c *Client) SelectObjectByID(ctx context.Context, id string) (*model.Object
 			return nil
 		}
 
-		ok3 = true
+		ok4 = true
 		return nil
 	})
 
 	if err := eg.Wait(); err != nil {
 		return nil, errors.Wrap(err, "SelectObjectByID failed to eg.Wait")
 	}
-	if !ok1 || !ok2 || !ok3 {
-		return nil, errors.Wrapf(sql.ErrNoRows, "SelectObjectByID failed to find object %s", id)
+	switch true {
+	case !ok1:
+		return nil, errors.Wrapf(sql.ErrNoRows, "SelectObjectByID failed to find object %s on daocore.SelectOneObjectByID", id)
+	case !ok2:
+		return nil, errors.Wrapf(sql.ErrNoRows, "SelectObjectByID failed to find object %s on daocore.SelectOneObjtxtByID", id)
+	case !ok3:
+		return nil, errors.Wrapf(sql.ErrNoRows, "SelectObjectByID failed to find object %s on daocore.SelectObjectTargetObjtxtByObjectID", id)
+	case !ok4:
+		return nil, errors.Wrapf(sql.ErrNoRows, "SelectObjectByID failed to find object %s on daocore.SelectObjtxtsByIDs", id)
 	}
 
 	return model.ObjectFromDAO(&o, &oo, tos), nil

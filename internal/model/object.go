@@ -134,7 +134,7 @@ func ObjectFromAPI(userID string, h *api.Object) (*Object, error) {
 	o.Target = make([]*Objtxt, 0, len(*h.Target))
 	for i, t := range *h.Target {
 		r := &Objtxt{}
-		if t.Id != nil {
+		if t.Id == nil {
 			return nil, fmt.Errorf("target[%d].id cannot be null", i)
 		}
 		r.ID = *t.Id

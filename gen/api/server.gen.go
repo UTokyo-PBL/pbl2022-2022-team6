@@ -170,6 +170,12 @@ type PostDashboardHistoriesParams struct {
 // PostDashboardHistoriesParamsType defines parameters for PostDashboardHistories.
 type PostDashboardHistoriesParamsType string
 
+// DeleteDashboardHistoriesObjectIDParams defines parameters for DeleteDashboardHistoriesObjectID.
+type DeleteDashboardHistoriesObjectIDParams struct {
+	// cookie for identifying user
+	Cookie Cookie `json:"cookie"`
+}
+
 // GetDashboardHistoriesObjectIDParams defines parameters for GetDashboardHistoriesObjectID.
 type GetDashboardHistoriesObjectIDParams struct {
 	// cookie for identifying user
@@ -310,6 +316,9 @@ type ServerInterface interface {
 	// (POST /dashboard/histories)
 	PostDashboardHistories(ctx echo.Context, params PostDashboardHistoriesParams) error
 	// dashboard/history - history
+	// (DELETE /dashboard/histories/{objectID})
+	DeleteDashboardHistoriesObjectID(ctx echo.Context, objectID ObjectID, params DeleteDashboardHistoriesObjectIDParams) error
+	// dashboard/history - history
 	// (GET /dashboard/histories/{objectID})
 	GetDashboardHistoriesObjectID(ctx echo.Context, objectID ObjectID, params GetDashboardHistoriesObjectIDParams) error
 	// dashboard/histories - edit caption
@@ -441,6 +450,44 @@ func (w *ServerInterfaceWrapper) PostDashboardHistories(ctx echo.Context) error 
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PostDashboardHistories(ctx, params)
+	return err
+}
+
+// DeleteDashboardHistoriesObjectID converts echo context to params.
+func (w *ServerInterfaceWrapper) DeleteDashboardHistoriesObjectID(ctx echo.Context) error {
+	var err error
+	// ------------- Path parameter "objectID" -------------
+	var objectID ObjectID
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "objectID", runtime.ParamLocationPath, ctx.Param("objectID"), &objectID)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter objectID: %s", err))
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params DeleteDashboardHistoriesObjectIDParams
+
+	headers := ctx.Request().Header
+	// ------------- Required header parameter "cookie" -------------
+	if valueList, found := headers[http.CanonicalHeaderKey("cookie")]; found {
+		var Cookie Cookie
+		n := len(valueList)
+		if n != 1 {
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Expected one value for cookie, got %d", n))
+		}
+
+		err = runtime.BindStyledParameterWithLocation("simple", false, "cookie", runtime.ParamLocationHeader, valueList[0], &Cookie)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter cookie: %s", err))
+		}
+
+		params.Cookie = Cookie
+	} else {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Header parameter cookie is required, but not found"))
+	}
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.DeleteDashboardHistoriesObjectID(ctx, objectID, params)
 	return err
 }
 
@@ -1028,6 +1075,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 
 	router.GET(baseURL+"/dashboard/histories", wrapper.GetDashboardHistories)
 	router.POST(baseURL+"/dashboard/histories", wrapper.PostDashboardHistories)
+	router.DELETE(baseURL+"/dashboard/histories/:objectID", wrapper.DeleteDashboardHistoriesObjectID)
 	router.GET(baseURL+"/dashboard/histories/:objectID", wrapper.GetDashboardHistoriesObjectID)
 	router.POST(baseURL+"/dashboard/histories/:objectID/caption", wrapper.PostDashboardHistoriesObjectIDCaption)
 	router.POST(baseURL+"/dashboard/histories/:objectID/liked", wrapper.PostDashboardHistoriesObjectIDLiked)

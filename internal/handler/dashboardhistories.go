@@ -27,7 +27,13 @@ func (s *Server) GetDashboardHistories(ec echo.Context, params api.GetDashboardH
 		return handle(ec, err)
 	}
 
-	return ec.JSON(http.StatusOK, objects)
+	return ec.JSON(http.StatusOK, &struct {
+		Data  []*api.Object `json:"data"`
+		Total int           `json:"total"`
+	}{
+		Data:  objects,
+		Total: len(objects),
+	})
 }
 
 func (s *Server) PostDashboardHistories(ec echo.Context, params api.PostDashboardHistoriesParams) error {
@@ -77,6 +83,22 @@ func (s *Server) GetDashboardHistoriesObjectID(ec echo.Context, objectID api.Obj
 	}
 
 	return ec.JSON(http.StatusOK, object)
+}
+
+func (s *Server) DeleteDashboardHistoriesObjectID(ec echo.Context, objectID api.ObjectID, params api.DeleteDashboardHistoriesObjectIDParams) error {
+	ctx, cancel := context.WithCancel(ec.Request().Context())
+	defer cancel()
+
+	userID, err := httpmiddleware.GetUserFromSession(ec)
+	if err != nil {
+		return echoutil.ErrInternal(ec, err)
+	}
+
+	if err := service.DeleteObject(ctx, s.repo, userID, objectID); err != nil {
+		return handle(ec, err)
+	}
+
+	return ec.JSON(http.StatusNoContent, nil)
 }
 
 func (s *Server) PostDashboardHistoriesObjectIDCaption(ec echo.Context, objectID api.ObjectID, params api.PostDashboardHistoriesObjectIDCaptionParams) error {

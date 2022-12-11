@@ -12,7 +12,7 @@ CREATE TABLE users (
     middle_name VARCHAR(256) NOT NULL,
     last_name VARCHAR(256) NOT NULL,
     username VARCHAR(512) NOT NULL,
-    `language` CHAR(2) NOT NULL REFERENCES languages(`language`),
+    `language` CHAR(2) NOT NULL REFERENCES languages(`language`) ON DELETE CASCADE,
     profile_image VARCHAR(1024) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE users (
 
 CREATE TABLE sessions (
     `session` CHAR(36) CHARACTER SET utf8 PRIMARY KEY NOT NULL COMMENT 'UUID',
-    user_id CHAR(36) NOT NULL REFERENCES users(id),
+    user_id CHAR(36) NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     UNIQUE (user_id)
@@ -30,8 +30,8 @@ CREATE TABLE sessions (
 
 CREATE TABLE user_preferred_languages (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    user_id CHAR(36) NOT NULL REFERENCES users(id),
-    `language` CHAR(2) NOT NULL REFERENCES languages(`language`),
+    user_id CHAR(36) NOT NULL REFERENCES users(id) ON DELETE CASCADE ,
+    `language` CHAR(2) NOT NULL REFERENCES languages(`language`) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     UNIQUE (user_id, `language`),
@@ -41,7 +41,7 @@ CREATE TABLE user_preferred_languages (
 CREATE TABLE objtxts (
     id CHAR(36) CHARACTER SET utf8 NOT NULL PRIMARY KEY COMMENT 'UUID',
     text VARCHAR(1024) NOT NULL,
-    `language` CHAR(2) NOT NULL REFERENCES languages(`language`),
+    `language` CHAR(2) NOT NULL REFERENCES languages(`language`) ON DELETE CASCADE,
     sound_url VARCHAR(1024),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL
@@ -50,7 +50,7 @@ CREATE TABLE objtxts (
 CREATE TABLE objects (
     id CHAR(36) CHARACTER SET utf8 NOT NULL PRIMARY KEY COMMENT 'UUID',
     user_id CHAR(36) NOT NULL REFERENCES users(id),
-    original_ojbtxt_id CHAR(36) NOT NULL REFERENCES objtxts(id),
+    original_ojbtxt_id CHAR(36) NOT NULL REFERENCES objtxts(id) ON DELETE CASCADE ,
     bbox_x FLOAT,
     bbox_y FLOAT,
     bbox_w FLOAT,
@@ -71,8 +71,8 @@ CREATE TABLE objects (
 
 CREATE TABLE object_target_objtxts (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    object_id CHAR(36) NOT NULL REFERENCES objects(id),
-    target_objtxt_id CHAR(36) NOT NULL REFERENCES objtxts(id),
+    object_id CHAR(36) NOT NULL REFERENCES objects(id) ON DELETE CASCADE,
+    target_objtxt_id CHAR(36) NOT NULL REFERENCES objtxts(id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     UNIQUE (object_id, target_objtxt_id),
@@ -91,8 +91,8 @@ CREATE TABLE lists (
 
 CREATE TABLE list_objects (
     id CHAR(36) CHARACTER SET utf8 NOT NULL PRIMARY KEY COMMENT 'UUID',
-    list_id CHAR(36) NOT NULL REFERENCES lists(id),
-    object_id CHAR(36) NOT NULL REFERENCES objects(id),
+    list_id CHAR(36) NOT NULL REFERENCES lists(id) ON DELETE CASCADE,
+    object_id CHAR(36) NOT NULL REFERENCES objects(id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     UNIQUE (list_id, object_id),

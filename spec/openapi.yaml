@@ -150,6 +150,14 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/object"
+    delete:
+      summary: "dashboard/history - history"
+      tags:
+        - "dashboard"
+      description: "dashboard/history - delete one history"
+      responses:
+        204:
+          description: "ok"
   /dashboard/histories/{objectID}/liked:
     parameters:
       - $ref: "#/components/parameters/cookie"
