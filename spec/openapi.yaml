@@ -475,6 +475,9 @@ components:
               original:
                 type: object
                 properties:
+                  id:
+                    type: string
+                    example: "617a283a-44e1-42e5-8a65-c5a29afe51fc"
                   text:
                     type: string
                     description: "nullable when object detection"
@@ -486,6 +489,9 @@ components:
                 items:
                   type: object
                   properties:
+                    id:
+                      type: string
+                      example: "bdcd0908-644d-46b8-bafd-8ab39c2c404d"
                     language:
                       type: string
                       example: "ja"
