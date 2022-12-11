@@ -359,12 +359,7 @@ components:
         objects:
           type: array
           items:
-            type: object
-            properties:
-              id:
-                type: string
-              object:
-                $ref: "#/components/schemas/object"
+            $ref: "#/components/schemas/object"
     message:
       type: object
       properties:

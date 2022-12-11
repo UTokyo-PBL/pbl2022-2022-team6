@@ -27,13 +27,10 @@ type Bbox struct {
 
 // List defines model for list.
 type List struct {
-	IconName *string `json:"icon_name,omitempty"`
-	Id       *string `json:"id,omitempty"`
-	Name     *string `json:"name,omitempty"`
-	Objects  *[]struct {
-		Id     *string `json:"id,omitempty"`
-		Object *Object `json:"object,omitempty"`
-	} `json:"objects,omitempty"`
+	IconName *string   `json:"icon_name,omitempty"`
+	Id       *string   `json:"id,omitempty"`
+	Name     *string   `json:"name,omitempty"`
+	Objects  *[]Object `json:"objects,omitempty"`
 }
 
 // Message defines model for message.
