@@ -128,3 +128,44 @@ $ curl -XDELETE \
   -H "Cookie: ${SESSION}" \
   "http://104.198.116.249/dashboard/histories/8d5eeaff-654d-4cde-a075-07d2a04c26be"
 ```
+
+like
+
+```shell
+$ curl -XPOST \
+  -d '{"liked":true}' \
+  -H "content-type: application/json" \
+  -H "Cookie: ${SESSION}" \
+  "http://104.198.116.249/dashboard/histories/8d5eeaff-654d-4cde-a075-07d2a04c26be/liked"
+```
+
+caption
+
+```shell
+$ curl -XPOST \
+  -d '{"caption":"nice to meet you"}' \
+  -H "content-type: application/json" \
+  -H "Cookie: ${SESSION}" \
+  "http://104.198.116.249/dashboard/histories/8d5eeaff-654d-4cde-a075-07d2a04c26be/caption"
+```
+
+increment num failures
+
+```shell
+$ curl -XPOST \
+  -d '{"num_failures": 1}' \
+  -H "content-type: application/json" \
+  -H "Cookie: ${SESSION}" \
+  "http://104.198.116.249/dashboard/histories/8d5eeaff-654d-4cde-a075-07d2a04c26be/num_failures"
+```
+
+update translation
+
+```shell
+$ curl -XPOST \
+  -d '{"original":{"id":"5c81a2c7-7075-4e61-9e22-897792d62510","text":"猫","language":"zh"}}' \
+  -H "content-type: application/json" \
+  -H "Cookie: ${SESSION}" \
+  "http://104.198.116.249/dashboard/histories/8d5eeaff-654d-4cde-a075-07d2a04c26be/original"
+```
+
