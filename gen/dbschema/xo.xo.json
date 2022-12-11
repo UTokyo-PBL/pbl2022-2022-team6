@@ -199,6 +199,13 @@
               }
             },
             {
+              "name": "user_id",
+              "datatype": {
+                "type": "char",
+                "prec": 36
+              }
+            },
+            {
               "name": "icon_name",
               "datatype": {
                 "type": "varchar",

@@ -17,6 +17,7 @@ const ListTableName = "lists"
 var ListAllColumns = []string{
 	"id",
 	"name",
+	"user_id",
 	"icon_name",
 	"created_at",
 	"updated_at",
@@ -25,6 +26,7 @@ var ListAllColumns = []string{
 var ListColumnsWOMagics = []string{
 	"id",
 	"name",
+	"user_id",
 	"icon_name",
 }
 
@@ -35,6 +37,7 @@ var ListPrimaryKeyColumns = []string{
 type List struct {
 	ID        string
 	Name      string
+	UserID    string
 	IconName  string
 	CreatedAt *time.Time
 	UpdatedAt *time.Time
@@ -44,6 +47,7 @@ func (t *List) Values() []interface{} {
 	return []interface{}{
 		t.ID,
 		t.Name,
+		t.UserID,
 		t.IconName,
 	}
 }
@@ -52,6 +56,7 @@ func (t *List) SetMap() map[string]interface{} {
 	return map[string]interface{}{
 		"id":        t.ID,
 		"name":      t.Name,
+		"user_id":   t.UserID,
 		"icon_name": t.IconName,
 	}
 }
@@ -60,6 +65,7 @@ func (t *List) Ptrs() []interface{} {
 	return []interface{}{
 		&t.ID,
 		&t.Name,
+		&t.UserID,
 		&t.IconName,
 		&t.CreatedAt,
 		&t.UpdatedAt,
