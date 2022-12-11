@@ -74,7 +74,7 @@ func run() error {
 		Path:     "/",
 		MaxAge:   env.SessionMaxAge,
 		Secure:   !env.SessionCookieInsecure,
-		HttpOnly: true,
+		HttpOnly: false,
 		SameSite: http.SameSiteNoneMode,
 	}
 

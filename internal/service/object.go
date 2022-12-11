@@ -15,7 +15,7 @@ import (
 )
 
 func ListObjects(ctx context.Context, repo repository.Interface, userID string) ([]*api.Object, error) {
-	objects, err := repo.SelectObjectsByUserID(ctx, userID)
+	objects, err := repo.ListObjectsByUserID(ctx, userID)
 
 	if err != nil {
 		err = errors.Wrap(err, "ListObjects failed to repo.SelectObjectsByUserID")
@@ -132,25 +132,26 @@ func GetObject(ctx context.Context, repo repository.Interface, userID, id string
 	return object.API(), nil
 }
 
-func DeleteObject(ctx context.Context, repo repository.Interface, userID, id string) error {
+func DeleteObject(ctx context.Context, repo repository.Interface, userID, id string) (*api.Message, error) {
 	object, err := repo.SelectObjectByID(ctx, id)
 
 	if err != nil {
-		err = errors.Wrap(err, "GetObject failed to repo.SelectObjectByID")
-		return errors.Wrap(failures.UnknownError, err.Error())
+		err = errors.Wrap(err, "DeleteObject failed to repo.SelectObjectByID")
+		return nil, errors.Wrap(failures.UnknownError, err.Error())
 	}
 
 	if object.UserID != userID {
-		err = errors.Wrapf(err, "GetObject: User %s have no access to %s ", userID, id)
-		return errors.Wrap(failures.InvalidObjectAccess, err.Error())
+		err = errors.Wrapf(err, "DeleteObject: User %s have no access to %s ", userID, id)
+		return nil, errors.Wrap(failures.InvalidObjectAccess, err.Error())
 	}
 
 	if err := repo.DeleteObject(ctx, id, object); err != nil {
-		return errors.Wrap(failures.UnknownError, err.Error())
+		return nil, errors.Wrap(failures.UnknownError, err.Error())
 	}
 
-	return nil
-
+	return &api.Message{
+		Message: ptr.String("successfully deleted"),
+	}, nil
 }
 
 func UpdateCaption(ctx context.Context, repo repository.Interface, userID, id, caption string) (*api.Message, error) {

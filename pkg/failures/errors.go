@@ -13,4 +13,6 @@ var (
 	TranslationFailed   = errors.New("translation failed")
 	InvalidObjectAccess = errors.New("invalid object access")
 	ResourceNotFound    = errors.New("resource not found")
+	InvalidListParams   = errors.New("invalid list params")
+	InvalidListAccess   = errors.New("invalid object access")
 )

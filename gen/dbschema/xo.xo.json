@@ -252,6 +252,18 @@
               "is_unique": true
             },
             {
+              "name": "user_id",
+              "fields": [
+                {
+                  "name": "user_id",
+                  "datatype": {
+                    "type": "char",
+                    "prec": 36
+                  }
+                }
+              ]
+            },
+            {
               "name": "lists_id_pkey",
               "fields": [
                 {

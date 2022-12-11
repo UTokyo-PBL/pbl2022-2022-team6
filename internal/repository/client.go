@@ -19,7 +19,12 @@ type Interface interface {
 	UpdateObject(ctx context.Context, id string, object *model.Object) error
 	DeleteObject(ctx context.Context, id string, object *model.Object) error
 	SelectObjectByID(ctx context.Context, id string) (*model.Object, error)
-	SelectObjectsByUserID(ctx context.Context, userID string) ([]*model.Object, error)
+	ListObjectsByUserID(ctx context.Context, userID string) ([]*model.Object, error)
+	CreateList(ctx context.Context, list *model.List) error
+	UpdateList(ctx context.Context, id string, list *model.List) error
+	DeleteList(ctx context.Context, id string, list *model.List) error
+	SelectListByID(ctx context.Context, id string) (*model.List, error)
+	ListListsByUserID(ctx context.Context, userID string) ([]*model.List, error)
 }
 
 type Client struct {

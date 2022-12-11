@@ -87,7 +87,8 @@ CREATE TABLE lists (
     icon_name VARCHAR(256),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
-    UNIQUE (name)
+    UNIQUE (name),
+    INDEX (user_id)
 );
 
 CREATE TABLE list_objects (

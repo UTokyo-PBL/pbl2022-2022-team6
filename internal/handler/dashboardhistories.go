@@ -94,11 +94,12 @@ func (s *Server) DeleteDashboardHistoriesObjectID(ec echo.Context, objectID api.
 		return echoutil.ErrInternal(ec, err)
 	}
 
-	if err := service.DeleteObject(ctx, s.repo, userID, objectID); err != nil {
+	msg, err := service.DeleteObject(ctx, s.repo, userID, objectID)
+	if err != nil {
 		return handle(ec, err)
 	}
 
-	return ec.JSON(http.StatusNoContent, nil)
+	return ec.JSON(http.StatusOK, msg)
 }
 
 func (s *Server) PostDashboardHistoriesObjectIDCaption(ec echo.Context, objectID api.ObjectID, params api.PostDashboardHistoriesObjectIDCaptionParams) error {

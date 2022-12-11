@@ -128,6 +128,38 @@ func SelectOneListByName(ctx context.Context, txn *sql.Tx, name *string) (List, 
 	return IterateList(stmt.QueryRowContext(ctx, params...))
 }
 
+func SelectListByUserID(ctx context.Context, txn *sql.Tx, user_id *string) ([]*List, error) {
+	eq := squirrel.Eq{}
+	if user_id != nil {
+		eq["user_id"] = *user_id
+	}
+	query, params, err := squirrel.
+		Select(ListAllColumns...).
+		From(ListTableName).
+		Where(eq).
+		ToSql()
+	if err != nil {
+		return nil, dberror.MapError(err)
+	}
+	stmt, err := txn.PrepareContext(ctx, query)
+	if err != nil {
+		return nil, dberror.MapError(err)
+	}
+	rows, err := stmt.QueryContext(ctx, params...)
+	if err != nil {
+		return nil, dberror.MapError(err)
+	}
+	res := make([]*List, 0)
+	for rows.Next() {
+		t, err := IterateList(rows)
+		if err != nil {
+			return nil, dberror.MapError(err)
+		}
+		res = append(res, &t)
+	}
+	return res, nil
+}
+
 func SelectOneListByID(ctx context.Context, txn *sql.Tx, id *string) (List, error) {
 	eq := squirrel.Eq{}
 	if id != nil {
@@ -264,6 +296,29 @@ func DeleteOneListByName(ctx context.Context, txn *sql.Tx, name *string) error {
 	eq := squirrel.Eq{}
 	if name != nil {
 		eq["name"] = *name
+	}
+
+	query, params, err := squirrel.
+		Delete(ListTableName).
+		Where(eq).
+		ToSql()
+	if err != nil {
+		return dberror.MapError(err)
+	}
+	stmt, err := txn.PrepareContext(ctx, query)
+	if err != nil {
+		return dberror.MapError(err)
+	}
+	if _, err = stmt.Exec(params...); err != nil {
+		return dberror.MapError(err)
+	}
+	return nil
+}
+
+func DeleteListByUserID(ctx context.Context, txn *sql.Tx, user_id *string) error {
+	eq := squirrel.Eq{}
+	if user_id != nil {
+		eq["user_id"] = *user_id
 	}
 
 	query, params, err := squirrel.

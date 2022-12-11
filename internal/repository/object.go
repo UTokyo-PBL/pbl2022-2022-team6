@@ -40,7 +40,7 @@ func (c *Client) CreateObject(ctx context.Context, object *model.Object) error {
 
 func (c *Client) UpdateObject(ctx context.Context, id string, object *model.Object) error {
 	if id != object.ID {
-		return errors.Errorf("UpdateObject: User %s cannot update object ")
+		return errors.Errorf("UpdateObject: cannot update object %s's into %s", id, object.ID)
 	}
 	txn, err := c.db.BeginTx(ctx, &sql.TxOptions{
 		Isolation: sql.LevelDefault,
@@ -80,6 +80,9 @@ func (c *Client) UpdateObject(ctx context.Context, id string, object *model.Obje
 }
 
 func (c *Client) DeleteObject(ctx context.Context, id string, object *model.Object) error {
+	if id != object.ID {
+		return errors.Errorf("DeleteObject: cannot update object %s's into %s", id, object.ID)
+	}
 	txn, err := c.db.BeginTx(ctx, &sql.TxOptions{
 		Isolation: sql.LevelDefault,
 		ReadOnly:  false,
@@ -203,13 +206,13 @@ func (c *Client) SelectObjectByID(ctx context.Context, id string) (*model.Object
 	return model.ObjectFromDAO(&o, &oo, tos), nil
 }
 
-func (c *Client) SelectObjectsByUserID(ctx context.Context, userID string) ([]*model.Object, error) {
+func (c *Client) ListObjectsByUserID(ctx context.Context, userID string) ([]*model.Object, error) {
 	txn, err := c.db.BeginTx(ctx, &sql.TxOptions{
 		Isolation: sql.LevelDefault,
 		ReadOnly:  true,
 	})
 	if err != nil {
-		return nil, errors.Wrap(err, "SelectObjectsByUserID failed to c.db.BeginTx")
+		return nil, errors.Wrap(err, "ListObjectsByUserID failed to c.db.BeginTx")
 	}
 	defer txn.Rollback()
 
