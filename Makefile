@@ -46,7 +46,7 @@ gen-db:
 	go run ./script/dbgen ./gen/dbschema/xo.xo.json
 
 .PHONY: migrate-db
-migrate-db:
+migrate-db: __init-db-args
 	for file in $$(find ddl/ -type f -name '*.sql' | sort); do mysql -u$(DB_USER) -p$(DB_PASS) -h$(DB_HOST) --protocol='tcp' --database=$(DB_NAME) < $$file; done
 
 .PHONY: build

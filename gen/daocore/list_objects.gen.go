@@ -33,7 +33,7 @@ var ListObjectPrimaryKeyColumns = []string{
 }
 
 type ListObject struct {
-	ID        string
+	ID        int
 	ListID    string
 	ObjectID  string
 	CreatedAt *time.Time
@@ -189,7 +189,7 @@ func SelectListObjectByObjectID(ctx context.Context, txn *sql.Tx, object_id *str
 	return res, nil
 }
 
-func SelectOneListObjectByID(ctx context.Context, txn *sql.Tx, id *string) (ListObject, error) {
+func SelectOneListObjectByID(ctx context.Context, txn *sql.Tx, id *int) (ListObject, error) {
 	eq := squirrel.Eq{}
 	if id != nil {
 		eq["id"] = *id
@@ -209,7 +209,7 @@ func SelectOneListObjectByID(ctx context.Context, txn *sql.Tx, id *string) (List
 	return IterateListObject(stmt.QueryRowContext(ctx, params...))
 }
 
-func SelectListObjectsByIDs(ctx context.Context, txn *sql.Tx, ids []string) ([]*ListObject, error) {
+func SelectListObjectsByIDs(ctx context.Context, txn *sql.Tx, ids []int) ([]*ListObject, error) {
 	query, params, err := squirrel.
 		Select(ListObjectAllColumns...).
 		From(ListObjectTableName).
@@ -393,7 +393,7 @@ func DeleteListObjectByObjectID(ctx context.Context, txn *sql.Tx, object_id *str
 	return nil
 }
 
-func DeleteOneListObjectByID(ctx context.Context, txn *sql.Tx, id *string) error {
+func DeleteOneListObjectByID(ctx context.Context, txn *sql.Tx, id *int) error {
 	eq := squirrel.Eq{}
 	if id != nil {
 		eq["id"] = *id
