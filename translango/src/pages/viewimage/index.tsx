@@ -9,7 +9,6 @@ import TopNavigation from "../../components/TopNavigation";
 import Copyright from "../../components/Copyright";
 import BottomNavigation from "../../components/BottomNavigation";
 import axios from "axios";
-import CommonTranslationController from "../../api/translation/common.handler";
 // import { uploadFile } from 'react-s3';
 import Resizer from "react-image-file-resizer";
 

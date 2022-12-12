@@ -1,163 +1,110 @@
-import {
-  $axios,
-  RESPONSE_STATUS_CODES,
-} from "../../constants/common/axios.constants";
-
-// --------->>> INSTANCES
-type coordinate = {
-  x: number;
-  y: number;
-};
+import { $axios } from "../../constants/common/axios.constants";
 
 // --------->>> MAIN CLASS
 export default class DashboardController {
-  // ---------> GET: dashboard/main - top - list available languages
+  // ---------> GET: dashboard/main - top
   // ROUTE: /dashboard/top
-  // COMMENTS :
-  // 1.- Skipped as FE will manage this
+  // COMMENTS:
+  // 1.- What does this do?
+  static async getDashboardTop() {
+    // Call the AXIOS request
+    const axiosResponse = await $axios.get("/dashboard/top").catch((e) => {
+      const JSONError = e.toJSON();
+      return JSONError;
+    });
+    return axiosResponse;
+  }
 
-  // ---------> POST : dashboard/main - update preferred language
+  // ---------> POST : edit dashboard/top
   // ROUTE: /dashboard/top
-  // COMMENTS :
-  // 1.- Skipped as UserController.editUserProfile handles this exact task by updating the parameters 'preferred_languages' or 'language'
+  static async updateUserPreferredLanguages({
+    languages,
+  }: {
+    languages: string[];
+  }) {
+    // Call the AXIOS request
+    const axiosResponse = await $axios
+      .post(" /dashboard/top", {
+        languages,
+      })
+      .catch((e) => {
+        const JSONError = e.toJSON();
+        return JSONError;
+      });
+    return axiosResponse;
+  }
 
   // ---------> GET : dashboard/histories - list histories
   // ROUTE: /dashboard/histories
-  static getItems({ key }: { key?: string }) {
+  static async getItems() {
     // Call the AXIOS request
-    $axios
-      .get("/dashboard/histories", {
-        params: {
-          key,
-        },
-      })
-      .then((axiosResponse) => {
-        // Return the status data contained
-        const responseCodeInfo = RESPONSE_STATUS_CODES[axiosResponse.status];
-        const { data, total } = axiosResponse.data;
-        return {
-          responseCodeInfo,
-          data,
-          total,
-        };
+    const axiosResponse = await $axios
+      .get("/dashboard/histories")
+      .catch((e) => {
+        const JSONError = e.toJSON();
+        return JSONError;
       });
+    return axiosResponse;
   }
 
   // ---------> POST : dashboard/camera - add history (detect object or text)
   // ROUTE: /dashboard/histories
-  // COMMENTS :
-  // 1.- Request 'id' property should be managed in BE. Maybe consider removing it?
-  // 2.- Request 'original' property should be a {language : string, text? : string} object for text translation.
-  // 3.- Request 'target' property should be just an array of language codes, but on the OpenApi is not clear if that is the case. Please confirm it.
-  // 4.- Response 'liked' property is misleading and could be mistaken in terms of likes received on the item. Consider changing it to isFavourite?
-  static translateImageFromUrl({
+  // COMMENTS : Some parameters (original & target) are misleading.
+  static async translateImageFromUrl({
     type,
     image_url,
     id,
     original,
     target,
-    country,
-    city,
-    latitude,
-    longitude,
   }: {
     type: "object" | "text";
-    image_url: string;
+    image_url?: string;
     id?: string;
-    original?: { language: string; text?: string };
-    target: string[];
-    country?: string;
-    city?: string;
-    latitude?: number;
-    longitude?: number;
+    original: { language: string; id: string; text?: string };
+    target: { language: string; id: string; text?: string }[];
   }) {
     // Call the AXIOS request
-    $axios
-      .post("/dashboard/histories", {
-        type,
+    const axiosResponse = await $axios
+      .post("/dashboard/histories?type=" + type, {
         image_url,
         id,
         original,
         target,
-        country,
-        city,
-        latitude,
-        longitude,
       })
-      .then((axiosResponse) => {
-        // Return the status data contained
-        const responseCodeInfo = RESPONSE_STATUS_CODES[axiosResponse.status];
-        const {
-          id,
-          original,
-          target,
-          bbox,
-          image_url,
-          caption,
-          country,
-          city,
-          latitude,
-          longitude,
-          liked,
-          num_failures,
-        } = axiosResponse.data;
-        return {
-          responseCodeInfo,
-          id,
-          original,
-          target,
-          bbox,
-          image_url,
-          caption,
-          country,
-          city,
-          latitude,
-          longitude,
-          liked,
-          num_failures,
-        };
+      .catch((e) => {
+        const JSONError = e.toJSON();
+        return JSONError;
       });
+    return axiosResponse;
   }
 
   // ---------> GET : dashboard/history - one history for object
   // ROUTE: /dashboard/histories/{objectID}
-  static getOneItem({ id }: { id: string }) {
+  static async getOneItem({ id }: { id: string }) {
     // Call the AXIOS request
-    $axios.get("/dashboard/histories/" + id).then((axiosResponse) => {
-      // Return the status data contained
-      const responseCodeInfo = RESPONSE_STATUS_CODES[axiosResponse.status];
-      const {
-        id,
-        original,
-        target,
-        bbox,
-        image_url,
-        caption,
-        country,
-        city,
-        latitude,
-        longitude,
-        liked,
-        num_failures,
-      } = axiosResponse.data;
-      return {
-        responseCodeInfo,
-        id,
-        original,
-        target,
-        bbox,
-        image_url,
-        caption,
-        country,
-        city,
-        latitude,
-        longitude,
-        liked,
-        num_failures,
-      };
-    });
+    const axiosResponse = await $axios
+      .get("/dashboard/histories/" + id)
+      .catch((e) => {
+        const JSONError = e.toJSON();
+        return JSONError;
+      });
+    return axiosResponse;
   }
 
+  // ---------> DELETE : dashboard/history - one history for object
+  // ROUTE: /dashboard/histories/{objectID}
+  static async deleteOneItem({ id }: { id: string }) {
+    // Call the AXIOS request
+    const axiosResponse = await $axios
+      .delete("/dashboard/histories/" + id)
+      .catch((e) => {
+        const JSONError = e.toJSON();
+        return JSONError;
+      });
+    return axiosResponse;
+  }
+
+  // TODO : Este idiota dej'o las cosas como quizo y ahora tengo quer trabajar m'as
   // ---------> POST :
   // - dashboard/history - edit liked
   // - dashboard/history - edit caption
@@ -165,116 +112,65 @@ export default class DashboardController {
   // - dashboard/history - edit original language
   // ROUTE: /dashboard/histories/{objectID}/edit
   // COMMENTS:
-  // 1.- These functions can be compacted in one big editItem POST function. I did it below.
-  // 2.- Response and request 'liked' property is misleading and could be mistaken in terms of likes received on the item. Consider changing it to isFavourite?
+  // 1.- Only one change per call?
 
   // ROUTE: /dashboard/histories/{objectID}
-  static editItem({
+  static async editItem({
     id,
-    original,
-    target,
-    bbox,
-    image_url,
     caption,
-    country,
-    city,
-    latitude,
-    longitude,
-    liked,
     num_failures,
+    original,
+    liked,
   }: {
     id: string;
-    original: { language: string; text?: string };
-    target: { language: string; text?: string; sound_url?: string }[];
-    bbox: {
-      upper_left: coordinate;
-      lower_left: coordinate;
-      lower_right: coordinate;
-      upper_right: coordinate;
-    };
-    image_url: string;
-    caption: string;
-    country: string;
-    city: string;
-    latitude: number;
-    longitude: number;
-    liked: boolean;
-    num_failures: number;
+    original?: { language: string; id: string; text?: string };
+    caption?: string;
+    liked?: boolean;
+    num_failures?: number;
   }) {
+    // Set the editTarget property according to the received items
+    const editTarget =
+      caption !== undefined
+        ? "caption"
+        : num_failures !== undefined
+        ? "num_failures"
+        : original !== undefined
+        ? "original"
+        : liked !== undefined
+        ? "liked"
+        : "";
+
     // Call the AXIOS request
-    $axios
-      .post("/dashboard/histories/" + id + "/edit", {
-        id,
-        original,
-        target,
-        bbox,
-        image_url,
+    const axiosResponse = await $axios
+      .post("/dashboard/histories/" + id + "/" + editTarget, {
         caption,
-        country,
-        city,
-        latitude,
-        longitude,
-        liked,
         num_failures,
+        original,
+        liked,
       })
-      .then((axiosResponse) => {
-        // Return the status data contained and the sctatus code's information
-        const responseCodeInfo = RESPONSE_STATUS_CODES[axiosResponse.status];
-        const {
-          id,
-          original,
-          target,
-          bbox,
-          image_url,
-          caption,
-          country,
-          city,
-          latitude,
-          longitude,
-          liked,
-          num_failures,
-        } = axiosResponse.data;
-        return {
-          responseCodeInfo,
-          id,
-          original,
-          target,
-          bbox,
-          image_url,
-          caption,
-          country,
-          city,
-          latitude,
-          longitude,
-          liked,
-          num_failures,
-        };
+      .catch((e) => {
+        const JSONError = e.toJSON();
+        return JSONError;
       });
+    return axiosResponse;
   }
 
   // ---------> GET : dashboard/list - lists
   // ROUTE: /dashboard/lists
-  static getLists() {
+  static async getLists() {
     // Call the AXIOS request
-    $axios.get("/dashboard/lists").then((axiosResponse) => {
-      // Return the status data contained
-      const responseCodeInfo = RESPONSE_STATUS_CODES[axiosResponse.status];
-      const { default_list, custom_lists, total } = axiosResponse.data;
-      return {
-        responseCodeInfo,
-        default_list,
-        custom_lists,
-        total,
-      };
+    const axiosResponse = await $axios.get("/dashboard/lists").catch((e) => {
+      const JSONError = e.toJSON();
+      return JSONError;
     });
+    return axiosResponse;
   }
 
   // ---------> POST : dashboard/list - add custom list
   // ROUTE: /dashboard/lists
   // COMMENTS:
-  // 1.- Property 'id' should be managed on the BE.
-  // 2.- Request 'objects' property include only an array of ids for the referred items, However, the response should include the entire object.
-  static createList({
+  // 1.- icon_name is set to icon-name, which cannot be sent as Json from axios
+  static async createList({
     id,
     name,
     icon_name,
@@ -283,28 +179,21 @@ export default class DashboardController {
     id?: string;
     name: string;
     icon_name: string;
-    objects: string[];
+    objects: { id: string }[];
   }) {
     // Call the AXIOS request
-    $axios
+    const axiosResponse = await $axios
       .post("/dashboard/lists", { id, name, icon_name, objects })
-      .then((axiosResponse) => {
-        // Return the status data contained
-        const responseCodeInfo = RESPONSE_STATUS_CODES[axiosResponse.status];
-        const { id, name, icon_name, objects } = axiosResponse.data;
-        return {
-          responseCodeInfo,
-          id,
-          name,
-          icon_name,
-          objects,
-        };
+      .catch((e) => {
+        const JSONError = e.toJSON();
+        return JSONError;
       });
+    return axiosResponse;
   }
 
   // ---------> GET : dashboard/list - start game
   // ROUTE: /dashboards/lists/{listID}
-  static getItemsForGame({
+  static async getList({
     id,
     num_questions,
   }: {
@@ -312,27 +201,20 @@ export default class DashboardController {
     num_questions: number;
   }) {
     // Call the AXIOS request
-    $axios
+    const axiosResponse = await $axios
       .get("/dashboard/lists" + id, { params: { num_questions } })
-      .then((axiosResponse) => {
-        // Return the status data contained
-        const responseCodeInfo = RESPONSE_STATUS_CODES[axiosResponse.status];
-        const { id, name, icon_name, objects } = axiosResponse.data;
-        return {
-          responseCodeInfo,
-          id,
-          name,
-          icon_name,
-          objects,
-        };
+      .catch((e) => {
+        const JSONError = e.toJSON();
+        return JSONError;
       });
+    return axiosResponse;
   }
 
   // ---------> PUT : dashboard - edit list
   // ROUTE: /dashboards/lists/{listID}
   // COMMENTS:
   // 1.- Request 'objects' property include only an array of ids for the referred items, However, the response should include the entire object.
-  static editList({
+  static async editList({
     id,
     name,
     icon_name,
@@ -341,32 +223,28 @@ export default class DashboardController {
     id: string;
     name: string;
     icon_name: string;
-    objects: string[];
+    objects: { id: string }[];
   }) {
     // Call the AXIOS request
-    $axios
-      .put("/dashboard/lists" + id, { id, name, icon_name, objects })
-      .then((axiosResponse) => {
-        // Return the status data contained
-        const responseCodeInfo = RESPONSE_STATUS_CODES[axiosResponse.status];
-        const { id, name, icon_name, objects } = axiosResponse.data;
-        return {
-          responseCodeInfo,
-          id,
-          name,
-          icon_name,
-          objects,
-        };
+    const axiosResponse = await $axios
+      .put("/dashboard/lists/" + id, { id, name, icon_name, objects })
+      .catch((e) => {
+        const JSONError = e.toJSON();
+        return JSONError;
       });
+    return axiosResponse;
   }
 
   // ---------> DELETE : dashboard - delete list
   // ROUTE: /dashboards/lists/{listID}
-  static deleteList({ id }: { id: string }) {
+  static async deleteList({ id }: { id: string }) {
     // Call the AXIOS request
-    $axios.delete("/dashboard/lists" + id).then((axiosResponse) => {
-      // Return the info from the response code
-      return RESPONSE_STATUS_CODES[axiosResponse.status];
-    });
+    const axiosResponse = await $axios
+      .delete("/dashboard/lists/" + id)
+      .catch((e) => {
+        const JSONError = e.toJSON();
+        return JSONError;
+      });
+    return axiosResponse;
   }
 }
