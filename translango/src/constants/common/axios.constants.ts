@@ -22,42 +22,15 @@ export const RESPONSE_STATUS_CODES = {
   409: "USER_ALREADY_EXISTS",
 };
 
-// INSTANCE: Header name for the user's ID to be stored
-export const SESSION_HEADER_NAME = 'UserId';
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = "http://104.198.116.249";
 
-// INSTANCE: Create an Axios client
-export const $axios = axios.create({
-  baseURL: "http://104.198.116.249",
-  withCredentials: true,
-  headers: {
-    [SESSION_HEADER_NAME]: getCookie(SESSION_HEADER_NAME),
-  },
-});
-
-$axios.interceptors.request.use((request) => {
+axios.interceptors.request.use((request) => {
   console.log(request);
   return request;
 });
 
-export function getCookie(cname) {
-  let name = cname + "=";
-  let decodedCookie = decodeURIComponent(document.cookie);
-  let ca = decodedCookie.split(';');
-  for(let i = 0; i <ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) === ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) === 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
-}
-
-export function setCookie(cname, cvalue, exdays) {
-  const d = new Date();
-  d.setTime(d.getTime() + (exdays*24*60*60*1000));
-  let expires = "expires="+ d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
+axios.interceptors.response.use((response) => {
+  console.log(response.headers);
+  return response;
+});

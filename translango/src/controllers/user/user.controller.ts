@@ -1,8 +1,4 @@
-import {
-  $axios,
-  SESSION_HEADER_NAME,
-  setCookie,
-} from "../../constants/common/axios.constants";
+import axios from "axios";
 
 // --------->>> MAIN CLASS
 export default class UserController {
@@ -37,7 +33,7 @@ export default class UserController {
     language: string;
   }) {
     // Call the AXIOS request
-    const axiosResponse = await $axios
+    const axiosResponse = await axios
       .post("/user/signup", {
         id,
         email,
@@ -64,20 +60,22 @@ export default class UserController {
   // 3.- TESTED
   static async login({ email, password }: { email: string; password: string }) {
     // Call the AXIOS request
-    const axiosResponse = await $axios
-      .post("/user/login", {
-        email,
-        password,
-      })
+    const axiosResponse = await axios
+      .post(
+        "/user/login",
+        {
+          email,
+          password,
+        },
+        {
+          withCredentials: true,
+          headers: { "Access-Control-Allow-Origin": "*" },
+        }
+      )
       .catch((e) => {
         const JSONError = e.toJSON();
         return JSONError;
       });
-
-    // Set the axios' SESSION_HEADER_NAME header
-    setCookie(SESSION_HEADER_NAME, axiosResponse.headers["set-cookie"], 14);
-    $axios.defaults.headers.common[SESSION_HEADER_NAME] =
-      axiosResponse.headers["set-cookie"];
 
     return axiosResponse;
   }
@@ -88,17 +86,10 @@ export default class UserController {
   // 1.- TESTED
   static async logout() {
     // Call the AXIOS request
-    const axiosResponse = await $axios
-      .post("/user/logout", {
-      })
-      .catch((e) => {
-        const JSONError = e.toJSON();
-        return JSONError;
-      });
-
-    // Set the axios' SESSION_HEADER_NAME header
-    setCookie(SESSION_HEADER_NAME, '', 0);
-    $axios.defaults.headers.common[SESSION_HEADER_NAME] ='';
+    const axiosResponse = await axios.post("/user/logout", {}).catch((e) => {
+      const JSONError = e.toJSON();
+      return JSONError;
+    });
 
     return axiosResponse;
   }
@@ -109,10 +100,15 @@ export default class UserController {
   // 1.- TESTED, but failed due to cookie not being received
   static async getUserProfile() {
     // Call the AXIOS request
-    const axiosResponse = await $axios.get("/user/profile").catch((e) => {
-      const JSONError = e.toJSON();
-      return JSONError;
-    });
+    const axiosResponse = await axios
+      .get("/user/profile", {
+        withCredentials: true,
+        headers: { "Access-Control-Allow-Origin": "*" },
+      })
+      .catch((e) => {
+        const JSONError = e.toJSON();
+        return JSONError;
+      });
     return axiosResponse;
   }
 
@@ -143,7 +139,7 @@ export default class UserController {
     user_profile_pic: string;
   }) {
     // Call the AXIOS request
-    const axiosResponse = await $axios
+    const axiosResponse = await axios
       .post("/user/profile", {
         id,
         email,
