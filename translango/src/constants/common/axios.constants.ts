@@ -22,7 +22,6 @@ export const RESPONSE_STATUS_CODES = {
   409: "USER_ALREADY_EXISTS",
 };
 
-axios.defaults.withCredentials = true;
 axios.defaults.baseURL = "http://104.198.116.249";
 
 axios.interceptors.request.use((request) => {
@@ -31,6 +30,6 @@ axios.interceptors.request.use((request) => {
 });
 
 axios.interceptors.response.use((response) => {
-  console.log(response.headers);
+  console.log(response);
   return response;
 });

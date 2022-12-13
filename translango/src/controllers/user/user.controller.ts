@@ -66,10 +66,6 @@ export default class UserController {
         {
           email,
           password,
-        },
-        {
-          withCredentials: true,
-          headers: { "Access-Control-Allow-Origin": "*" },
         }
       )
       .catch((e) => {
@@ -102,7 +98,7 @@ export default class UserController {
     // Call the AXIOS request
     const axiosResponse = await axios
       .get("/user/profile", {
-        withCredentials: true,
+        withCredentials: false,
         headers: { "Access-Control-Allow-Origin": "*" },
       })
       .catch((e) => {
