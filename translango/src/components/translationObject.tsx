@@ -16,6 +16,12 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ReactCountryFlag from 'react-country-flag';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import { useSpeechSynthesis } from 'react-speech-kit';
+import { useState } from 'react';
+import ShareButton from './shareButton';
+import { Button } from '@mui/material';
+
+
 
 interface ExpandMoreProps extends IconButtonProps {
     expand: boolean;
@@ -32,8 +38,33 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
     }),
 }));
 
+/*
+    What We Need here:
+
+    list of:
+        1. language code of translated text
+        2. mapping of language code between react speech kit and google translate
+        3. translated text
+        4. language name of translated text
+*/
+
+// const uploadButton = styled((props: any) => {
+//     const { expand, ...other } = props;
+//     return <IconButton {...other} />;
+//   })(({ theme }) => ({
+//     marginLeft: 'auto',
+// }));
+
 export default function TranslationObject() {
     const [expanded, setExpanded] = React.useState(false);
+    const [lang, setLang] = useState('ja-JP')
+    const [value, setValue] = useState('いぬ');
+    const { speak, cancel, speaking, supported, voices } = useSpeechSynthesis();
+
+    const voice_index = voices.map((l: any) => l.lang).indexOf(lang);
+
+    const voice = voices[voice_index];
+
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -49,7 +80,7 @@ export default function TranslationObject() {
                             <Card sx={{ m: 2 }}>
                                 <CardHeader
                                     action={
-                                        <IconButton aria-label="settings">
+                                        <IconButton aria-label="settings" onClick={() => speak({ text: value, voice: voice })} >
                                             <VolumeUpIcon />
                                         </IconButton>
                                     }
@@ -69,6 +100,15 @@ export default function TranslationObject() {
                                         <ShareIcon />
                                     </IconButton>
                                 </CardActions> */}
+                                <CardActions disableSpacing>
+                                    {/* <Box sx={{ display: "flex", alignItems: "center", pl: 1, pb: 1 }}> */}
+                                    <IconButton aria-label="add to favorites">
+                                        <FavoriteIcon />
+                                    </IconButton>
+                                    <ShareButton rawurl={window.location.href} title={value} />
+                                    <Button size="small" sx={{ marginLeft: 'auto' }}>Upload</Button>
+                                    {/* </Box> */}
+                                </CardActions>
                             </Card>
                         );
                     }

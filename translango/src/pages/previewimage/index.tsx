@@ -44,7 +44,7 @@ export interface uploadStates {
 }
 
 // background: 'linear-gradient(to right bottom, #430089, #82ffa1)'
-export default function ViewImage(props: any) {
+export default function PreviewImage(props: any) {
 
 
     const location = useLocation();
@@ -132,27 +132,28 @@ export default function ViewImage(props: any) {
             const image_url = getUrlFromBucket("test");
 
             if (toggledObject === true) {
-                navigate('/viewtranslations', { state: { rawurl: rawurl, detectedObject: 'Dog' } });
-                const imageObject = {
-                    type: 'object',
-                    image_url: rawurl,
-                    original: {
-                        language: "en",
-                        text: ""
-                    },
-                    target: ["jp"],
-                };
+                var id = Date.now() + Math.random().toString(16).slice(2);
+                navigate(`/viewtranslations/${id}`, { state: { rawurl: rawurl, detectedObject: 'Dog' } });
+                // const imageObject = {
+                //     type: 'object',
+                //     image_url: rawurl,
+                //     original: {
+                //         language: "en",
+                //         text: ""
+                //     },
+                //     target: ["jp"],
+                // };
 
-                // }
+                // // }
 
 
-                let response = DashboardController.translateImageFromUrl(imageObject);
+                // let response = DashboardController.translateImageFromUrl(imageObject);
                 // console.log();
 
-                await new Promise<void>((resolve, reject) => {
-                    console.log(response)
-                    resolve();
-                })
+                // await new Promise<void>((resolve, reject) => {
+                //     console.log(response)
+                //     resolve();
+                // })
 
                 // CommonTranslationController.detectFromImage(imageObject)
             }

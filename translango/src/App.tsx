@@ -1,6 +1,6 @@
 import classes from './App.module.scss';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import ViewImage from './pages/viewimage';
+import PreviewImage from './pages/previewimage';
 import WelcomePage from './pages/welcome';
 import { ThemeProvider } from '@mui/system';
 import theme from './theme/theme';
@@ -24,10 +24,10 @@ function App() {
         <ThemeProvider theme={theme}>
           <Router>
             <Routes>
-              <Route path='/dashboard' element={<Dashboard />} />
+              <Route path='/dashboard/:userID' element={<Dashboard />} />
               {/* <Route path='/test' element={<TestImage />} /> */}
               <Route path='/' element={<WelcomePage />} />
-              <Route path="/view-image" element={<ViewImage />} />
+              <Route path="/view-image" element={<PreviewImage />} />
               <Route path="/signin" element={<SignInPage />} />
               <Route path="/select-favourite-languages" element={<SelectLanguagesPage />} />
               <Route path='/sign-up'>
@@ -35,7 +35,7 @@ function App() {
                 <Route path='confirm-email' element={<ConfirmEmail />} />
                 <Route path='create-profile' element={<CreateProfile />} />
               </Route>
-              <Route path='/viewtranslations' element={<ViewTranslations />} />
+              <Route path='/viewtranslations/:translationID' element={<ViewTranslations />} />
             </Routes>
           </Router>
         </ThemeProvider>

@@ -32,12 +32,6 @@ export default function ViewObject(props: any) {
                         Taken on: {new Date().toLocaleString().split(',')[0] + ''}
                     </Typography>
                 </CardContent>
-                <Box sx={{ display: "flex", alignItems: "center", pl: 1, pb: 1 }}>
-                    <IconButton aria-label="add to favorites">
-                        <FavoriteIcon />
-                    </IconButton>
-                    <ShareButton rawurl={props.rawurl} title={props.detectedObject} />
-                </Box>
             </Box>
             <CardMedia
                 component="img"
