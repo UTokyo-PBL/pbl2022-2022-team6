@@ -66,6 +66,10 @@ export default class UserController {
       })
       .then((axiosResponse) => {
         // Return the status code
+        console.log(axiosResponse);
+        for (let entry of axiosResponse.headers.entries) {
+          console.log('header', entry);
+        }
         return RESPONSE_STATUS_CODES[axiosResponse.status];
       });
   }

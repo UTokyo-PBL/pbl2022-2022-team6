@@ -61,7 +61,7 @@ export default class DashboardController {
     latitude,
     longitude,
   }: {
-    type: "object" | "text";
+    type: string;
     image_url: string;
     id?: string;
     original?: { language: string; text?: string };

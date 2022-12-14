@@ -9,24 +9,28 @@ import TopNavigation from "../../components/TopNavigation";
 import Copyright from "../../components/Copyright";
 import BottomNavigation from "../../components/BottomNavigation";
 import axios from "axios";
-import CommonTranslationController from "../../api/translation/common.handler";
-// import { uploadFile } from 'react-s3';
+// import CommonTranslationController from "../../api/translation/common.handler";
 import Resizer from "react-image-file-resizer";
-
-
+import AWS from 'aws-sdk';
+import DashboardController from '../../controllers/dashboard/dashboard.controller'
 // Use URL.revokeObjectURL(img.src) in large scale production
 
-const S3_BUCKET = 'YOUR_BUCKET_NAME';
-const REGION = 'YOUR_REGION_NAME';
-const ACCESS_KEY = 'YOUR_ACCESS_KEY';
-const SECRET_ACCESS_KEY = 'YOUR_SECRET_ACCESS_KEY';
+const S3_BUCKET = 'team6-bucket01';
+const REGION = 'us-east-1';
+const ACCESS_KEY = 'ASIASU4NVN3GZK2JFK6C';
+const SECRET_ACCESS_KEY = 'pTpBOjXWp7NwJrm2zk5LapTY6eu40itE5Mc6QqHF';
 
-const config = {
-    bucketName: S3_BUCKET,
-    region: REGION,
+// Dx9wOeUCbmGTY3mX7YHo0Su38bZbHeA2Npe4VQHs
+// aws_session_token=FwoGZXIvYXdzEEMaDHCG3vCaUpT7td2FUiLTATxW/Z6p74EgLamVpUPI0G3IDZwNuISNTp1VesKxUDIWvtq6F8YEb8CbYMB2CASm/vf1V4jpyyuqr02q8PVpyJTsU2ckdBtcQtDvRjFsneNg2XNoPWxjFbOgwMmWKWc7j7+lq6MagfkG/QPgW+cNUba9eRsbqKYQbY1tSakNhoiklbacwBHxEj61FhaQ5NcGu8wEIVg50xXyu7oKjeS5D9aGC87W1by8y1gUgmV5rjODM5dirB1vnPPDHbEtPRRctlB7wwBvIBVWHJ+NRG+BIgWJvQ0oyYjMnAYyLQXN/b24OH5Bz+2QQ7W/aoMtaIaxpGdZdyYIBEQaLy50qc++G1r8Hel+YJ+LXA==
+AWS.config.update({
     accessKeyId: ACCESS_KEY,
-    secretAccessKey: SECRET_ACCESS_KEY,
-}
+    secretAccessKey: SECRET_ACCESS_KEY
+})
+
+const myBucket = new AWS.S3({
+    params: { Bucket: S3_BUCKET },
+    region: REGION,
+})
 
 
 export interface uploadProps {
@@ -45,9 +49,11 @@ export default function ViewImage(props: any) {
     const location = useLocation();
 
     const [rawurl, setRawURL] = useState(location.state.rawurl);
+    const [imgObj, setImgObj] = useState(location.state.img);
     const [updateImage, setUpdateImage] = useState(false);
     const [toggledObject, setToggledObject] = React.useState(true);
 
+    const controller = new DashboardController();
     const navigate = useNavigate();
     const handleToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
         setToggledObject(event.target.checked);
@@ -65,6 +71,7 @@ export default function ViewImage(props: any) {
 
         setRawURL(URL.createObjectURL(file));
         setUpdateImage(true);
+        setImgObj(file);
 
 
         await new Promise<void>((resolve, reject) => {
@@ -91,36 +98,70 @@ export default function ViewImage(props: any) {
             );
         });
 
-    // const uploadtoS3 = async (file: any) => {
-    //     uploadFile(file, config)
-    //         .then((data: any) => console.log(data))
-    //         .catch((err: any) => console.error(err));
-    // }
-    const goScan = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const uploadFile = (file: any, name: string) => {
+
+        const params = {
+            ACL: 'public-read',
+            Body: file,
+            Bucket: S3_BUCKET,
+            Key: name
+        };
+
+        myBucket.putObject(params)
+            .send((err) => {
+                if (err) console.log(err)
+            })
+    }
+    const getUrlFromBucket = (fileName: string) => {
+        const regionString = REGION.includes('us-east-1') ? '' : ('-' + REGION)
+        return `https://${S3_BUCKET}.s3${regionString}.amazonaws.com/${fileName}`
+    };
+
+    const goScan = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        // console.log(toggledObject);
 
-        if (toggledObject === true) {
-            navigate('/scanobjects');
+        try {
+            // Resize image
+            const image = await resizeFile(imgObj);
+            console.log(image);
 
-            // SEND TO S3
+            // Upload to S3
+            uploadFile(image, "test");
 
-            const imageObject = {
-                type: 'object',
-                image_url: '',
-                location: null,
-                preferred_languages: {
-                    code: 'en'
-                }
+            const image_url = getUrlFromBucket("test");
 
+            if (toggledObject === true) {
+                navigate('/viewtranslations', { state: { rawurl: rawurl, detectedObject: 'Dog' } });
+                const imageObject = {
+                    type: 'object',
+                    image_url: rawurl,
+                    original: {
+                        language: "en",
+                        text: ""
+                    },
+                    target: ["jp"],
+                };
+
+                // }
+
+
+                let response = DashboardController.translateImageFromUrl(imageObject);
+                // console.log();
+
+                await new Promise<void>((resolve, reject) => {
+                    console.log(response)
+                    resolve();
+                })
+
+                // CommonTranslationController.detectFromImage(imageObject)
             }
-            // CommonTranslationController.detectFromImage(imageObject)
-        }
-        else {
-            navigate('/scantext');
-        }
+            else {
+                navigate('/scantext');
+            }
 
-
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     return (

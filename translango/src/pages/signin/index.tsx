@@ -12,6 +12,7 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import UserController from '../../controllers/user/user.controller';
 
 function Copyright(props: any) {
     return (
@@ -29,13 +30,18 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function SignInPage() {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+        const user_data = {
+            email: "example@translango.com",
+            password: "passw0rd",
+        };
+        console.log(user_data)
+        const response = UserController.login(user_data);
+        console.log(response);
+
+
     };
 
     return (
