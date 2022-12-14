@@ -1,4 +1,5 @@
-import axios from "axios";
+import axiosInstance from "../../constants/common/axios.constants";
+import instance from "../../constants/common/axios.constants";
 
 // --------->>> MAIN CLASS
 export default class UserController {
@@ -12,7 +13,7 @@ export default class UserController {
   // COMMENTS :
   // 1.- ID is not included in the OpenAPI schema, but
   // 2.- Response code 401 is kinda misleading. Maybe it should be put in the login function?
-  // 3.- TESTED
+  // 3.- TESTED & CONNECTED
   static async registerUser({
     id,
     email,
@@ -33,7 +34,7 @@ export default class UserController {
     language: string;
   }) {
     // Call the AXIOS request
-    const axiosResponse = await axios
+    const axiosResponse = await axiosInstance
       .post("/user/signup", {
         id,
         email,
@@ -57,10 +58,10 @@ export default class UserController {
   // COMMENTS:
   // 1.- Should there be a responseCode for unconfirmed email?
   // 2.- Please check if cookie is being set. Else, consider sending it back as part of the body response setting it manually
-  // 3.- TESTED
+  // 3.- TESTED & CONNECTED
   static async login({ email, password }: { email: string; password: string }) {
     // Call the AXIOS request
-    const axiosResponse = await axios
+    const axiosResponse = await instance
       .post(
         "/user/login",
         {
@@ -79,10 +80,10 @@ export default class UserController {
   // ---------> POST : login - submit email & password
   // ROUTE: /user/logout
   // COMMENTS:
-  // 1.- TESTED
+  // 1.- TESTED & CONNECTED
   static async logout() {
     // Call the AXIOS request
-    const axiosResponse = await axios.post("/user/logout", {}).catch((e) => {
+    const axiosResponse = await axiosInstance.post("/user/logout", {}).catch((e) => {
       const JSONError = e.toJSON();
       return JSONError;
     });
@@ -93,14 +94,11 @@ export default class UserController {
   // ---------> GET : user profile - retrieve user profile
   // ROUTE: /user/profile
   // COMMENTS:
-  // 1.- TESTED, but failed due to cookie not being received
+  // 1.- TESTED & CONNECTED
   static async getUserProfile() {
     // Call the AXIOS request
-    const axiosResponse = await axios
-      .get("/user/profile", {
-        withCredentials: false,
-        headers: { "Access-Control-Allow-Origin": "*" },
-      })
+    const axiosResponse = await axiosInstance
+      .get("/user/profile")
       .catch((e) => {
         const JSONError = e.toJSON();
         return JSONError;
@@ -112,7 +110,7 @@ export default class UserController {
   // ROUTE: /user/profile
   // COMMENTS:
   // 1.- Added the user_profile_pic property on the expected response
-  // 2.- TESTED, but failed due to cookie not being received
+  // 2.- TESTED & CONNECTED
   static async editUserProfile({
     id,
     email,
@@ -122,7 +120,7 @@ export default class UserController {
     last_name,
     username,
     language,
-    user_profile_pic,
+    profile_image
   }: {
     id: string;
     email: string;
@@ -132,10 +130,10 @@ export default class UserController {
     last_name: string;
     username: string;
     language: string;
-    user_profile_pic: string;
+    profile_image: string
   }) {
     // Call the AXIOS request
-    const axiosResponse = await axios
+    const axiosResponse = await axiosInstance
       .post("/user/profile", {
         id,
         email,
@@ -145,7 +143,7 @@ export default class UserController {
         last_name,
         username,
         language,
-        user_profile_pic,
+        profile_image
       })
       .catch((e) => {
         const JSONError = e.toJSON();

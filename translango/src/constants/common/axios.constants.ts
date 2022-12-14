@@ -16,20 +16,20 @@ export const RESPONSE_STATUS_CODES = {
   ],
 
   // FAIL Codes
-  400: "FAIL (USUALLY RELATED TO DATA MISSING)",
-  401: ["EMAIL_CONFIRMATION_HAS_EXPIRED", "INVALID_INFO_INPUTED"],
+  400: "FAIL (USUALLY RELATED TO DATA MISSING ON REQUEST)",
+  401: ["EMAIL_CONFIRMATION_HAS_EXPIRED", "INVALID_INFO_INPUTED", 'UNAUTHORIZED'],
   404: "RESOURCE_NOT_FOUND",
   409: "USER_ALREADY_EXISTS",
+  500 : ['SERVER_DIED', 'REQUESTED INFO NOT FOUND IN DB']
 };
 
-axios.defaults.baseURL = "http://104.198.116.249";
+// INSTANCE: Set axios' defaults
+const axiosInstance = axios.create({
+  baseURL: "https://translango.y-nakai.com",
+  withCredentials: true,
+  headers: {
+      withCredentials: 'true',
+  },
+})
 
-axios.interceptors.request.use((request) => {
-  console.log(request);
-  return request;
-});
-
-axios.interceptors.response.use((response) => {
-  console.log(response);
-  return response;
-});
+export default axiosInstance;
