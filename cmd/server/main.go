@@ -73,8 +73,8 @@ func run() error {
 	sessStore.Options = &sessions.Options{
 		Path:     "/",
 		MaxAge:   env.SessionMaxAge,
-		Secure:   !env.SessionCookieInsecure,
-		HttpOnly: false,
+		Secure:   true,
+		HttpOnly: true,
 		SameSite: http.SameSiteNoneMode,
 	}
 
@@ -85,6 +85,9 @@ func run() error {
 		middleware.RequestID(),
 		middleware.CORSWithConfig(middleware.CORSConfig{
 			AllowCredentials: true,
+			AllowOrigins:     []string{"http://*", "https://*"},
+			AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+			MaxAge:           300,
 		}),
 		session.Middleware(sessStore),
 		httpmiddleware.SessionMiddleware(db, ignorePaths),
