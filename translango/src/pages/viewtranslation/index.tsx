@@ -1,7 +1,7 @@
 import { Button, CardActions, CardHeader, CssBaseline, Grid, ThemeProvider, Toolbar, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import theme from '../../theme/theme';
 import ToggleSwitch from "../../components/ToggleSwitch";
@@ -56,89 +56,21 @@ export default function ViewTranslations(props: any) {
     };
 
 
-
-
-
-    const changeImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (!event.target.files || !event.target.files[0]) return;
-        event.persist();
-        const file = await event.target.files[0];
-
-        setRawURL(URL.createObjectURL(file));
-        setUpdateImage(true);
-
-
-        await new Promise<void>((resolve, reject) => {
-            console.log('async', event.target.value)
-            resolve();
-        })
-
-    };
-
-
-    const resizeFile = (file: any) =>
-        new Promise((resolve) => {
-            Resizer.imageFileResizer(
-                file,
-                300,
-                400,
-                "JPEG",
-                50,
-                0,
-                (uri) => {
-                    resolve(uri);
-                },
-                "base64"
-            );
-        });
-
-    // const uploadtoS3 = async (file: any) => {
-    //     uploadFile(file, config)
-    //         .then((data: any) => console.log(data))
-    //         .catch((err: any) => console.error(err));
-    // }
-    const goScan = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-        // console.log(toggledObject);
-
-        if (toggledObject === true) {
-            navigate('/scanobjects');
-
-            // SEND TO S3
-
-            const imageObject = {
-                type: 'object',
-                image_url: '',
-                location: null,
-                preferred_languages: {
-                    code: 'en'
-                }
-
-            }
-            // CommonTranslationController.detectFromImage(imageObject)
-        }
-        else {
-            navigate('/scantext');
-        }
-
-
-    };
-
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <TopNavigation />
             <Grid container direction="column" color="primary">
-                <Grid item xs={12} sm={8} md={5} direction="column" alignItems="center" sx={{ m: 2, display: 'flex' }}>
-                    <Toolbar />
+                <Grid item xs={12} sm={9} md={10} alignItems="center" sx={{ m: 2, display: 'flex' }}>
+                    {/* <Toolbar /> */}
                     <ViewObject rawurl={rawurl} detectedObject="Dog" />
                 </Grid>
-                <Grid item xs={12} sm={8} md={5} direction="column" alignItems="left" sx={{ m: 2 }}>
+                <Grid item xs={12} sm={9} md={10} alignItems="left" sx={{ m: 2 }}>
                     <Typography variant="h5" color="purple" component="div">
                         Your favourite languages
                     </Typography>
                     {/* <Toolbar /> */}
-                    <TranslationObject />
+                    <TranslationObject rawurl={rawurl} />
                 </Grid>
             </Grid>
         </ThemeProvider>

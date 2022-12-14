@@ -15,6 +15,7 @@ import Dashboard from './pages/dashboard/Dashboard';
 import SelectLanguagesPage from './pages/select-languages/SelectLanguagesPage';
 import ViewObject from './components/viewObject';
 import ViewTranslations from './pages/viewtranslation';
+import CreatePost from './pages/createPost';
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
                 <Route path='create-profile' element={<CreateProfile />} />
               </Route>
               <Route path='/viewtranslations/:translationID' element={<ViewTranslations />} />
+              <Route path='/createpost/:translationID' element={<CreatePost />} />
             </Routes>
           </Router>
         </ThemeProvider>

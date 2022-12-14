@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
+import { styled, ThemeProvider } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -19,7 +19,9 @@ import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import { useSpeechSynthesis } from 'react-speech-kit';
 import { useState } from 'react';
 import ShareButton from './shareButton';
-import { Button } from '@mui/material';
+import { Button, CssBaseline, Paper } from '@mui/material';
+import theme from '../theme/theme';
+import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
 
 
 
@@ -55,39 +57,45 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 //     marginLeft: 'auto',
 // }));
 
-export default function TranslationObject() {
+export default function TranslationObject(props: any) {
     const [expanded, setExpanded] = React.useState(false);
     const [lang, setLang] = useState('ja-JP')
     const [value, setValue] = useState('いぬ');
     const { speak, cancel, speaking, supported, voices } = useSpeechSynthesis();
+    const navigate = useNavigate();
+
+
 
     const voice_index = voices.map((l: any) => l.lang).indexOf(lang);
 
     const voice = voices[voice_index];
+    const { translationID } = useParams();
 
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
 
+
     const languages = ["Spanish", "Japanese", "Chinese"]
     return (
-        <>
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
             {
                 languages.map((language) => {
                     if (language) {
                         return (
-                            <Card sx={{ m: 2 }}>
+                            <Card sx={{ m: 2 }} key={language}>
                                 <CardHeader
                                     action={
-                                        <IconButton aria-label="settings" onClick={() => speak({ text: value, voice: voice })} >
+                                        <IconButton aria-label="settings" onClick={() => speak({ text: value, voice: voice, rate: 0.6 })} >
                                             <VolumeUpIcon />
                                         </IconButton>
                                     }
                                     title={language}
                                     titleTypographyProps={{ variant: 'h5' }}
                                 />
-                                <CardContent>
+                                <CardContent sx={{ m: 2, backgroundColor: 'primary.light' }}>
                                     <Typography variant="body2" color="text.secondary">
                                         Translation: いぬ
                                     </Typography>
@@ -105,15 +113,16 @@ export default function TranslationObject() {
                                     <IconButton aria-label="add to favorites">
                                         <FavoriteIcon />
                                     </IconButton>
-                                    <ShareButton rawurl={window.location.href} title={value} />
-                                    <Button size="small" sx={{ marginLeft: 'auto' }}>Upload</Button>
+                                    <ShareButton rawurl={props.rawurl} title={value} />
+                                    <Button size="small" sx={{ marginLeft: 'auto' }} onClick={() => navigate(`/createpost/${translationID}`, { state: { rawurl: props.rawurl } })}>Upload</Button>
                                     {/* </Box> */}
                                 </CardActions>
                             </Card>
+
                         );
                     }
                 })
             }
-        </>
+        </ThemeProvider>
     );
 }
