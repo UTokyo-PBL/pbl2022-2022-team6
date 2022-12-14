@@ -22,14 +22,7 @@ export const RESPONSE_STATUS_CODES = {
   409: "USER_ALREADY_EXISTS",
 };
 
-axios.defaults.baseURL = "http://104.198.116.249";
-
-axios.interceptors.request.use((request) => {
-  console.log(request);
-  return request;
-});
-
-axios.interceptors.response.use((response) => {
-  console.log(response);
-  return response;
-});
+// INSTANCE: Set axios' defaults
+axios.defaults.baseURL = "https://translango.y-nakai.com";
+//axios.defaults.baseURL = "http://104.198.116.249";
+axios.defaults.withCredentials = true;
