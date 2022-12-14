@@ -16,14 +16,20 @@ export const RESPONSE_STATUS_CODES = {
   ],
 
   // FAIL Codes
-  400: "FAIL",
+  400: "FAIL (USUALLY RELATED TO DATA MISSING)",
   401: ["EMAIL_CONFIRMATION_HAS_EXPIRED", "INVALID_INFO_INPUTED"],
   404: "RESOURCE_NOT_FOUND",
   409: "USER_ALREADY_EXISTS",
 };
 
-// INSTANCE: Create an Axios client
-export const $axios = axios.create({
-  baseURL: "http://104.198.116.249",
-  withCredentials: true,
+axios.defaults.baseURL = "http://104.198.116.249";
+
+axios.interceptors.request.use((request) => {
+  console.log(request);
+  return request;
+});
+
+axios.interceptors.response.use((response) => {
+  console.log(response);
+  return response;
 });

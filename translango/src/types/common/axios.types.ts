@@ -7,3 +7,9 @@ export type endpointsType = {
     statusCodes?: { success?: number[]; failure?: number[] };
   };
 };
+
+// INSTANCE: Structure for response coming from backend
+export type backendResponseType = {
+  outcome : boolean, 
+  responnse : any
+}
