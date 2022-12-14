@@ -15,6 +15,7 @@ import Dashboard from './pages/dashboard/Dashboard';
 import SelectLanguagesPage from './pages/select-languages/SelectLanguagesPage';
 import ViewObject from './components/viewObject';
 import ViewTranslations from './pages/viewtranslation';
+import { TestImage } from './pages/test/test';
 
 
 function App() {
@@ -25,7 +26,7 @@ function App() {
           <Router>
             <Routes>
               <Route path='/dashboard/:userID' element={<Dashboard />} />
-              {/* <Route path='/test' element={<TestImage />} /> */}
+              {<Route path='/test' element={<TestImage />} /> }
               <Route path='/' element={<WelcomePage />} />
               <Route path="/view-image" element={<PreviewImage />} />
               <Route path="/signin" element={<SignInPage />} />

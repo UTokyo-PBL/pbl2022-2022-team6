@@ -1,30 +1,34 @@
-import axios from "axios";
+import axiosInstance from "../../constants/common/axios.constants";
 
 // --------->>> MAIN CLASS
 export default class DashboardController {
   // ---------> GET: dashboard/main - top
   // ROUTE: /dashboard/top
   // COMMENTS:
-  // 1.- What does this do?
-  static async getDashboardTop() {
+  // 1.- TESTED & CONNECTED
+  static async getPreferredLanguages() {
     // Call the AXIOS request
-    const axiosResponse = await axios.get("/dashboard/top").catch((e) => {
-      const JSONError = e.toJSON();
-      return JSONError;
-    });
+    const axiosResponse = await axiosInstance
+      .get("/dashboard/top")
+      .catch((e) => {
+        const JSONError = e.toJSON();
+        return JSONError;
+      });
     return axiosResponse;
   }
 
   // ---------> POST : edit dashboard/top
   // ROUTE: /dashboard/top
+  // COMMENTS:
+  // 1.- TESTED & CONNECTED
   static async updateUserPreferredLanguages({
     languages,
   }: {
     languages: string[];
   }) {
     // Call the AXIOS request
-    const axiosResponse = await axios
-      .post(" /dashboard/top", {
+    const axiosResponse = await axiosInstance
+      .post("/dashboard/top", {
         languages,
       })
       .catch((e) => {
@@ -36,9 +40,10 @@ export default class DashboardController {
 
   // ---------> GET : dashboard/histories - list histories
   // ROUTE: /dashboard/histories
+  // 1.- TESTED & CONNECTED
   static async getItems() {
     // Call the AXIOS request
-    const axiosResponse = await axios
+    const axiosResponse = await axiosInstance
       .get("/dashboard/histories")
       .catch((e) => {
         const JSONError = e.toJSON();
@@ -49,7 +54,10 @@ export default class DashboardController {
 
   // ---------> POST : dashboard/camera - add history (detect object or text)
   // ROUTE: /dashboard/histories
-  // COMMENTS : Some parameters (original & target) are misleading.
+  // COMMENTS :
+  // 1.- CONNECTED BUT FAILING
+  // TODO
+
   static async translateImageFromUrl({
     type,
     image_url,
@@ -64,7 +72,7 @@ export default class DashboardController {
     target: { language: string; id: string; text?: string }[];
   }) {
     // Call the AXIOS request
-    const axiosResponse = await axios
+    const axiosResponse = await axiosInstance
       .post("/dashboard/histories?type=" + type, {
         image_url,
         id,
@@ -80,9 +88,11 @@ export default class DashboardController {
 
   // ---------> GET : dashboard/history - one history for object
   // ROUTE: /dashboard/histories/{objectID}
+  // 1.- CONNECTED BUT FAILING
+  // TODO
   static async getOneItem({ id }: { id: string }) {
     // Call the AXIOS request
-    const axiosResponse = await axios
+    const axiosResponse = await axiosInstance
       .get("/dashboard/histories/" + id)
       .catch((e) => {
         const JSONError = e.toJSON();
@@ -93,9 +103,12 @@ export default class DashboardController {
 
   // ---------> DELETE : dashboard/history - one history for object
   // ROUTE: /dashboard/histories/{objectID}
+  // COMMENTS:
+  // 1.- CONNECTED BUT FAILING
+  // TODO
   static async deleteOneItem({ id }: { id: string }) {
     // Call the AXIOS request
-    const axiosResponse = await axios
+    const axiosResponse = await axiosInstance
       .delete("/dashboard/histories/" + id)
       .catch((e) => {
         const JSONError = e.toJSON();
@@ -112,7 +125,8 @@ export default class DashboardController {
   // ROUTE: /dashboard/histories/{objectID}/edit
   // COMMENTS:
   // 1.- Only one change per call?
-
+  // 2.- CONNECTED BUT FAILING
+  // TODO
   // ROUTE: /dashboard/histories/{objectID}
   static async editItem({
     id,
@@ -132,15 +146,15 @@ export default class DashboardController {
       caption !== undefined
         ? "caption"
         : num_failures !== undefined
-          ? "num_failures"
-          : original !== undefined
-            ? "original"
-            : liked !== undefined
-              ? "liked"
-              : "";
+        ? "num_failures"
+        : original !== undefined
+        ? "original"
+        : liked !== undefined
+        ? "liked"
+        : "";
 
     // Call the AXIOS request
-    const axiosResponse = await axios
+    const axiosResponse = await axiosInstance
       .post("/dashboard/histories/" + id + "/" + editTarget, {
         caption,
         num_failures,
@@ -156,12 +170,16 @@ export default class DashboardController {
 
   // ---------> GET : dashboard/list - lists
   // ROUTE: /dashboard/lists
+  // COMMENTS:
+  // 1.- TESTED & CONNECTED
   static async getLists() {
     // Call the AXIOS request
-    const axiosResponse = await axios.get("/dashboard/lists").catch((e) => {
-      const JSONError = e.toJSON();
-      return JSONError;
-    });
+    const axiosResponse = await axiosInstance
+      .get("/dashboard/lists")
+      .catch((e) => {
+        const JSONError = e.toJSON();
+        return JSONError;
+      });
     return axiosResponse;
   }
 
@@ -169,6 +187,7 @@ export default class DashboardController {
   // ROUTE: /dashboard/lists
   // COMMENTS:
   // 1.- icon_name is set to icon-name, which cannot be sent as Json from axios
+  // 2.- TESTED & CONNECTED
   static async createList({
     id,
     name,
@@ -181,7 +200,7 @@ export default class DashboardController {
     objects: { id: string }[];
   }) {
     // Call the AXIOS request
-    const axiosResponse = await axios
+    const axiosResponse = await axiosInstance
       .post("/dashboard/lists", { id, name, icon_name, objects })
       .catch((e) => {
         const JSONError = e.toJSON();
@@ -192,6 +211,8 @@ export default class DashboardController {
 
   // ---------> GET : dashboard/list - start game
   // ROUTE: /dashboards/lists/{listID}
+  // COMMENTS:
+  // 1.- TESTED & CONNECTED
   static async getList({
     id,
     num_questions,
@@ -200,8 +221,8 @@ export default class DashboardController {
     num_questions: number;
   }) {
     // Call the AXIOS request
-    const axiosResponse = await axios
-      .get("/dashboard/lists" + id, { params: { num_questions } })
+    const axiosResponse = await axiosInstance
+      .get("/dashboard/lists/" + id + '?num_questions=' + num_questions)
       .catch((e) => {
         const JSONError = e.toJSON();
         return JSONError;
@@ -213,6 +234,7 @@ export default class DashboardController {
   // ROUTE: /dashboards/lists/{listID}
   // COMMENTS:
   // 1.- Request 'objects' property include only an array of ids for the referred items, However, the response should include the entire object.
+  // 2.- TESTED & CONNECTED
   static async editList({
     id,
     name,
@@ -225,7 +247,7 @@ export default class DashboardController {
     objects: { id: string }[];
   }) {
     // Call the AXIOS request
-    const axiosResponse = await axios
+    const axiosResponse = await axiosInstance
       .put("/dashboard/lists/" + id, { id, name, icon_name, objects })
       .catch((e) => {
         const JSONError = e.toJSON();
@@ -236,9 +258,11 @@ export default class DashboardController {
 
   // ---------> DELETE : dashboard - delete list
   // ROUTE: /dashboards/lists/{listID}
+  // COMMENTS:
+  // 1.- TESTED & CONNECTED
   static async deleteList({ id }: { id: string }) {
     // Call the AXIOS request
-    const axiosResponse = await axios
+    const axiosResponse = await axiosInstance
       .delete("/dashboard/lists/" + id)
       .catch((e) => {
         const JSONError = e.toJSON();
