@@ -132,12 +132,12 @@ export default class DashboardController {
       caption !== undefined
         ? "caption"
         : num_failures !== undefined
-        ? "num_failures"
-        : original !== undefined
-        ? "original"
-        : liked !== undefined
-        ? "liked"
-        : "";
+          ? "num_failures"
+          : original !== undefined
+            ? "original"
+            : liked !== undefined
+              ? "liked"
+              : "";
 
     // Call the AXIOS request
     const axiosResponse = await axios

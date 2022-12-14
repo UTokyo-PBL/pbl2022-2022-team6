@@ -12,12 +12,16 @@ import { CssBaseline, Stack } from '@mui/material';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import theme from '../theme/theme';
 import { AccountCircle } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function TopNavigation(props: any) {
     const [auth, setAuth] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+    const navigate = useNavigate();
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAuth(event.target.checked);
@@ -45,6 +49,7 @@ function TopNavigation(props: any) {
                         color="inherit"
                         aria-label="menu"
                         sx={{ mr: 2 }}
+                        onClick={() => navigate(-1)}
                     >
                         <ArrowBackIosIcon />
                     </IconButton>

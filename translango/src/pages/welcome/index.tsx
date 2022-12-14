@@ -76,7 +76,7 @@ export default function WelcomePage() {
                                 <TranslanGoText background='white' />
                             </Grid>
                         </Grid>
-                        <Grid container direction="column" alignItems="right" justifyContent="flex-end">
+                        <Grid container direction="column" alignItems="center" justifyContent="flex-end">
                             <Grid item>
                                 <Typography variant='h4' color='white' fontWeight='bold'>
                                     {t('Welcome')}
@@ -96,7 +96,7 @@ export default function WelcomePage() {
                                 <TextButton background='white' />
                             </Grid>
                         </Grid>
-                        <Grid container sx={{ m: 0 }} direction="column" alignItems="right" justifyContent="flex-end">
+                        <Grid container sx={{ m: 0 }} direction="column" alignItems="center" justifyContent="flex-end">
                             <Grid item>
                                 <Typography variant='body1' color='white'>
                                     {t('Or')}
@@ -109,7 +109,7 @@ export default function WelcomePage() {
                             </Grid>
                         </Grid>
 
-                        <Box sx={{ m: 1 }}>
+                        <Grid container sx={{ m: 1 }} direction="column" alignItems="center" justifyContent="flex-end">
                             <Button
                                 fullWidth
                                 variant="text"
@@ -132,7 +132,7 @@ export default function WelcomePage() {
 
 
 
-                        </Box>
+                        </Grid>
 
                         <Grid container direction="column" alignItems='center'>
                             <Grid item>
