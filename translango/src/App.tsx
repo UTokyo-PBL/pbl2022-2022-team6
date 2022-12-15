@@ -8,11 +8,11 @@ import SignInPage from './pages/signin';
 // import { TestImage } from './pages/test/test';
 
 import './i18n.tsx'
-import GetSignUpDetails from './pages/sign-up/get-sign-up-details/GetSignUpDetails';
-import ConfirmEmail from './pages/sign-up/confirm-email/ConfirmEmail';
-import CreateProfile from './pages/sign-up/create-profile/CreateProfile';
-import Dashboard from './pages/dashboard/Dashboard';
-import SelectLanguagesPage from './pages/select-languages/SelectLanguagesPage';
+import GetSignUpDetails from './pages/sign-up/get-sign-up-details';
+import ConfirmEmail from './pages/sign-up/confirm-email';
+import CreateProfile from './pages/sign-up/create-profile';
+import Dashboard from './pages/dashboard';
+import SelectLanguagesPage from './pages/select-languages';
 import ViewObject from './components/viewObject';
 import ViewTranslations from './pages/viewtranslation';
 import CreatePost from './pages/createPost';
@@ -26,7 +26,10 @@ function App() {
         <ThemeProvider theme={theme}>
           <Router>
             <Routes>
-              <Route path='/dashboard/:userID' element={<Dashboard />} />
+              <Route path='/dashboard'>
+                <Route index element={<Dashboard />} />
+                <Route path=':userID' element={<Dashboard />} />
+              </Route>
               {<Route path='/test' element={<TestImage />} />}
               <Route path='/' element={<WelcomePage />} />
               <Route path="/view-image" element={<PreviewImage />} />
