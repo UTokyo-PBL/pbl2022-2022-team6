@@ -1,7 +1,7 @@
 import { ThemeProvider } from "@mui/material";
-import UserController from "../../controllers/user/user.controller";
 import theme from '../../theme/theme';
 import { v4 as uuidv4 } from 'uuid';
+import UserController from "../../controllers/user/user.controller";
 import { RESPONSE_STATUS_CODES } from "../../constants/common/axios.constants";
 import DashboardController from "../../controllers/dashboard/dashboard.controller";
 
@@ -230,10 +230,10 @@ function getLists() {
 
 function createList() {
     DashboardController.createList({
-        id : uuidv4(),
-        icon_name : 'US',
-        name : 'mytestlist',
-        objects : [{"id":"8d5eeaff-654d-4cde-a075-07d2a04c26be"}]
+        id: uuidv4(),
+        icon_name: 'US',
+        name: 'mytestlist',
+        objects: [{ "id": "8d5eeaff-654d-4cde-a075-07d2a04c26be" }]
     }).then((OpenAPIResponse) => {
         console.log(OpenAPIResponse)
     })
@@ -241,10 +241,10 @@ function createList() {
 
 function editList() {
     DashboardController.editList({
-        id : "f9c5565c-85a9-4de6-b96f-0f9171b64e6d",
-        icon_name : 'all',
-        name : 'thischanges',
-        objects : [{"id":"8d5eeaff-654d-4cde-a075-07d2a04c26be"}]
+        id: "f9c5565c-85a9-4de6-b96f-0f9171b64e6d",
+        icon_name: 'all',
+        name: 'thischanges',
+        objects: [{ "id": "8d5eeaff-654d-4cde-a075-07d2a04c26be" }]
     }).then((OpenAPIResponse) => {
         console.log(OpenAPIResponse)
     })
@@ -257,7 +257,7 @@ function getList() {
 }
 
 function deleteList() {
-    DashboardController.deleteList({ id: 'f9c5565c-85a9-4de6-b96f-0f9171b64e6d'}).then((OpenAPIResponse) => {
+    DashboardController.deleteList({ id: 'f9c5565c-85a9-4de6-b96f-0f9171b64e6d' }).then((OpenAPIResponse) => {
         console.log(OpenAPIResponse)
     })
 }

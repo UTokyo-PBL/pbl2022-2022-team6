@@ -17,6 +17,7 @@ import ViewObject from './components/viewObject';
 import ViewTranslations from './pages/viewtranslation';
 import CreatePost from './pages/createPost';
 import { TestImage } from './pages/test/test';
+import PreviewPost from './pages/previewPost';
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
               </Route>
               <Route path='/viewtranslations/:translationID' element={<ViewTranslations />} />
               <Route path='/createpost/:translationID' element={<CreatePost />} />
+              <Route path='/previewpost/:translationID' element={<PreviewPost />} />
             </Routes>
           </Router>
         </ThemeProvider>

@@ -1,8 +1,8 @@
-import { Box, Button, CardActions, CardHeader, CssBaseline, Grid, InputAdornment, Stack, styled, TextField, ThemeProvider } from "@mui/material";
+import { Box, Button, CardActions, CardHeader, CssBaseline, Grid, Input, InputAdornment, InputLabel, Stack, styled, TextField, ThemeProvider } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import theme from '../../theme/theme';
 import TopNavigation from "../../components/TopNavigation";
 
@@ -16,12 +16,15 @@ import EnterCaption from "../../components/enterCaption";
 import RoomIcon from '@mui/icons-material/Room';
 import SendIcon from '@mui/icons-material/Send';
 import Copyright from "../../components/Copyright";
+import Autocomplete from "react-google-autocomplete";
 
 
 export default function CreatePost(props: any) {
 
 
     const location = useLocation();
+    const navigate = useNavigate();
+    const { translationID } = useParams();
 
     const Img = styled('img')({
         margin: 'auto',
@@ -50,8 +53,8 @@ export default function CreatePost(props: any) {
                     <Img src={location.state.rawurl} />
                 </Grid>
 
-                <Grid item alignItems="center" sx={{ m: 2 }}>
-                    <TranslatedBox ogtext="Dog" translatedtext="いぬ" />
+                <Grid item alignItems="center" sx={{ m: 2, maxWidth: '80%' }}>
+                    <TranslatedBox ogtext="Dog" translatedtext="いぬ" oglanguage="EN" translatedlanguage="JP" />
                 </Grid>
 
                 <Box component="form" noValidate onSubmit={handleSubmit} sx={{
@@ -70,31 +73,34 @@ export default function CreatePost(props: any) {
                         fullWidth
                         sx={{ backgroundColor: 'white' }}
                     />
-                    <TextField
-                        id="input-with-icon-textfield"
-                        label="Location"
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <RoomIcon color="secondary" />
-                                </InputAdornment>
-                            ),
-                        }}
-                        variant="standard"
+                    <InputLabel>Location</InputLabel>
+                    <Input
+                        startAdornment={
+                            <InputAdornment position="start">
+                                <RoomIcon color="secondary" />
+                            </InputAdornment>
+                        }
                         color="secondary"
                         placeholder="Tokyo, Japan"
                         fullWidth
                         sx={{ m: 1 }}
+                        inputComponent={({ inputRef, onFocus, onBlur, ...props }) => (
+                            <Autocomplete
+                                apiKey="AIzaSyCNKzmgqLSVBnT05TLmkkiBR_s9JwnM2k"
+                                {...props}
+                                onPlaceSelected={(selected) => console.log(selected)}
+                            />
+                        )}
                     />
                     <Stack direction="row" spacing={2} sx={{
                         m: 4, display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                     }}>
-                        <Button variant="outlined">
+                        <Button variant="outlined" onClick={() => navigate(`/previewpost/${translationID}`, { state: { ...props, rawurl: location.state.rawurl } })}>
                             Preview
                         </Button>
-                        <Button variant="contained" endIcon={<SendIcon />}>
+                        <Button type="submit" variant="contained" endIcon={<SendIcon />}>
                             Upload
                         </Button>
                     </Stack>

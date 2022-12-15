@@ -1,7 +1,7 @@
 import { Button, CardActions, CardHeader, CssBaseline, ThemeProvider } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import theme from '../../theme/theme';
 import ToggleSwitch from "../../components/ToggleSwitch";
@@ -14,15 +14,16 @@ import axios from "axios";
 import Resizer from "react-image-file-resizer";
 import AWS from 'aws-sdk';
 import DashboardController from '../../controllers/dashboard/dashboard.controller'
+import UserController from "../../controllers/user/user.controller";
 // Use URL.revokeObjectURL(img.src) in large scale production
+import { v4 as uuidv4 } from 'uuid';
+
 
 const S3_BUCKET = 'team6-bucket01';
 const REGION = 'us-east-1';
 const ACCESS_KEY = 'ASIASU4NVN3GZK2JFK6C';
 const SECRET_ACCESS_KEY = 'pTpBOjXWp7NwJrm2zk5LapTY6eu40itE5Mc6QqHF';
 
-// Dx9wOeUCbmGTY3mX7YHo0Su38bZbHeA2Npe4VQHs
-// aws_session_token=FwoGZXIvYXdzEEMaDHCG3vCaUpT7td2FUiLTATxW/Z6p74EgLamVpUPI0G3IDZwNuISNTp1VesKxUDIWvtq6F8YEb8CbYMB2CASm/vf1V4jpyyuqr02q8PVpyJTsU2ckdBtcQtDvRjFsneNg2XNoPWxjFbOgwMmWKWc7j7+lq6MagfkG/QPgW+cNUba9eRsbqKYQbY1tSakNhoiklbacwBHxEj61FhaQ5NcGu8wEIVg50xXyu7oKjeS5D9aGC87W1by8y1gUgmV5rjODM5dirB1vnPPDHbEtPRRctlB7wwBvIBVWHJ+NRG+BIgWJvQ0oyYjMnAYyLQXN/b24OH5Bz+2QQ7W/aoMtaIaxpGdZdyYIBEQaLy50qc++G1r8Hel+YJ+LXA==
 AWS.config.update({
     accessKeyId: ACCESS_KEY,
     secretAccessKey: SECRET_ACCESS_KEY
@@ -134,28 +135,26 @@ export default function PreviewImage(props: any) {
             if (toggledObject === true) {
                 var id = Date.now() + Math.random().toString(16).slice(2);
                 navigate(`/viewtranslations/${id}`, { state: { rawurl: rawurl, detectedObject: 'Dog' } });
-                // const imageObject = {
-                //     type: 'object',
-                //     image_url: rawurl,
-                //     original: {
-                //         language: "en",
-                //         text: ""
-                //     },
-                //     target: ["jp"],
-                // };
 
-                // // }
-
-
-                // let response = DashboardController.translateImageFromUrl(imageObject);
-                // console.log();
-
-                // await new Promise<void>((resolve, reject) => {
-                //     console.log(response)
-                //     resolve();
-                // })
-
-                // CommonTranslationController.detectFromImage(imageObject)
+                const image_id = uuidv4();
+                const text_id = uuidv4();
+                const image_data = {
+                    id: image_id,
+                    type: 'object',
+                    image_url: image_url,
+                    original: { 'id': text_id, 'language': "en" },
+                    target: [{ "id": text_id, "language": "ja" }]
+                }
+                DashboardController.translateImageFromUrl({
+                    id: image_id,
+                    type: 'object',
+                    image_url: image_url,
+                    original: { 'id': text_id, 'language': "en" },
+                    target: [{ "id": uuidv4(), "language": "ja" }]
+                }).then((OpenAPIResponse) => {
+                    console.log("Check this")
+                    console.log(OpenAPIResponse)
+                })
             }
             else {
                 navigate('/scantext');

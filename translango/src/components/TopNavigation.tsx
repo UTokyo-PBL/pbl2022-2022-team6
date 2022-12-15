@@ -13,6 +13,8 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import theme from '../theme/theme';
 import { AccountCircle } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import UserController from '../controllers/user/user.controller';
 
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -21,11 +23,16 @@ function TopNavigation(props: any) {
     const [auth, setAuth] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
+    useEffect(() => {
+        UserController.getUserProfile().then((OpenAPIResponse) => {
+            // console.log(OpenAPIResponse)
+            const isLoggedIn = OpenAPIResponse.data.id !== '';
+            setAuth(isLoggedIn);
+        })
+    }, []);
+
     const navigate = useNavigate();
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setAuth(event.target.checked);
-    };
 
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);

@@ -13,6 +13,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import UserController from '../../controllers/user/user.controller';
+import { v4 as uuidv4 } from 'uuid';
+import { RESPONSE_STATUS_CODES } from "../../constants/common/axios.constants";
+import DashboardController from "../../controllers/dashboard/dashboard.controller";
+import { Navigate, useNavigate } from 'react-router-dom';
 
 function Copyright(props: any) {
     return (
@@ -30,16 +34,38 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function SignInPage() {
+
+    const navigate = useNavigate();
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
+        const data = event.currentTarget;
+        // const isValid = data.email.value !== '' && data.password.value !== '';
+
         const user_data = {
-            email: "example@translango.com",
-            password: "passw0rd",
+            email: data.email.value,
+            password: data.password.value,
         };
         console.log(user_data)
-        const response = UserController.login(user_data);
-        console.log(response);
+
+        const test_data = {
+            email: 'test@test10.com',
+            password: 'test',
+        }
+        //const response = UserController.login(user_data);
+        //console.log(response);
+
+        UserController.login(test_data).then((OpenAPIResponse) => {
+            // Manage the response according to OpenAPI schema
+            if (OpenAPIResponse.status === 200) {
+                UserController.getUserProfile().then((OpenAPIResponse) => {
+                    console.log(OpenAPIResponse)
+                    const uid = OpenAPIResponse.data.id;
+                    navigate(`/dashboard/${uid}`, { state: { uid: uid } });
+                })
+            } else {
+                alert('Something went wrong. Please check your details and try again');
+            }
+        })
 
 
     };
