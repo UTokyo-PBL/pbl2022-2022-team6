@@ -102,7 +102,7 @@ function createUser() {
 
 function login() {
     UserController.login({
-        email: 'test@test8.com',
+        email: 'test@test10.com',
         password: 'test'
     }).then((OpenAPIResponse) => {
         console.log(OpenAPIResponse)
