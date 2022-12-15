@@ -55,9 +55,7 @@ export default class DashboardController {
   // ---------> POST : dashboard/camera - add history (detect object or text)
   // ROUTE: /dashboard/histories
   // COMMENTS :
-  // 1.- CONNECTED BUT FAILING
-  // TODO
-
+  // 1.- TESTED & CONNECTED
   static async translateImageFromUrl({
     type,
     image_url,
@@ -88,8 +86,7 @@ export default class DashboardController {
 
   // ---------> GET : dashboard/history - one history for object
   // ROUTE: /dashboard/histories/{objectID}
-  // 1.- CONNECTED BUT FAILING
-  // TODO
+  // 1.- TESTED & CONNECTED
   static async getOneItem({ id }: { id: string }) {
     // Call the AXIOS request
     const axiosResponse = await axiosInstance
@@ -104,8 +101,7 @@ export default class DashboardController {
   // ---------> DELETE : dashboard/history - one history for object
   // ROUTE: /dashboard/histories/{objectID}
   // COMMENTS:
-  // 1.- CONNECTED BUT FAILING
-  // TODO
+  // 1.- TESTED & CONNECTED
   static async deleteOneItem({ id }: { id: string }) {
     // Call the AXIOS request
     const axiosResponse = await axiosInstance
@@ -125,8 +121,7 @@ export default class DashboardController {
   // ROUTE: /dashboard/histories/{objectID}/edit
   // COMMENTS:
   // 1.- Only one change per call?
-  // 2.- CONNECTED BUT FAILING
-  // TODO
+  // TESTED & CONNECTED
   // ROUTE: /dashboard/histories/{objectID}
   static async editItem({
     id,

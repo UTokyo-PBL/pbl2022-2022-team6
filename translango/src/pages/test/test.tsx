@@ -102,7 +102,7 @@ function createUser() {
 
 function login() {
     UserController.login({
-        email: 'test@test8.com',
+        email: 'test@test10.com',
         password: 'test'
     }).then((OpenAPIResponse) => {
         console.log(OpenAPIResponse)
@@ -171,13 +171,15 @@ function getItemsForHistory() {
     })
 }
 
+let a = uuidv4();
 function translateObject() {
+    a = uuidv4();
     DashboardController.translateImageFromUrl({
-        id: '8d5eeaff-654d-4cde-a075-07d2a04c26be',
+        id: a ,
         type: 'object',
         image_url: "https://dime.jp/genre/files/2020/11/44817f7cc02f549d516a94cc2710c53f.png",
-        original: { 'id': "5c81a2c7-7075-4e61-9e22-897792d62510", 'language': "en" },
-        target: [{ "id": "58cb8ec4-ab50-4cdc-a553-dcefb68aad2b", "language": "ja" }]
+        original: {"id":uuidv4(), "language":"en"},
+        target: [{"id":uuidv4(), "language": "ja"}]
     }).then((OpenAPIResponse) => {
         console.log(OpenAPIResponse)
     })
@@ -185,18 +187,19 @@ function translateObject() {
 
 function getOneItem() {
     DashboardController.getOneItem({
-        id: '8d5eeaff-654d-4cde-a075-07d2a04c26be',
+        id: a,
     }).then((OpenAPIResponse) => {
         console.log(OpenAPIResponse)
     })
 }
 
+let b = uuidv4();
 function translateText() {
     DashboardController.translateImageFromUrl({
-        id: 'ee520bd2-ca07-48ff-9838-5549811cdb6d',
+        id: b,
         type: 'text',
-        original: { "id": "15fcfaa7-5fc1-4a3b-b86a-074f8dac6856", "language": "en", "text": "cat" },
-        target: [{ "id": "b2f65661-aabc-4b36-b3d4-d2823c6b9e1a", "language": "ja" }]
+        original: { "id": uuidv4(), "language": "en", "text": "cat" },
+        target: [{ "id": uuidv4(), "language": "ja" }]
     }).then((OpenAPIResponse) => {
         console.log(OpenAPIResponse)
     })
@@ -204,7 +207,7 @@ function translateText() {
 
 function editItem() {
     DashboardController.editItem({
-        id: '8d5eeaff-654d-4cde-a075-07d2a04c26be',
+        id: a,
         caption: 'the cake is a lie',
         num_failures: 10,
         original: { "id": "5c81a2c7-7075-4e61-9e22-897792d62510", "text": "猫", "language": "zh" },
@@ -216,7 +219,7 @@ function editItem() {
 
 function deleteObject() {
     DashboardController.deleteOneItem({
-        id: '8d5eeaff-654d-4cde-a075-07d2a04c26be',
+        id: a,
     }).then((OpenAPIResponse) => {
         console.log(OpenAPIResponse)
     })
