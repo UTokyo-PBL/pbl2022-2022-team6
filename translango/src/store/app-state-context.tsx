@@ -1,5 +1,5 @@
 import { createContext, PropsWithChildren } from "react"
-import { lang_country_two_letter_codes } from "../types/common/common.types";
+import { ISO3166_2letter_country_codes, ISO639_1LanguageCodeType } from "../types/common/common.types";
 
 export interface AppContextInterface {
     isLoggedIn: boolean;
@@ -7,9 +7,10 @@ export interface AppContextInterface {
     lastName?: string;
     username?: string;
     email?: string;
+    countryCode: ISO3166_2letter_country_codes;
     profile_pic_url?: string;
-    nativeLanguage?: lang_country_two_letter_codes;
-    favouriteLanguages: Set<lang_country_two_letter_codes>;
+    nativeLanguage?: ISO639_1LanguageCodeType;
+    favouriteLanguages: Set<ISO639_1LanguageCodeType>;
     theme: "light" | "dark";
 };
 
@@ -18,8 +19,9 @@ const defaultCtx: AppContextInterface = {
     firstName: "Hey",
     lastName: "User!",
     username: "user",
-    nativeLanguage: "en-US",
-    favouriteLanguages: new Set<lang_country_two_letter_codes>(["ja-JP"]),
+    countryCode: "JP",
+    nativeLanguage: "en",
+    favouriteLanguages: new Set<ISO639_1LanguageCodeType>(["ja"]),
     theme: "light"
 }
 
