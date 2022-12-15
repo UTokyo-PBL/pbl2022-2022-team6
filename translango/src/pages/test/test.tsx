@@ -207,7 +207,7 @@ function translateText() {
 
 function editItem() {
     DashboardController.editItem({
-        id: b,
+        id: a,
         caption: 'the cake is a lie',
         num_failures: 10,
         original: { "id": "5c81a2c7-7075-4e61-9e22-897792d62510", "text": "猫", "language": "zh" },
@@ -219,7 +219,7 @@ function editItem() {
 
 function deleteObject() {
     DashboardController.deleteOneItem({
-        id: '8d5eeaff-654d-4cde-a075-07d2a04c26be',
+        id: a,
     }).then((OpenAPIResponse) => {
         console.log(OpenAPIResponse)
     })
