@@ -99,6 +99,13 @@ detect object
 $ curl -XPOST \
   -d '{"id":"8d5eeaff-654d-4cde-a075-07d2a04c26be","image_url":"https://dime.jp/genre/files/2020/11/44817f7cc02f549d516a94cc2710c53f.png","original":{"id":"5c81a2c7-7075-4e61-9e22-897792d62510", "language":"en"}, "target": [{"id":"58cb8ec4-ab50-4cdc-a553-dcefb68aad2b", "language": "ja"}]}' \
   -H "content-type: application/json" \
+  "https://translango.y-nakai.com/dashboard/histories?type=object"
+```
+
+```shell
+$ curl -XPOST \
+  -d '{"id":"8d5eeaff-654d-4cde-a075-07d2a04c26be","image_url":"https://dime.jp/genre/files/2020/11/44817f7cc02f549d516a94cc2710c53f.png","original":{"id":"5c81a2c7-7075-4e61-9e22-897792d62510", "language":"en"}, "target": [{"id":"58cb8ec4-ab50-4cdc-a553-dcefb68aad2b", "language": "ja"}]}' \
+  -H "content-type: application/json" \
   -H "Cookie: ${SESSION}" \
   "https://translango.y-nakai.com/dashboard/histories?type=object"
 ```

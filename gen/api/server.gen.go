@@ -159,9 +159,6 @@ type GetDashboardHistoriesParams struct {
 // PostDashboardHistoriesParams defines parameters for PostDashboardHistories.
 type PostDashboardHistoriesParams struct {
 	Type PostDashboardHistoriesParamsType `form:"type" json:"type"`
-
-	// cookie for identifying user
-	Cookie Cookie `json:"cookie"`
 }
 
 // PostDashboardHistoriesParamsType defines parameters for PostDashboardHistories.
@@ -424,25 +421,6 @@ func (w *ServerInterfaceWrapper) PostDashboardHistories(ctx echo.Context) error 
 	err = runtime.BindQueryParameter("form", true, true, "type", ctx.QueryParams(), &params.Type)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter type: %s", err))
-	}
-
-	headers := ctx.Request().Header
-	// ------------- Required header parameter "cookie" -------------
-	if valueList, found := headers[http.CanonicalHeaderKey("cookie")]; found {
-		var Cookie Cookie
-		n := len(valueList)
-		if n != 1 {
-			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Expected one value for cookie, got %d", n))
-		}
-
-		err = runtime.BindStyledParameterWithLocation("simple", false, "cookie", runtime.ParamLocationHeader, valueList[0], &Cookie)
-		if err != nil {
-			return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter cookie: %s", err))
-		}
-
-		params.Cookie = Cookie
-	} else {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Header parameter cookie is required, but not found"))
 	}
 
 	// Invoke the callback with all the unmarshalled arguments

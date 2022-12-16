@@ -114,8 +114,6 @@ paths:
         204:
           description: "ok"
   /dashboard/histories:
-    parameters:
-      - $ref: "#/components/parameters/cookie"
     get:
       summary: "dashboard/histories - list histories"
       tags:
@@ -123,6 +121,7 @@ paths:
       description: "histories/histories - list histories"
       parameters:
         - $ref: "#/components/parameters/search-query"
+        - $ref: "#/components/parameters/cookie"
       responses:
         200:
           $ref: "#/components/responses/objects"
