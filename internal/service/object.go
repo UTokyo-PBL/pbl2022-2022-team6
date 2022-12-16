@@ -34,10 +34,9 @@ func DetectObject(
 	ctx context.Context,
 	detectionClient detection.Interface,
 	translationClient translation.Interface,
-	repo repository.Interface,
 	userID string,
 	object *api.Object,
-) (*api.Message, error) {
+) (*model.Object, error) {
 	o, err := model.ObjectFromAPI(userID, object)
 	if err != nil {
 		err = errors.Wrap(err, "PostObject failed to model.ObjectFromAPI")
@@ -70,26 +69,18 @@ func DetectObject(
 		t.Text = l
 	}
 
-	if err := repo.CreateObject(ctx, o); err != nil {
-		err = errors.Wrap(err, "PostObject failed to repo.CreateObject")
-		return nil, errors.Wrap(failures.UnknownError, err.Error())
-	}
-
-	return &api.Message{
-		Message: ptr.String("successfully inserted"),
-	}, nil
+	return o, nil
 }
 
 func TranslateObject(
 	ctx context.Context,
 	translationClient translation.Interface,
-	repo repository.Interface,
 	userID string,
 	object *api.Object,
-) (*api.Message, error) {
+) (*model.Object, error) {
 	o, err := model.ObjectFromAPI(userID, object)
 	if err != nil {
-		err = errors.Wrap(err, "PostObject failed to model.ObjectFromAPI")
+		err = errors.Wrap(err, "TranslateObject failed to model.ObjectFromAPI")
 		return nil, errors.Wrap(failures.InvalidObjectParams, err.Error())
 	}
 
@@ -100,14 +91,18 @@ func TranslateObject(
 	for _, t := range o.Target {
 		l, err := translationClient.Translate(ctx, o.Original.Text, o.Original.Language, t.Language)
 		if err != nil {
-			err = errors.Wrap(err, "PostObject failed to translationClient.Detect")
+			err = errors.Wrap(err, "TranslateObject failed to translationClient.Detect")
 			return nil, errors.Wrap(failures.TranslationFailed, err.Error())
 		}
 		t.Text = l
 	}
 
+	return o, nil
+}
+
+func SaveObject(ctx context.Context, repo repository.Interface, o *model.Object) (*api.Message, error) {
 	if err := repo.CreateObject(ctx, o); err != nil {
-		err = errors.Wrap(err, "PostObject failed to repo.CreateObject")
+		err = errors.Wrap(err, "SaveObject failed to repo.CreateObject")
 		return nil, errors.Wrap(failures.UnknownError, err.Error())
 	}
 

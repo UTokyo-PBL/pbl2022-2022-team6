@@ -78,7 +78,7 @@ func run() error {
 		SameSite: http.SameSiteNoneMode,
 	}
 
-	ignorePaths := []string{"/user/signup", "/user/login"}
+	ignorePaths := []string{"/user/signup", "/user/login", "/dashboard/histories"}
 	e.Use(
 		middleware.Recover(),
 		middleware.Logger(),

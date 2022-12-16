@@ -4,6 +4,8 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/UTokyo-PBL/pbl2022-2022-team6/internal/model"
+
 	"github.com/labstack/echo/v4"
 
 	"github.com/UTokyo-PBL/pbl2022-2022-team6/internal/handler/httpmiddleware"
@@ -19,7 +21,7 @@ func (s *Server) GetDashboardHistories(ec echo.Context, params api.GetDashboardH
 
 	userID, err := httpmiddleware.GetUserFromSession(ec)
 	if err != nil {
-		return echoutil.ErrInternal(ec, err)
+		return ec.NoContent(http.StatusUnauthorized)
 	}
 
 	objects, err := service.ListObjects(ctx, s.repo, userID)
@@ -41,8 +43,10 @@ func (s *Server) PostDashboardHistories(ec echo.Context, params api.PostDashboar
 	defer cancel()
 
 	userID, err := httpmiddleware.GetUserFromSession(ec)
+
+	loggedIn := true
 	if err != nil {
-		return echoutil.ErrInternal(ec, err)
+		loggedIn = false
 	}
 
 	req := &api.Object{}
@@ -50,13 +54,13 @@ func (s *Server) PostDashboardHistories(ec echo.Context, params api.PostDashboar
 		return echoutil.ErrBadRequest(ec, err)
 	}
 
-	var msg *api.Message
+	var object *model.Object
 
 	switch params.Type {
 	case "object":
-		msg, err = service.DetectObject(ctx, s.detection, s.translation, s.repo, userID, req)
+		object, err = service.DetectObject(ctx, s.detection, s.translation, userID, req)
 	case "text":
-		msg, err = service.TranslateObject(ctx, s.translation, s.repo, userID, req)
+		object, err = service.TranslateObject(ctx, s.translation, userID, req)
 	default:
 		return echoutil.ErrBadPassword(ec, err)
 	}
@@ -65,7 +69,15 @@ func (s *Server) PostDashboardHistories(ec echo.Context, params api.PostDashboar
 		return handle(ec, err)
 	}
 
-	return ec.JSON(http.StatusOK, msg)
+	if loggedIn {
+		_, err := service.SaveObject(ctx, s.repo, object)
+
+		if err != nil {
+			return handle(ec, err)
+		}
+	}
+
+	return ec.JSON(http.StatusOK, object)
 }
 
 func (s *Server) GetDashboardHistoriesObjectID(ec echo.Context, objectID api.ObjectID, params api.GetDashboardHistoriesObjectIDParams) error {
