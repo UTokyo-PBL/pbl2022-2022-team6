@@ -17,11 +17,12 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ReactCountryFlag from 'react-country-flag';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import { useSpeechSynthesis } from 'react-speech-kit';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ShareButton from './shareButton';
 import { Button, CssBaseline, Paper } from '@mui/material';
 import theme from '../theme/theme';
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
+import UserController from '../controllers/user/user.controller';
 
 
 
@@ -76,6 +77,24 @@ export default function TranslationObject(props: any) {
         setExpanded(!expanded);
     };
 
+    const [auth, setAuth] = React.useState(false);
+    const [userdata, setUserdata] = React.useState<null | any>(null);
+
+    const getData = () => {
+        UserController.getUserProfile().then(async (OpenAPIResponse) => {
+            setUserdata(OpenAPIResponse.data);
+        }).catch().finally();
+    };
+
+    useEffect(() => {
+        getData();
+        if (userdata) {
+            if (userdata.id !== '') {
+                setAuth(true);
+            }
+        }
+    });
+
 
     const languages = ["Spanish", "Japanese", "Chinese"]
     return (
@@ -114,7 +133,7 @@ export default function TranslationObject(props: any) {
                                         <FavoriteIcon />
                                     </IconButton>
                                     <ShareButton rawurl={props.rawurl} title={value} />
-                                    <Button size="small" sx={{ marginLeft: 'auto' }} onClick={() => navigate(`/createpost/${translationID}`, { state: { rawurl: props.rawurl } })}>Upload</Button>
+                                    {auth && <Button size="small" sx={{ marginLeft: 'auto' }} onClick={() => navigate(`/createpost/${translationID}`, { state: { rawurl: props.rawurl } })}>Upload</Button>}
                                     {/* </Box> */}
                                 </CardActions>
                             </Card>

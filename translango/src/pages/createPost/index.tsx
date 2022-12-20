@@ -16,7 +16,20 @@ import EnterCaption from "../../components/enterCaption";
 import RoomIcon from '@mui/icons-material/Room';
 import SendIcon from '@mui/icons-material/Send';
 import Copyright from "../../components/Copyright";
-import Autocomplete from "react-google-autocomplete";
+import Autocomplete, { usePlacesWidget } from "react-google-autocomplete";
+
+import usePlacesService from "react-google-autocomplete/lib/usePlacesAutocompleteService";
+import UserController from "../../controllers/user/user.controller";
+
+
+// const GoogleAutoComplete = React.forwardRef(({ inputRef, onFocus, onBlur, ...props }) => (
+//     <Autocomplete
+//         apiKey="AIzaSyCNKzmgqLSVBnT05TLmkkiBR_s9JwnM2ko"
+//         {...props}
+//         onPlaceSelected={(selected) => console.log(selected)}
+//     />)
+//   ))
+
 
 
 export default function CreatePost(props: any) {
@@ -25,6 +38,21 @@ export default function CreatePost(props: any) {
     const location = useLocation();
     const navigate = useNavigate();
     const { translationID } = useParams();
+    const [userdata, setUserdata] = React.useState<null | any>(null);
+
+    const [place, setPlace] = useState<any | null>(null);
+
+    const { ref: materialRef } = usePlacesWidget({
+        apiKey: "AIzaSyCNKzmgqLSVBnT05TLmkkiBR_s9JwnM2ko",
+        onPlaceSelected: async (selectedplace) => {
+            await setPlace(selectedplace);
+            console.log(place);
+        }
+        // inputAutocompleteValue: "country",
+        // options: {
+        //   componentRestrictions: { country },
+        // },
+    });
 
     const Img = styled('img')({
         margin: 'auto',
@@ -37,10 +65,10 @@ export default function CreatePost(props: any) {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        const user_data = {
-            email: "example@translango.com",
-            password: "passw0rd",
-        };
+        for (var [key, value] of data.entries()) {
+            console.log(key, value);
+        }
+        console.log(place);
     };
 
     return (
@@ -64,7 +92,7 @@ export default function CreatePost(props: any) {
                     borderRadius: '20px'
                 }}>
                     <TextField
-                        id="outlined-multiline-flexible"
+                        id="caption"
                         label="Caption"
                         multiline
                         rows={4}
@@ -72,34 +100,43 @@ export default function CreatePost(props: any) {
                         color="secondary"
                         fullWidth
                         sx={{ backgroundColor: 'white' }}
+                        name="caption"
+                        required
+
                     />
-                    <InputLabel>Location</InputLabel>
-                    <Input
-                        startAdornment={
-                            <InputAdornment position="start">
-                                <RoomIcon color="secondary" />
-                            </InputAdornment>
-                        }
+                    <TextField
+                        variant="outlined"
+                        label="Location"
+                        name="location"
+                        id="location"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <RoomIcon color="secondary" />
+                                </InputAdornment>
+                            ),
+                            // inputComponent: ({ inputRef, onFocus, onBlur, ...props }) => (
+                            //     <Autocomplete
+                            //         apiKey="AIzaSyCNKzmgqLSVBnT05TLmkkiBR_s9JwnM2ko"
+                            //         {...props}
+                            //         onPlaceSelected={(selected) => console.log(selected)}
+                            //     />)
+                        }}
+                        inputRef={materialRef}
                         color="secondary"
                         placeholder="Tokyo, Japan"
                         fullWidth
                         sx={{ m: 1 }}
-                        inputComponent={({ inputRef, onFocus, onBlur, ...props }) => (
-                            <Autocomplete
-                                apiKey="AIzaSyCNKzmgqLSVBnT05TLmkkiBR_s9JwnM2k"
-                                {...props}
-                                onPlaceSelected={(selected) => console.log(selected)}
-                            />
-                        )}
                     />
+
                     <Stack direction="row" spacing={2} sx={{
                         m: 4, display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                     }}>
-                        <Button variant="outlined" onClick={() => navigate(`/previewpost/${translationID}`, { state: { ...props, rawurl: location.state.rawurl } })}>
+                        {/* <Button variant="outlined" onClick={() => navigate(`/previewpost/${translationID}`, { state: { ...props, rawurl: location.state.rawurl } })}>
                             Preview
-                        </Button>
+                        </Button> */}
                         <Button type="submit" variant="contained" endIcon={<SendIcon />}>
                             Upload
                         </Button>

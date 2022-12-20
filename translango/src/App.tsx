@@ -18,6 +18,7 @@ import ViewTranslations from './pages/viewtranslation';
 import CreatePost from './pages/createPost';
 import { TestImage } from './pages/test/test';
 import PreviewPost from './pages/previewPost';
+import ProfilePage from './pages/profilePage';
 
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
               <Route path='/viewtranslations/:translationID' element={<ViewTranslations />} />
               <Route path='/createpost/:translationID' element={<CreatePost />} />
               <Route path='/previewpost/:translationID' element={<PreviewPost />} />
+              <Route path='/profilepage/:userID' element={<ProfilePage />} />
             </Routes>
           </Router>
         </ThemeProvider>

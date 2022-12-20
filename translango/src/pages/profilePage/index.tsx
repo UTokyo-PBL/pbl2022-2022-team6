@@ -19,9 +19,10 @@ import Copyright from "../../components/Copyright";
 import Autocomplete from "react-google-autocomplete";
 import SinglePost from "../../components/singlePost";
 import UserController from "../../controllers/user/user.controller";
+import MapComponent from "../../components/Mapcomponent";
 
 
-export default function PreviewPost(props: any) {
+export default function ProfilePage(props: any) {
 
 
     const location = useLocation();
@@ -49,6 +50,7 @@ export default function PreviewPost(props: any) {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
+            <TopNavigation />
             <Grid
                 container
                 spacing={0}
@@ -57,12 +59,10 @@ export default function PreviewPost(props: any) {
                 justifyContent="center"
                 style={{ minHeight: '80vh' }}
             >
-                <TopNavigation />
-                <Grid item xs={3}>
-                    <SinglePost photo_id={translationID} photo_url={props.rawurl} date={new Date().toLocaleString().split(',')[0] + ''} />
-                </Grid>
+                <MapComponent />
 
             </Grid>
+
 
 
         </ThemeProvider >

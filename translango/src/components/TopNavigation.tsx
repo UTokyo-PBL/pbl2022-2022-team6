@@ -8,7 +8,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MainIconSolid from './MainIconSolid';
 import { ThemeProvider } from '@mui/system';
-import { CssBaseline, Stack } from '@mui/material';
+import { Avatar, CssBaseline, Stack } from '@mui/material';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import theme from '../theme/theme';
 import { AccountCircle } from '@mui/icons-material';
@@ -21,15 +21,36 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function TopNavigation(props: any) {
     const [auth, setAuth] = React.useState(false);
+    const [profileURL, setProfileURL] = React.useState('');
+    const [userdata, setUserdata] = React.useState<null | any>(null);
+    const [username, setUsername] = React.useState('');
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
+
+
+
+    const getData = () => {
+        UserController.getUserProfile().then(async (OpenAPIResponse) => {
+            setUserdata(OpenAPIResponse.data);
+            // console.log(OpenAPIResponse.data);
+        }).catch().finally();
+    };
+
     useEffect(() => {
-        UserController.getUserProfile().then((OpenAPIResponse) => {
-            // console.log(OpenAPIResponse)
-            const isLoggedIn = OpenAPIResponse.data.id !== '';
-            setAuth(isLoggedIn);
-        })
-    }, []);
+        getData();
+        if (userdata) {
+            if (userdata.id !== '') {
+                setAuth(true);
+            }
+
+            setUsername(userdata.username);
+
+            if (userdata.profile_image !== 'select') {
+                setProfileURL(userdata.profile_image);
+            }
+        }
+
+    });
 
     const navigate = useNavigate();
 
@@ -95,7 +116,8 @@ function TopNavigation(props: any) {
                                 onClick={handleMenu}
                                 color="inherit"
                             >
-                                <AccountCircle />
+                                {profileURL === '' && (<AccountCircle />)}
+                                {profileURL !== '' && (<Avatar alt={username} src={profileURL} />)}
                             </IconButton>
                             <Menu
                                 id="menu-appbar"
@@ -112,8 +134,8 @@ function TopNavigation(props: any) {
                                 open={Boolean(anchorEl)}
                                 onClose={handleClose}
                             >
-                                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                                <MenuItem onClick={handleClose}>My account</MenuItem>
+                                <MenuItem onClick={() => navigate(`/profilepage/${userdata.id}`)}>My Account</MenuItem>
+                                <MenuItem onClick={handleClose}>Settings</MenuItem>
                             </Menu>
                         </div>
                     )}

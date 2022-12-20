@@ -14,6 +14,10 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import DashboardController from '../controllers/dashboard/dashboard.controller';
+import { useLocation, useParams } from 'react-router-dom';
+import UserController from '../controllers/user/user.controller';
+import { useEffect } from 'react';
 
 interface ExpandMoreProps extends IconButtonProps {
     expand: boolean;
@@ -30,34 +34,70 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
     }),
 }));
 
-export default function SinglePost() {
+export default function SinglePost(props: any) {
     const [expanded, setExpanded] = React.useState(false);
+    const [auth, setAuth] = React.useState(false);
+    const [profileURL, setProfileURL] = React.useState('');
+    const [userdata, setUserdata] = React.useState<null | any>(null);
+    const [username, setUsername] = React.useState('');
+    const [photodata, setPhotoData] = React.useState('');
+    const location = useLocation();
+
+    const getData = () => {
+        UserController.getUserProfile().then(async (OpenAPIResponse) => {
+            setUserdata(OpenAPIResponse.data);
+            // console.log(OpenAPIResponse.data);
+        }).catch().finally();
+
+        if (props.photo_id) {
+            DashboardController.getOneItem({
+                id: props.photo_id,
+            }).then((OpenAPIResponse) => {
+                console.log(OpenAPIResponse)
+            })
+        }
+    };
+
+    useEffect(() => {
+        getData();
+        if (userdata && !auth) {
+            if (userdata.id !== '') {
+                setAuth(true);
+            }
+
+            setUsername(userdata.username);
+
+            if (userdata.profile_image !== 'select') {
+                setProfileURL(userdata.profile_image);
+            }
+        }
+
+    }, []);
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
 
+
     return (
         <Card sx={{ maxWidth: 345 }}>
             <CardHeader
                 avatar={
-                    <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                        R
-                    </Avatar>
+                    <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe" src={profileURL} />
                 }
                 action={
                     <IconButton aria-label="settings">
                         <MoreVertIcon />
                     </IconButton>
                 }
-                title="Shrimp and Chorizo Paella"
-                subheader="September 14, 2016"
+                title={username}
+                subheader={props.date}
             />
             <CardMedia
                 component="img"
                 height="194"
-                image="/static/images/cards/paella.jpg"
-                alt="Paella dish"
+                image={location.state.rawurl}
+                alt="A photo"
             />
             <CardContent>
                 <Typography variant="body2" color="text.secondary">
