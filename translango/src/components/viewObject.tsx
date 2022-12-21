@@ -20,6 +20,10 @@ export default function ViewObject(props: any) {
 
     const [rawurl, setRawURL] = useState(props.rawurl);
 
+    // const width =props.width ? props.width : 200
+
+
+
 
     return (
         <Card sx={{ display: "flex", width: '100%' }}>
@@ -29,7 +33,7 @@ export default function ViewObject(props: any) {
                         Object: {props.detectedObject}
                     </Typography>
                     <Typography variant="subtitle2" color="text.secondary" component="div">
-                        Taken on: {new Date().toLocaleString().split(',')[0] + ''}
+                        Taken on: {props.date ? props.date : new Date().toLocaleString().split(',')[0] + ''}
                     </Typography>
                 </CardContent>
             </Box>

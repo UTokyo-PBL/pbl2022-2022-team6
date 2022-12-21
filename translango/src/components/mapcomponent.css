@@ -1,0 +1,15 @@
+.gm-style .gm-style-iw+div {
+    display: none;
+    /* <-- this will generally work on the fly. */
+    visibility: hidden;
+    /* this 2 lines below are just for hard hiding. :) */
+    opacity: 0;
+}
+
+button.gm-ui-hover-effect {
+    visibility: hidden;
+}
+
+::ng-deep .gm-style .gm-style-iw-c button {
+    display: none !important;
+}

@@ -47,6 +47,8 @@ export default function ProfilePage(props: any) {
         };
     };
 
+
+
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -59,6 +61,7 @@ export default function ProfilePage(props: any) {
                 justifyContent="center"
                 style={{ minHeight: '80vh' }}
             >
+
                 <MapComponent />
 
             </Grid>
