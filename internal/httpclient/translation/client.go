@@ -1,12 +1,13 @@
 package translation
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"github.com/pkg/errors"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"net/url"
+	"strings"
 	"time"
 )
 
@@ -39,33 +40,23 @@ func New(address string) Interface {
 	return &Client{address: address}
 }
 
-type Payload struct {
-	Text string `json:"text"`
-	From string `json:"source_lang"`
-	To   string `json:"target_lang"`
-}
-
 func (c *Client) Translate(ctx context.Context, text, from, to string) (string, error) {
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
-	payload := &Payload{
-		Text: text,
-		From: from,
-		To:   to,
-	}
+	form := url.Values{}
+	form.Add("text", text)
+	form.Add("source_lang", from)
+	form.Add("target_lang", to)
 
-	b, err := json.Marshal(payload)
-	if err != nil {
-		return "", errors.Wrap(err, "Translate failed to marshal")
-	}
+	payload := strings.NewReader(form.Encode())
 
-	req, err := http.NewRequest(http.MethodPost, c.address, bytes.NewBuffer(b))
+	req, err := http.NewRequest(http.MethodPost, c.address, payload)
 	if err != nil {
 		return "", errors.Wrap(err, "Translate failed to prepare request")
 	}
 
-	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	client := new(http.Client)
 	resp, err := client.Do(req)
@@ -74,10 +65,12 @@ func (c *Client) Translate(ctx context.Context, text, from, to string) (string, 
 	}
 	defer resp.Body.Close()
 
-	b, err = ioutil.ReadAll(resp.Body)
+	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return "", errors.Wrap(err, "Translate failed to read response body")
 	}
+
+	log.Println("resp", string(b))
 
 	return string(b), nil
 }
