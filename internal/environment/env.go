@@ -18,8 +18,8 @@ type (
 		DBPass   string `envconfig:"DB_PASS"`
 		DBName   string `envconfig:"DB_NAME"`
 
-		DetectionAddress   string `envconfig:"DETECTION_ADDRESS" default:"http://dummy/api/detection"`
-		TranslationAddress string `envconfig:"TRANSLATION_ADDRESS" default:"http://dummy/api/translation"`
+		DetectionAddress   string `envconfig:"DETECTION_ADDRESS" default:"http://34.69.11.219/from-url"`
+		TranslationAddress string `envconfig:"TRANSLATION_ADDRESS" default:"http://34.69.11.219/text-translate"`
 
 		SessionSecret         string `envconfig:"SESSION_SECRET" default:"dHJhbnNsYW5nbwo="`
 		SessionMaxAge         int    `envconfig:"SESSION_MAX_AGE" default:"3600"`

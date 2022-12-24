@@ -58,8 +58,8 @@ func run() error {
 	repo := repository.New(db)
 
 	// httpclient
-	dc := detection.NewFake(env.DetectionAddress)
-	tc := translation.NewFake(env.TranslationAddress)
+	dc := detection.New(env.DetectionAddress)
+	tc := translation.New(env.TranslationAddress)
 
 	// handler
 	server := handler.New(repo, dc, tc)
