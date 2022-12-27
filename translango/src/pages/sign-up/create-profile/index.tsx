@@ -17,12 +17,105 @@ import {
   Stack,
   TextField,
   Typography,
+  MenuItem,
 } from "@mui/material";
+import { useContext, useEffect, useRef, useState } from "react";
 import FillPageWithSidePic from "../../../components/FillPageWithSidePic";
 import SignUpAndLoginTop from "../SignUpAndLoginTop";
+import {
+  useLazyTranslate,
+  getLanguages,
+  setConfig
+} from "react-google-translate";
+// import ListLanguagesWithTarget from "../../../googletranslate";
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import axios from 'axios';
+import LanguageContext from "../../../components/LanguageContext";
+import { useLocation } from "react-router-dom";
 
-const CreateProfile: React.FC = () => {
+
+
+
+export default function CreateProfile(props: any) {
+
+  const [profilePic, setProfilePic] = useState<undefined | any>();
+  const [profileURL, setProfileURL] = useState('empty');
+  const [uploadedimg, setUploadedimg] = useState(false);
+  const fileInput = useRef<any>();
+
+  // const value = { language, setLanguage }
+  // 
+  const target = useContext(LanguageContext);
+  const [language, setLanguage] = useState(target.language);
+  const [languageOptions, setLanguageOptions] = useState([]);
+
+  const location = useLocation();
+  //   // Imports the Google Cloud client library
+  // const {Translate} = require('@google-cloud/translate').v2;
+
+  // Creates a client
+  // const translate = new Translate();
+
+  // async function listLanguages() {
+  //   // Lists available translation language with their names in English (the default).
+  //   const [languages] = await translate.getLanguages();
+
+  //   console.log('Languages:');
+  //   languages.forEach(language => console.log(language));
+  // }
+
+  // listLanguages();
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setLanguage(event.target.value);
+  };
+
+  // const ListLanguages
+  useEffect(() => {
+    // const languages = ListLanguagesWithTarget();
+    console.log(language)
+    console.log(target)
+    // Accessing previous page state
+    console.log(location.state.email)
+    const response = axios
+      .post(
+        'https://translation.googleapis.com/language/translate/v2/languages',
+        {},
+        {
+          params: {
+            key: 'AIzaSyA9AKCuN3DSy3LYtzLjJwanD0sGjD5HI-8',
+            target: 'ja',
+          }
+        }
+      )
+      .then((response) => {
+        console.log(response.data.data.languages);
+      })
+      .catch((err) => {
+        console.log('rest api error', err);
+      });
+
+  }, []);
+
+  const changeImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files || !event.target.files[0]) return;
+    // event.persist();
+    const file = event.target.files[0];
+    setProfilePic(file);
+    setProfileURL(URL.createObjectURL(file));
+    setUploadedimg(true);
+
+    // this.setState({ img: file, rawurl: URL.createObjectURL(file), uploadedimg: true });
+
+    // await new Promise<void>((resolve, reject) => {
+    //     console.log('async', this.state.rawurl)
+    //     resolve();
+    // })
+    // console.log(this.state.rawurl)
+  };
+
   return (
+    // <LanguageContext.Provider value={value}>
     <FillPageWithSidePic>
       <Stack>
         <SignUpAndLoginTop
@@ -38,15 +131,8 @@ const CreateProfile: React.FC = () => {
                 width: { xs: "150px", sm: "300px" },
                 height: { xs: "150px", sm: "300px" },
               }}
-            >
-              <AccountCircle
-                color="primary"
-                sx={{
-                  width: { xs: "150px", sm: "300px" },
-                  height: { xs: "150px", sm: "300px" },
-                }}
-              />
-            </Avatar>
+              src={profileURL}
+            />
             <Box
               position="relative"
               sx={{
@@ -54,10 +140,11 @@ const CreateProfile: React.FC = () => {
                 left: { xs: "100px", sm: "220px" },
               }}
             >
-              <Fab color="secondary">
+
+              <Fab color="secondary" onClick={() => fileInput.current.click()}>
+                <input hidden ref={fileInput} type="file" accept="image/*" onChange={changeImage} />
                 <Add />
               </Fab>
-              {/* <Chip label="+" color="secondary" onClick={() => {}} /> */}
             </Box>
           </Box>
 
@@ -65,6 +152,8 @@ const CreateProfile: React.FC = () => {
             fullWidth
             variant="standard"
             placeholder="Full Name"
+            name="name"
+            id="name"
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -78,6 +167,8 @@ const CreateProfile: React.FC = () => {
             fullWidth
             variant="standard"
             placeholder="username"
+            name="username"
+            id="username"
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -101,6 +192,38 @@ const CreateProfile: React.FC = () => {
               ),
             }}
           />
+          {/* <Select
+            fullWidth
+            variant="standard"
+            placeholder="Language"
+            defaultValue={{ label: "Chinese", value: "zh-CN" }}
+            // InputProps={{
+            //   startAdornment: (
+            //     <InputAdornment position="start">
+            //       <Language />
+            //     </InputAdornment>
+            //   ),
+            // }}
+            options={languageOptions}
+            onChange={(param: any) => {
+              setLanguage(param.value);
+            }}
+          /> */}
+
+          <Select
+            id="languages"
+            name="languages"
+            value={language}
+            onChange={handleChange}
+            label="Language"
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            <MenuItem value={10}>Ten</MenuItem>
+            <MenuItem value={20}>Twenty</MenuItem>
+            <MenuItem value={30}>Thirty</MenuItem>
+          </Select>
 
           <FormControlLabel
             sx={{ width: "100%" }}
@@ -129,7 +252,6 @@ const CreateProfile: React.FC = () => {
         </Stack>
       </Stack>
     </FillPageWithSidePic>
+    // </LanguageContext.Provider>
   );
 };
-
-export default CreateProfile;

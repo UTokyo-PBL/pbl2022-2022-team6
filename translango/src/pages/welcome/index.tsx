@@ -23,13 +23,17 @@ import Copyright from '../../components/Copyright';
 import theme from '../../theme/theme';
 import TextButton from '../../components/TextButton';
 import SelectLanguage from '../../components/selectLanguage';
+import { useNavigate } from 'react-router-dom';
 
 type SupportedLocales = keyof typeof locales;
+
+
 
 
 export default function WelcomePage() {
 
     const [locale, setLocale] = React.useState<SupportedLocales>('enUS');
+    // const [locale, setLocale] = React.useContext(LanguageContext);
 
     const themeWithLocale = React.useMemo(
         () => createTheme(theme, locales[locale]),
@@ -115,7 +119,7 @@ export default function WelcomePage() {
                                 variant="text"
                                 color="primary"
                                 sx={{ bgcolor: 'white', minHeight: '40px', width: '280px', color: 'primary' }}
-                                href="#"
+                                href="/signin"
                             >
                                 {t('Sign_In')}
                             </Button>
@@ -124,7 +128,7 @@ export default function WelcomePage() {
                                 variant="outlined"
                                 color="info"
                                 sx={{ mt: 3, mb: 2, color: 'white', minHeight: '40px', width: '280px', border: '2px solid' }}
-                                href="#"
+                                href="/sign-up"
                             >
                                 {t('Sign_Up')}
                             </Button>

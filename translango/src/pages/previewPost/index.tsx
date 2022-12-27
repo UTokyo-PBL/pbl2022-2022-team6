@@ -59,7 +59,7 @@ export default function PreviewPost(props: any) {
             >
                 <TopNavigation />
                 <Grid item xs={3}>
-                    <SinglePost photo_id={translationID} photo_url={props.rawurl} date={new Date().toLocaleString().split(',')[0] + ''} />
+                    <SinglePost photo_id={translationID} photo_url={location.state.rawurl} date={new Date().toLocaleString().split(',')[0] + ''} />
                 </Grid>
 
             </Grid>

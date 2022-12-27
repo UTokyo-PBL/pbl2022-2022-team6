@@ -1,17 +1,17 @@
 import { FormControl, MenuItem } from "@mui/material";
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import React from "react";
+import React, { useContext } from "react";
 import { useTranslation } from 'react-i18next';
 import i18next from '../i18n';
-
-
-
+import LanguageContext from "./LanguageContext";
 
 
 export default function SelectLanguage(props: any) {
     // It is a hook imported from 'react-i18next'
     const { t } = useTranslation();
     const [language, setLanguage] = React.useState(i18next.language);
+    // const { language, setLanguage } = useContext(LanguageContext);
+    const value = { language, setLanguage };
 
     const handleChange = (event: SelectChangeEvent) => {
         setLanguage(event.target.value);
@@ -31,33 +31,36 @@ export default function SelectLanguage(props: any) {
 
 
     return (
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+        <LanguageContext.Provider value={value}>
 
-            <Select
-                value={language}
-                onChange={handleChange}
-                displayEmpty
-                inputProps={{ 'aria-label': 'Without label' }}
-                labelId="demo-simple-select-autowidth-label"
-                id="demo-simple-select-autowidth"
-                sx={{
-                    bgcolor: 'white',
+            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
 
-                    color: 'primary'
-                }}
-            >
-                {languages.map(item => {
-                    return (<MenuItem key={item.value}
-                        value={item.value}>{item.text}</MenuItem>);
-                })}
-                {/* <MenuItem value="">
+                <Select
+                    value={language}
+                    onChange={handleChange}
+                    displayEmpty
+                    inputProps={{ 'aria-label': 'Without label' }}
+                    labelId="demo-simple-select-autowidth-label"
+                    id="demo-simple-select-autowidth"
+                    sx={{
+                        bgcolor: 'white',
+
+                        color: 'primary'
+                    }}
+                >
+                    {languages.map(item => {
+                        return (<MenuItem key={item.value}
+                            value={item.value}>{item.text}</MenuItem>);
+                    })}
+                    {/* <MenuItem value="">
                     <em>None</em>
                 </MenuItem>
                 <MenuItem value={10}>Ten</MenuItem>
                 <MenuItem value={20}>Twenty</MenuItem>
                 <MenuItem value={30}>Thirty</MenuItem> */}
-            </Select>
-        </FormControl>
+                </Select>
+            </FormControl>
+        </LanguageContext.Provider>
     );
 }
 
