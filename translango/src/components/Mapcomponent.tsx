@@ -13,7 +13,7 @@ import Places from "./places";
 
 export default function MapComponent() {
     const { isLoaded } = useLoadScript({
-        googleMapsApiKey: process.env.GOOGLE_API_KEY!,
+        googleMapsApiKey: process.env.GOOGLE_API_KEY || 'could not load key from environment',
         libraries: ['places']
     });
 
