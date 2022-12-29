@@ -116,8 +116,7 @@ function TopNavigation(props: any) {
                                 onClick={handleMenu}
                                 color="inherit"
                             >
-                                {profileURL === '' && (<AccountCircle />)}
-                                {profileURL !== '' && (<Avatar alt={username} src={profileURL} />)}
+                                <Avatar alt={username} src={profileURL} />
                             </IconButton>
                             <Menu
                                 id="menu-appbar"
@@ -136,6 +135,7 @@ function TopNavigation(props: any) {
                             >
                                 <MenuItem onClick={() => navigate(`/profilepage/${userdata.id}`)}>My Account</MenuItem>
                                 <MenuItem onClick={handleClose}>Settings</MenuItem>
+                                <MenuItem>Log Out</MenuItem>
                             </Menu>
                         </div>
                     )}

@@ -18,17 +18,28 @@ import UserController from "../../controllers/user/user.controller";
 // Use URL.revokeObjectURL(img.src) in large scale production
 import { v4 as uuidv4 } from 'uuid';
 
+// ```
+// aws_access_key_id=ASIASU4NVN3G6L2WWLFN
+// aws_secret_access_key=Mp1IjYigNY2RF4sNjMmzC69MHjwvVwfRRjZ7UVZt
+// aws_session_token=
+// ```
+const REACT_APP_S3_BUCKET = 'team6-bucket01';
+const REACT_APP_REGION = 'us-east-1';
+const REACT_APP_ACCESS_KEY = 'ASIASU4NVN3G6L2WWLFN';
+const REACT_APP_SECRET_ACCESS_KEY = 'Mp1IjYigNY2RF4sNjMmzC69MHjwvVwfRRjZ7UVZt';
+const REACT_APP_SESSION_TOKEN = 'FwoGZXIvYXdzEOX//////////wEaDJOZUZrCwKRYb8ffOyLTAclpij6/6iEEw6305+USlXyG+eN4mke8AmsMIlX2VSzvUW+yHm84BCtMWKoE0qms11p8hCexkv6ME1GpwEYdM61kN7CcrkeiN1AobgAP6d3pUItgMcoS0eDcr9Hzns3qWoPdgLzEUJnW4qstyDQtUkkMYoUpZWu3HHT/hcs1sEXg7dVdSyRC4djmd3tHvJ4S67ni755C8RWyRxVsnz4Jz3J0c8/JLVw3GWayRr7NLb9YSlW0gCEmrlvC5FhbONzl+s1WKwAOQcwjXKazwEzMvy3gPKAoudnvnAYyLeaU+DUxMXLh9NmkeZ4XkMN3B7nJFeoxT8rUvRzjvnAIsVhHFMp4IAxCgglnVw==';
+
 
 
 AWS.config.update({
-    accessKeyId: process.env.REACT_APP_ACCESS_KEY,
-    secretAccessKey: process.env.REACT_APP_SECRET_ACCESS_KEY,
-    sessionToken: process.env.REACT_APP_SESSION_TOKEN,
+    accessKeyId: REACT_APP_ACCESS_KEY,
+    secretAccessKey: REACT_APP_SECRET_ACCESS_KEY,
+    sessionToken: REACT_APP_SESSION_TOKEN,
 })
 
 const myBucket = new AWS.S3({
-    params: { Bucket: process.env.REACT_APP_S3_BUCKET },
-    region: process.env.REACT_APP_REGION,
+    params: { Bucket: REACT_APP_S3_BUCKET },
+    region: REACT_APP_REGION,
 })
 
 
@@ -74,7 +85,7 @@ export default function PreviewImage(props: any) {
 
 
         await new Promise<void>((resolve, reject) => {
-            console.log('async', event.target.value)
+            // console.log('async', event.target.value)
             resolve();
         })
 
@@ -102,13 +113,13 @@ export default function PreviewImage(props: any) {
         const params = {
             ACL: 'public-read',
             Body: file,
-            Bucket: process.env.REACT_APP_S3_BUCKET!,
+            Bucket: REACT_APP_S3_BUCKET!,
             Key: name,
             ContentEncoding: 'base64',
             ContentType: 'image/jpeg',
         };
 
-        console.log(params);
+        // console.log(params);
 
         myBucket.putObject(params)
             .send((err) => {
@@ -117,8 +128,8 @@ export default function PreviewImage(props: any) {
     }
 
     const getUrlFromBucket = (fileName: string) => {
-        const regionString = process.env.REACT_APP_REGION!.includes('us-east-1') ? '' : ('-' + process.env.REACT_APP_REGION)
-        return `https://${process.env.REACT_APP_S3_BUCKET}.s3${regionString}.amazonaws.com/${fileName}`
+        const regionString = REACT_APP_REGION!.includes('us-east-1') ? '' : ('-' + REACT_APP_REGION)
+        return `https://${REACT_APP_S3_BUCKET}.s3${regionString}.amazonaws.com/${fileName}`
     };
 
     const goScan = async (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -126,7 +137,7 @@ export default function PreviewImage(props: any) {
         // try {
         // Resize image
         const image = await resizeFile(imgObj);
-        console.log(image);
+        // console.log(image);
         const image_id = uuidv4();
         // Upload to S3
         uploadFile(imgObj, image_id);
@@ -144,13 +155,15 @@ export default function PreviewImage(props: any) {
             }).then((OpenAPIResponse) => {
                 console.log("Check this")
                 console.log(OpenAPIResponse)
-            });
-            DashboardController.getOneItem({
-                id: image_id,
-            }).then((OpenAPIResponse) => {
-                console.log("Image Info")
-                console.log(OpenAPIResponse)
+            }).finally(() => {
+                DashboardController.getOneItem({
+                    id: image_id,
+                }).then((OpenAPIResponse) => {
+                    console.log("Image Info")
+                    console.log(OpenAPIResponse)
+                })
             })
+
             navigate(`/viewtranslations/${image_id}`, { state: { rawurl: rawurl, detectedObject: 'Dog' } });
         }
         else {

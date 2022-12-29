@@ -27,7 +27,7 @@ export default function Places({ setOffice }: PlacesProps) {
 
 
     const { ref: placesRef } = usePlacesWidget({
-        apiKey: process.env.GOOGLE_API_KEY,
+        apiKey: "AIzaSyCNKzmgqLSVBnT05TLmkkiBR_s9JwnM2ko",
         onPlaceSelected: (selectedplace) => {
             setPlace(selectedplace);
 
@@ -56,7 +56,7 @@ export default function Places({ setOffice }: PlacesProps) {
             color="primary"
             placeholder="Tokyo, Japan"
             // fullWidth
-            sx={{ m: 1, backgroundColor: 'white', width: '96%' }}
+            sx={{ m: 1.8, backgroundColor: 'white', width: '94%' }}
         />
     );
 }

@@ -21,8 +21,6 @@ export default function GetSignUpDetails(props: any) {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = event.currentTarget;
-    // const isValid = data.email.value !== '' && data.password.value !== '';
-
     const user_data = {
       email: data.email.value,
       password: data.password.value,

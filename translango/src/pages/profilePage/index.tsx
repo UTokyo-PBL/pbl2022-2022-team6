@@ -60,15 +60,15 @@ export default function ProfilePage(props: any) {
                 direction="column"
                 alignItems="center"
                 justifyContent="center"
-                style={{ minHeight: '80vh' }}
+                style={{ maxHeight: '90vh' }}
             >
 
                 <MapComponent />
-                <BottomNavigation />
+
             </Grid>
 
 
-
+            <BottomNavigation />
         </ThemeProvider >
     );
 }
