@@ -10,21 +10,39 @@ import SignInPage from './pages/signin';
 import './i18n.tsx'
 import GetSignUpDetails from './pages/sign-up/get-sign-up-details';
 import ConfirmEmail from './pages/sign-up/confirm-email';
-import CreateProfile from './pages/sign-up/create-profile';
+import CreateProfile from './pages/sign-up/create-profile/SignUpCreateProfile';
 import Dashboard from './pages/dashboard';
-import SelectLanguagesPage from './pages/select-languages';
-import ViewObject from './components/viewObject';
+import SelectLanguagesPage from './pages/select-languages/SelectLanguagesPage';
 import ViewTranslations from './pages/viewtranslation';
 import CreatePost from './pages/createPost';
 import { TestImage } from './pages/test/test';
 import PreviewPost from './pages/previewPost';
 import ProfilePage from './pages/profilePage';
+import { useContext, useEffect, useState } from 'react';
+import AppCtx, { AppCtxUpdater, saveContext } from './store/app-state-context';
+import GeneralController from './controllers/general.controller';
 
 
 function App() {
-  return (
+  const ctx = useContext(AppCtx);
+  const ctxUpdater = useContext(AppCtxUpdater);
+  const [areLanguagesReady, setAreLanguagesReady] = useState<boolean>(false);
+  /**
+   * Use useEffect to load available languages
+   */
+  useEffect(()=>{
+    GeneralController.getAllLanguages(ctx.nativeLanguage).then((data) => {
+      ctx.availableLanguages = data;
+      setAreLanguagesReady(true);
+      ctxUpdater({...ctx});
+    });
+  }, [ctx.nativeLanguage]);
+
+  useEffect(() => saveContext(ctx));
+
+  return (<>
     <div className={classes.App}>
-      <header className={classes.AppHeader}>
+      {areLanguagesReady && <header className={classes.AppHeader}>
         <ThemeProvider theme={theme}>
           <Router>
             <Routes>
@@ -49,8 +67,8 @@ function App() {
             </Routes>
           </Router>
         </ThemeProvider>
-      </header>
-    </div>
+      </header>}
+    </div></>
   );
 }
 

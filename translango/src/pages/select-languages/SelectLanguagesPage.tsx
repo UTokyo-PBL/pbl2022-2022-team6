@@ -16,58 +16,30 @@ import {
 import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FillPageWithSidePic from "../../components/FillPageWithSidePic";
-import AppCtx from "../../store/app-state-context";
-import { ISO639_1LanguageCodes, LanguageCode2Name } from "../../store/utils";
-import { ISO639_1LanguageCodeType } from "../../types/common/common.types";
-
-interface CheckboxState {
-  language_code: ISO639_1LanguageCodeType;
-  language_name: string;
-  checked: boolean;
-}
+import AppCtx, { AppCtxUpdater } from "../../store/app-state-context";
+import { Language } from "../../types/common/common.types";
 
 const SelectLanguagesPage: React.FC = () => {
   const ctx = useContext(AppCtx);
-  const [filteredLangCodes, setFilteredLangcodes] = useState<CheckboxState[]>(
-    [...ISO639_1LanguageCodes].map((lang_code) => {
-      return {
-        language_code: lang_code,
-        language_name: LanguageCode2Name[lang_code].toLowerCase(),
-        checked: ctx.favouriteLanguages.has(lang_code),
-      };
-    })
-  );
+  const ctxUpdater = useContext(AppCtxUpdater);
+  
   const navigate = useNavigate();
-  const filterRef = useRef<HTMLInputElement>(null);
 
-  const languageFilterHandler = () => {
-    const searchTerm = filterRef.current!.value.trim().toLowerCase();
-    setFilteredLangcodes(
-      [...ISO639_1LanguageCodes]
-        .filter((code) => {
-          const name = LanguageCode2Name[code as ISO639_1LanguageCodeType];
-          return name.startsWith(searchTerm);
-        })
-        .map((lang_code) => {
-          return {
-            language_code: lang_code,
-            language_name: LanguageCode2Name[lang_code].toLowerCase(),
-            checked: ctx.favouriteLanguages.has(lang_code),
-          };
-        })
-    );
+  const [filterText, setFilterText] = useState('');
+
+  const languageFilterHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const lowercase_searchTerm = event.target.value.trim().toLocaleLowerCase();
+    setFilterText(lowercase_searchTerm);
   };
 
   const onCheckboxChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
-    // const lang_code = event.target.value as ISO639_1LanguageCodeType;
     const { name, checked, value } = event.target;
-    const lang_code = value as ISO639_1LanguageCodeType;
-    console.log(`${name}, ${checked}, ${lang_code}`);
+    const lang_code = value;
 
-    if (checked) ctx.favouriteLanguages.add(lang_code);
-    else ctx.favouriteLanguages.delete(lang_code);
-    languageFilterHandler();
+    if (checked) {ctx.favouriteLanguages.add(lang_code);}
+    else {ctx.favouriteLanguages.delete(lang_code);}
+    
+    ctxUpdater({...ctx});
   };
 
   return (
@@ -98,28 +70,28 @@ const SelectLanguagesPage: React.FC = () => {
               <TextField
                 fullWidth
                 variant="standard"
-                inputRef={filterRef}
+                value={filterText}
                 onChange={languageFilterHandler}
               />
               <FormControl component="fieldset">
                 <FormGroup>
-                  {filteredLangCodes.map(
-                    ({ language_code, language_name, checked }) => {
+                  {Object.entries(ctx.availableLanguages).map(
+                    ([ code, name ]) => {
                       return (
                         <Stack
-                          key={language_code}
+                          key={code}
                           direction="row"
                           justifyContent="space-between"
                           justifyItems="center"
                         >
                           {/* <Stack alignItems="center" direction="row" spacing={2} justifyItems="center"> */}
-                          <Typography>{`${language_name}`}</Typography>
+                          <Typography>{`${name}`}</Typography>
                           {/* </Stack> */}
                           <Checkbox
-                            name={language_name}
-                            checked={checked}
+                            name={name}
+                            checked={ctx.favouriteLanguages.has(code)}
                             onChange={onCheckboxChanged}
-                            value={language_code}
+                            value={code}
                           />
                         </Stack>
                       );

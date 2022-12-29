@@ -25,28 +25,29 @@ import SignUpAndLoginTop from "../SignUpAndLoginTop";
 import {
   useLazyTranslate,
   getLanguages,
-  setConfig
+  setConfig,
 } from "react-google-translate";
 // import ListLanguagesWithTarget from "../../../googletranslate";
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import axios from 'axios';
-import LanguageContext from "../../../components/LanguageContext";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import axios from "axios";
+// import LanguageContext from "../../../components/LanguageContext";
 import { useLocation } from "react-router-dom";
+import AppCtx, { AppCtxUpdater } from "../../../store/app-state-context";
+import { uiLanguages } from "../../../components/selectLanguage";
 
-
-
-
-export default function CreateProfile(props: any) {
+export default function CreateProfile() {
+  const ctx = useContext(AppCtx);
+  const ctxUpdater = useContext(AppCtxUpdater);
 
   const [profilePic, setProfilePic] = useState<undefined | any>();
-  const [profileURL, setProfileURL] = useState('empty');
+  const [profileURL, setProfileURL] = useState("empty");
   const [uploadedimg, setUploadedimg] = useState(false);
   const fileInput = useRef<any>();
 
   // const value = { language, setLanguage }
-  // 
-  const target = useContext(LanguageContext);
-  const [language, setLanguage] = useState(target.language);
+  //
+  // const target = useContext(LanguageContext);
+  // const [language, setLanguage] = useState(target.language);
   const [languageOptions, setLanguageOptions] = useState([]);
 
   const location = useLocation();
@@ -67,34 +68,35 @@ export default function CreateProfile(props: any) {
   // listLanguages();
 
   const handleChange = (event: SelectChangeEvent) => {
-    setLanguage(event.target.value);
+    // setLanguage(event.target.value);
+    ctx.nativeLanguage = event.target.value;
+    ctxUpdater({...ctx});
   };
 
   // const ListLanguages
   useEffect(() => {
     // const languages = ListLanguagesWithTarget();
-    console.log(language)
-    console.log(target)
+    // console.log(language)
+    // console.log(target)
     // Accessing previous page state
-    console.log(location.state.email)
+    console.log(location.state.email);
     const response = axios
       .post(
-        'https://translation.googleapis.com/language/translate/v2/languages',
+        "https://translation.googleapis.com/language/translate/v2/languages",
         {},
         {
           params: {
-            key: 'AIzaSyA9AKCuN3DSy3LYtzLjJwanD0sGjD5HI-8',
-            target: 'ja',
-          }
+            key: "AIzaSyA9AKCuN3DSy3LYtzLjJwanD0sGjD5HI-8",
+            target: "ja",
+          },
         }
       )
       .then((response) => {
         console.log(response.data.data.languages);
       })
       .catch((err) => {
-        console.log('rest api error', err);
+        console.log("rest api error", err);
       });
-
   }, []);
 
   const changeImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -140,9 +142,14 @@ export default function CreateProfile(props: any) {
                 left: { xs: "100px", sm: "220px" },
               }}
             >
-
               <Fab color="secondary" onClick={() => fileInput.current.click()}>
-                <input hidden ref={fileInput} type="file" accept="image/*" onChange={changeImage} />
+                <input
+                  hidden
+                  ref={fileInput}
+                  type="file"
+                  accept="image/*"
+                  onChange={changeImage}
+                />
                 <Add />
               </Fab>
             </Box>
@@ -213,16 +220,22 @@ export default function CreateProfile(props: any) {
           <Select
             id="languages"
             name="languages"
-            value={language}
+            value={ctx.nativeLanguage}
             onChange={handleChange}
             label="Language"
           >
-            <MenuItem value="">
+            {
+              /* <MenuItem value="">
               <em>None</em>
             </MenuItem>
             <MenuItem value={10}>Ten</MenuItem>
             <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            <MenuItem value={30}>Thirty</MenuItem> */
+
+              uiLanguages.map(({ value, text }) => {
+                return <MenuItem key={value} value={value}>{text}</MenuItem>;
+              })
+            }
           </Select>
 
           <FormControlLabel
@@ -254,4 +267,4 @@ export default function CreateProfile(props: any) {
     </FillPageWithSidePic>
     // </LanguageContext.Provider>
   );
-};
+}

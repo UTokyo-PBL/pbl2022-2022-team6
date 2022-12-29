@@ -2037,3 +2037,9 @@ export type ISO3166_2letter_country_codes =
   | "YE"
   | "ZM"
   | "ZW";
+
+
+export interface Language {
+  code: string;
+  name: string;
+};

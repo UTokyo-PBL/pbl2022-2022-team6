@@ -16,13 +16,13 @@ import { useContext } from "react";
 import AppCtx from "../store/app-state-context";
 import { ISO639_1LanguageCodeType } from "../types/common/common.types";
 import ReactCountryFlag from "react-country-flag";
-import { LanguageCode2Name } from "../store/utils";
 import { useNavigate } from "react-router-dom";
 
 const FavouriteLanguages: React.FC<{
-  fav_languages: Set<ISO639_1LanguageCodeType>;
+  fav_languages: Set<string>;
 }> = ({ fav_languages }) => {
   const navigate = useNavigate();
+  const ctx = useContext(AppCtx);
   return (
     <Stack>
       <Box>
@@ -30,10 +30,10 @@ const FavouriteLanguages: React.FC<{
         <Typography variant="body1">{fav_languages.size}</Typography>
       </Box>
       <Stack direction="row" spacing={1} alignItems="center">
-        {[...fav_languages.values()].map((iso639_1language_code) => {
-          const language_name = LanguageCode2Name[iso639_1language_code];
+        {[...fav_languages.values()].map((code) => {
+          const language_name = ctx.availableLanguages[code];
           return (
-            <Chip key={iso639_1language_code} label={language_name} color='secondary' sx={{color: 'white'}}/>
+            <Chip key={code} label={language_name} color='secondary' sx={{color: 'white'}}/>
           );
         })}
         <IconButton color="secondary" size="large" onClick={() => navigate("/select-favourite-languages")}> <Add fontSize="inherit"/></IconButton>

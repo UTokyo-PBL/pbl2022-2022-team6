@@ -1,42 +1,36 @@
 import { FormControl, MenuItem } from "@mui/material";
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import React, { useContext } from "react";
-import { useTranslation } from 'react-i18next';
+import { useContext } from "react";
+// import { useTranslation } from 'react-i18next';
 import i18next from '../i18n';
-import LanguageContext from "./LanguageContext";
+import AppCtx, { AppCtxUpdater } from "../store/app-state-context";
 
 
-export default function SelectLanguage(props: any) {
+export const uiLanguages = [
+    { value: 'en', text: "English" },
+    { value: 'zh', text: "中文" },
+    { value: 'hi', text: "हिन्दी" },
+    { value: 'es', text: "español" },
+    { value: 'ja', text: "日本語" },
+];
+
+
+export default function SelectLanguage() {
     // It is a hook imported from 'react-i18next'
-    const { t } = useTranslation();
-    const [language, setLanguage] = React.useState(i18next.language);
-    // const { language, setLanguage } = useContext(LanguageContext);
-    const value = { language, setLanguage };
+    // const { t } = useTranslation();
+    const ctx = useContext(AppCtx);
+    const ctxUpdater = useContext(AppCtxUpdater);
 
     const handleChange = (event: SelectChangeEvent) => {
-        setLanguage(event.target.value);
-        let loc = "http://localhost:3000";
-        window.location.replace(loc + "?lng=" + event.target.value);
-        i18next.changeLanguage(language);
+        ctx.nativeLanguage = event.target.value;
+        i18next.changeLanguage(event.target.value);
+        ctxUpdater({...ctx});
     };
 
-    const languages = [
-        // { value: '', text: "Language" },
-        { value: 'en', text: "English" },
-        { value: 'zh', text: "中文" },
-        { value: 'hi', text: "हिन्दी" },
-        { value: 'es', text: "español" },
-        { value: 'ja', text: "日本語" },
-    ]
-
-
     return (
-        <LanguageContext.Provider value={value}>
-
-            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-
+        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
                 <Select
-                    value={language}
+                    value={ctx.nativeLanguage}
                     onChange={handleChange}
                     displayEmpty
                     inputProps={{ 'aria-label': 'Without label' }}
@@ -44,23 +38,15 @@ export default function SelectLanguage(props: any) {
                     id="demo-simple-select-autowidth"
                     sx={{
                         bgcolor: 'white',
-
                         color: 'primary'
                     }}
                 >
-                    {languages.map(item => {
+                    {uiLanguages.map(item => {
                         return (<MenuItem key={item.value}
                             value={item.value}>{item.text}</MenuItem>);
                     })}
-                    {/* <MenuItem value="">
-                    <em>None</em>
-                </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem> */}
                 </Select>
             </FormControl>
-        </LanguageContext.Provider>
     );
 }
 
