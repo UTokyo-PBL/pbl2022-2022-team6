@@ -20,6 +20,7 @@ import Autocomplete from "react-google-autocomplete";
 import SinglePost from "../../components/singlePost";
 import UserController from "../../controllers/user/user.controller";
 import MapComponent from "../../components/Mapcomponent";
+import BottomNavigation from "../../components/BottomNavigation";
 
 
 export default function ProfilePage(props: any) {
@@ -63,7 +64,7 @@ export default function ProfilePage(props: any) {
             >
 
                 <MapComponent />
-
+                <BottomNavigation />
             </Grid>
 
 

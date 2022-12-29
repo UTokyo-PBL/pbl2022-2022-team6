@@ -43,7 +43,7 @@ export default function CreatePost(props: any) {
     const [place, setPlace] = useState<any | null>(null);
 
     const { ref: materialRef } = usePlacesWidget({
-        apiKey: process.env.GOOGLE_API_KEY,
+        apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
         onPlaceSelected: async (selectedplace) => {
             await setPlace(selectedplace);
             console.log(place);

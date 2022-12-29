@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@google-cloud/translate": "^7.0.5",
     "@googlemaps/react-wrapper": "^1.1.35",
     "@mui/icons-material": "^5.10.15",
     "@mui/material": "^5.10.15",
@@ -26,6 +27,8 @@
     "react-country-flag": "^3.0.2",
     "react-dom": "^18.2.0",
     "react-google-autocomplete": "^2.7.1",
+    "react-google-maps": "^9.4.5",
+    "react-google-translate": "^1.0.11",
     "react-i18next": "^12.0.0",
     "react-image-file-resizer": "^0.4.8",
     "react-router-dom": "^6.4.3",
