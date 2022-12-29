@@ -25,7 +25,7 @@ export const RESPONSE_STATUS_CODES = {
 
 // INSTANCE: Set axios' defaults
 const axiosInstance = axios.create({
-  baseURL: "https://www.translango.tk",
+  baseURL: "https://translango.y-nakai.com",
   withCredentials: true,
   headers: {
       withCredentials: 'true',
