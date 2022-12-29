@@ -33,9 +33,9 @@ export default function EndGame(props: any) {
                     <Typography variant="h6" color="text.secondary" align='center'>
                         You've done a great job so far, keep up the good work!
                     </Typography>
-                    <Typography variant="h6" color="primary" align='center'>
+                    {props.practice ? null : <Typography variant="h6" color="primary" align='center'>
                         You've earned {props.points} points!
-                    </Typography>
+                    </Typography>}
                 </CardContent>
 
 
