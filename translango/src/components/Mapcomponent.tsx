@@ -9,11 +9,12 @@ import { PropaneSharp } from "@mui/icons-material";
 import { ClickAwayListener } from '@mui/base';
 import ViewObject from "./viewObject";
 import Places from "./places";
+import SmallerViewObject from "./SmallerViewObject";
 
 
 export default function MapComponent() {
     const { isLoaded } = useLoadScript({
-        googleMapsApiKey: process.env.GOOGLE_API_KEY || 'could not load key from environment',
+        googleMapsApiKey: "AIzaSyCNKzmgqLSVBnT05TLmkkiBR_s9JwnM2ko",
         libraries: ['places']
     });
 
@@ -32,10 +33,14 @@ const styles = {
 const DEFAULT_OPTIONS = {
     mapTypeControl: false,
     streetViewControl: false,
-    fullScreenControl: false,
+    fullscreenControl: false,
     rotateControl: false,
-    scaleControle: false,
-    mapId: '208b77f6f7536855'
+    scaleControl: false,
+    mapId: '208b77f6f7536855',
+    panControl: false,
+    overviewMapControl: false,
+    zoomControl: false,
+    // scaleControl: false,
 }
 
 const markers = [
@@ -53,12 +58,21 @@ const markers = [
 
 function Map() {
     const center = useMemo(() => ({ lat: 44, lng: -80 }), []);
-
-
     const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
     const [openId, setOpenId] = useState('');
     const [office, setOffice] = useState<google.maps.LatLngLiteral>();
+    const [bottom, setBottom] = useState(470)
     const mapRef = useRef<GoogleMap>();
+    const [isMobile, setIsMobile] = useState(false)
+
+    //choose the screen size 
+    const handleResize = () => {
+        if (window.innerWidth < 720) {
+            setIsMobile(true)
+        } else {
+            setIsMobile(false)
+        }
+    }
 
     const onLoad = useCallback((map) => (mapRef.current = map), []);
 
@@ -70,7 +84,7 @@ function Map() {
     };
 
     const handleOpenInfo = (event: React.MouseEvent<HTMLDivElement>, key: string) => {
-        console.log(key)
+        // console.log(event.currentTarget)
         if (openId === key) {
             handleClose()
             return;
@@ -93,12 +107,32 @@ function Map() {
         anchor: new google.maps.Point(16, 28)
     }
 
+    const getItems = () => {
+        DashboardController.getItems().then((OpenAPIResponse) => {
+            if (OpenAPIResponse.status === 200) {
+                // console.log(OpenAPIResponse)
+            } else {
+                alert('Something went wrong. Please check your details and try again');
+            }
+        })
+    }
+
+    useEffect(() => {
+        getItems()
+        window.addEventListener("resize", handleResize)
+
+        if (isMobile) {
+            setBottom(580)
+        } else {
+            setBottom(470)
+        }
+    }, [window.innerWidth]);
 
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
 
-            <GoogleMap onLoad={handleOnLoad} zoom={9} mapContainerStyle={styles} options={DEFAULT_OPTIONS}>
+            <GoogleMap onLoad={handleOnLoad} zoom={7} mapContainerStyle={styles} options={DEFAULT_OPTIONS}>
                 <Places
                     setOffice={(position) => {
                         console.log(position)
@@ -132,19 +166,18 @@ function Map() {
                                         horizontal: 'left',
                                     }}
                                     anchorReference="anchorPosition"
-                                    anchorPosition={{ top: 1000, left: 0 }}
+                                    anchorPosition={{ top: bottom, left: 0 }}
 
                                     transformOrigin={{
                                         vertical: 'top',
                                         horizontal: 'left',
                                     }}
 
-                                    sx={{ width: '80%' }}
+                                    sx={{ width: '100%' }}
                                 >
-                                    <ViewObject date="12/12/2022" rawurl={image_url} onLoad={handleClose} detectedObject="いぬ" />
+                                    <SmallerViewObject date="12/12/2022" rawurl={image_url} onLoad={handleClose} detectedObject="いぬ" />
                                 </Popover>
                             </Card>
-
                         </InfoWindowF>
                     </MarkerF>
                 ))}

@@ -17,6 +17,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { RESPONSE_STATUS_CODES } from "../../constants/common/axios.constants";
 import DashboardController from "../../controllers/dashboard/dashboard.controller";
 import { Navigate, useNavigate } from 'react-router-dom';
+import TopNavigation from '../../components/TopNavigation';
 
 function Copyright(props: any) {
     return (
@@ -39,7 +40,6 @@ export default function SignInPage() {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = event.currentTarget;
-        // const isValid = data.email.value !== '' && data.password.value !== '';
 
         const user_data = {
             email: data.email.value,
@@ -51,23 +51,21 @@ export default function SignInPage() {
             email: 'test@test10.com',
             password: 'test',
         }
-        //const response = UserController.login(user_data);
-        //console.log(response);
 
-        UserController.login(test_data).then((OpenAPIResponse) => {
+        UserController.login(user_data).then((OpenAPIResponse) => {
             // Manage the response according to OpenAPI schema
             if (OpenAPIResponse.status === 200) {
                 UserController.getUserProfile().then((OpenAPIResponse) => {
                     console.log(OpenAPIResponse)
                     const uid = OpenAPIResponse.data.id;
+                    // alert('Works')
                     navigate(`/dashboard/${uid}`, { state: { uid: uid } });
                 })
             } else {
                 alert('Something went wrong. Please check your details and try again');
             }
         })
-
-
+        return false;
     };
 
     return (
@@ -80,7 +78,7 @@ export default function SignInPage() {
                     sm={4}
                     md={7}
                     sx={{
-                        backgroundImage: 'url(https://source.unsplash.com/random)',
+                        backgroundImage: 'url(https://source.unsplash.com/random/?nature)',
                         backgroundRepeat: 'no-repeat',
                         backgroundColor: (t) =>
                             t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -89,6 +87,7 @@ export default function SignInPage() {
                     }}
                 />
                 <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+                    <TopNavigation />
                     <Box
                         sx={{
                             my: 8,
@@ -104,7 +103,7 @@ export default function SignInPage() {
                         <Typography component="h1" variant="h5">
                             Sign in
                         </Typography>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+                        <Box component="form" noValidate onSubmit={(event) => { handleSubmit(event) }} sx={{ mt: 1 }}>
                             <TextField
                                 margin="normal"
                                 required

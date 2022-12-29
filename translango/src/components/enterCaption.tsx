@@ -15,13 +15,7 @@ export default function EnterCaption(props: any) {
     return (
         <ThemeProvider theme={theme}>
             <Paper sx={{ width: '100%' }}>
-                <TextField
-                    id="outlined-multiline-flexible"
-                    label="Caption"
-                    multiline
-                    rows={4}
-                    placeholder="Write your caption here..."
-                />
+
             </Paper>
 
         </ThemeProvider >

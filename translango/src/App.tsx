@@ -19,6 +19,9 @@ import CreatePost from './pages/createPost';
 import { TestImage } from './pages/test/test';
 import PreviewPost from './pages/previewPost';
 import ProfilePage from './pages/profilePage';
+import GameScreen from './pages/gameScreen';
+import PracticeScreen from './pages/practiceScreen';
+import QuizScreen from './pages/quizScreen';
 
 
 function App() {
@@ -46,6 +49,9 @@ function App() {
               <Route path='/createpost/:translationID' element={<CreatePost />} />
               <Route path='/previewpost/:translationID' element={<PreviewPost />} />
               <Route path='/profilepage/:userID' element={<ProfilePage />} />
+              <Route path='/game/:userID' element={<GameScreen />} />
+              <Route path='/practice/:userID' element={<PracticeScreen />} />
+              <Route path='/quiz/:userID' element={<QuizScreen />} />
             </Routes>
           </Router>
         </ThemeProvider>
