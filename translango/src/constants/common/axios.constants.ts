@@ -25,11 +25,20 @@ export const RESPONSE_STATUS_CODES = {
 
 // INSTANCE: Set axios' defaults
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: "https://translango.y-nakai.com",
   withCredentials: true,
   headers: {
       withCredentials: 'true',
   },
 })
+
+// INSTANCE for directly connecting to backend server by Gaurish
+export const gServer = axios.create({
+  baseURL: "https://translango-server-pfuvrj7daq-uc.a.run.app/",
+  withCredentials: true,
+  headers: {
+    withCredentials: 'true',
+}
+});
 
 export default axiosInstance;
