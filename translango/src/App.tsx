@@ -1,7 +1,7 @@
 import classes from './App.module.scss';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PreviewImage from './pages/previewimage';
-import WelcomePage from './pages/welcome';
+import WelcomePage from './pages/welcome/WelcomePage';
 import { ThemeProvider } from '@mui/system';
 import theme from './theme/theme';
 import SignInPage from './pages/signin';
