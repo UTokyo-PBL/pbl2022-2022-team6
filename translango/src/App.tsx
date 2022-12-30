@@ -44,7 +44,7 @@ function App() {
   useEffect(() => saveContext(ctx));
 
   return (<>
-    <h1>Checking</h1>
+    <h1>Checking on Node:18.12.1</h1>
     <div className={classes.App}>
       {areLanguagesReady && <header className={classes.AppHeader}>
         <ThemeProvider theme={theme}>
