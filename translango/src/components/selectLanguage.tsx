@@ -1,8 +1,6 @@
 import { FormControl, MenuItem } from "@mui/material";
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useContext } from "react";
-// import { useTranslation } from 'react-i18next';
-import i18next from '../i18n';
 import AppCtx, { AppCtxUpdater } from "../store/app-state-context";
 
 
@@ -23,7 +21,6 @@ export default function SelectLanguage() {
 
     const handleChange = (event: SelectChangeEvent) => {
         ctx.nativeLanguage = event.target.value;
-        i18next.changeLanguage(event.target.value);
         ctxUpdater({...ctx});
     };
 

@@ -1,7 +1,6 @@
-import { Button, SvgIcon, SvgIconProps, ThemeProvider } from '@mui/material';
-import { Component } from 'react';
-import theme from '../theme/theme';
-import { withTranslation, WithTranslation } from 'react-i18next';
+import { Button, SvgIcon, SvgIconProps } from '@mui/material';
+import { useContext } from 'react';
+import AppCtx, { AppCtxUpdater, TRANSLATION_KEYS } from '../store/app-state-context';
 
 
 
@@ -13,16 +12,16 @@ function TextRecIcon(props: SvgIconProps) {
     );
 }
 
-export interface TextButtonProps extends WithTranslation {
+export interface TextButtonProps {
     user?: any;
     uid?: string;
     background: string;
 }
 
-class TextButton extends Component<TextButtonProps, {}> {
-
-    render() {
-        const background = this.props.background;
+const  TextButton: React.FC<TextButtonProps> = ({user, uid, background}) => {
+    const ctx = useContext(AppCtx);
+    const ctxUpdater = useContext(AppCtxUpdater);
+    const t = (key: TRANSLATION_KEYS) => ctx.translations[ctx.nativeLanguage] ? ctx.translations[ctx.nativeLanguage][key] : ctx.translations['en'][key];
         const textStyle = {
             bgcolor: background,
             m: 2,
@@ -35,18 +34,14 @@ class TextButton extends Component<TextButtonProps, {}> {
         };
 
         return (
-            <ThemeProvider theme={theme}>
                 <Button variant='text' color="secondary" aria-label="Text" sx={textStyle} href="#">
                     <TextRecIcon color="secondary" sx={{ fontSize: 100 }} />
-                    <span>{this.props.t('Text')}</span>
+                    <span>{t("TEXT")}</span>
                 </Button>
-            </ThemeProvider>
 
         )
 
     }
 
-}
-
-export default withTranslation()(TextButton);
+export default TextButton;
 

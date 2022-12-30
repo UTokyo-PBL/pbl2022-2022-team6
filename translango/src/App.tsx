@@ -7,11 +7,10 @@ import theme from './theme/theme';
 import SignInPage from './pages/signin';
 // import { TestImage } from './pages/test/test';
 
-import './i18n.tsx'
 import GetSignUpDetails from './pages/sign-up/get-sign-up-details';
 import ConfirmEmail from './pages/sign-up/confirm-email';
 import CreateProfile from './pages/sign-up/create-profile/SignUpCreateProfile';
-import Dashboard from './pages/dashboard';
+import Dashboard from './pages/dashboard/DashboardPage';
 import SelectLanguagesPage from './pages/select-languages/SelectLanguagesPage';
 import ViewTranslations from './pages/viewtranslation';
 import CreatePost from './pages/createPost';
@@ -36,6 +35,22 @@ function App() {
   useEffect(()=>{
     GeneralController.getAllLanguages(ctx.nativeLanguage).then((data) => {
       ctx.availableLanguages = data;
+
+      if (ctx.translations[ctx.nativeLanguage] === undefined) {
+        Promise.all(Object.entries(ctx.translations['en']).map(async ([key, engText]) => {
+            const tr = await GeneralController.getTranslation(engText, ctx.nativeLanguage, 'en');
+            return {key, translation: tr.translatedText};
+        })).then((values) => {
+            // @ts-ignore: ignore next line because we're soon giving them values
+            ctx.translations[ctx.nativeLanguage] = {}; 
+            values.forEach(({key, translation}) => {
+              ctx.translations[ctx.nativeLanguage][key] = translation;
+            })
+        }).finally(() => {
+          ctxUpdater({...ctx});
+        })
+      }
+
       setAreLanguagesReady(true);
       ctxUpdater({...ctx});
     });

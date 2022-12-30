@@ -2043,3 +2043,8 @@ export interface Language {
   code: string;
   name: string;
 };
+
+export interface TranslationResponseType {
+  translatedText: string;
+  source_lang: string;
+};

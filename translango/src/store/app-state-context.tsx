@@ -3,11 +3,19 @@ import {
   Dispatch,
   PropsWithChildren,
   SetStateAction,
-  useCallback,
-  useEffect,
   useState,
 } from "react";
 import { ISO3166_2letter_country_codes } from "../types/common/common.types";
+
+export type TRANSLATION_KEYS = "WELCOME" | "CHOOSE_TRANSLATE" | "OR" | "DISCOVER_MORE_BELOW" | "SIGN_IN" | "SIGN_UP" | "CAMERA" | "TEXT";
+
+type TranslateMappingType = {
+  [key in TRANSLATION_KEYS]: string;
+};
+
+type TranslationObjType = {
+  [code in string]: TranslateMappingType;
+};
 
 export interface AppContextInterface {
   isLoggedIn: boolean;
@@ -21,6 +29,7 @@ export interface AppContextInterface {
   favouriteLanguages: Set<string>;
   theme: "light" | "dark";
   availableLanguages: Record<string, string>;
+  translations: TranslationObjType;
 }
 
 export const saveContext = (obj: AppContextInterface) => {
@@ -43,13 +52,25 @@ const defaultCtx: AppContextInterface = {
   nativeLanguage: "en",
   favouriteLanguages: new Set<string>(["ja"]),
   theme: "light",
-  availableLanguages: {}
+  availableLanguages: {},
+  translations: {
+    'en': {
+      "WELCOME": "Welcome",
+      "CHOOSE_TRANSLATE": "Choose how you'd like to translate",
+      "OR": "Or",
+      "DISCOVER_MORE_BELOW": "Discover more below!",
+      "SIGN_IN": "Sign in",
+      "SIGN_UP": "Sign up",
+      "CAMERA": "Camera",
+      "TEXT": "Text"
+    }
+  }
 };
 
 const AppCtx = createContext<AppContextInterface>(defaultCtx);
 export const AppCtxUpdater = createContext<
   Dispatch<SetStateAction<AppContextInterface>>
->((value) => {});
+>(() => {});
 
 export const AppCtxProvider: React.FC<PropsWithChildren> = (props) => {
   const [contextState, setContextState] = useState<AppContextInterface>(() => {

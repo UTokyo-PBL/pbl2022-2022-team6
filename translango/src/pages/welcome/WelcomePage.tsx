@@ -1,4 +1,4 @@
-import * as React from 'react';
+// import * as React from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 
@@ -7,9 +7,9 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 // import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import * as locales from '@mui/material/locale';
-import { useTranslation } from 'react-i18next'
+// import { createTheme, ThemeProvider } from '@mui/material/styles';
+// import * as locales from '@mui/material/locale';
+// import { useTranslation } from 'react-i18next'
 
 
 // Components
@@ -24,27 +24,21 @@ import theme from '../../theme/theme';
 import TextButton from '../../components/TextButton';
 import SelectLanguage from '../../components/selectLanguage';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import AppCtx, { AppCtxUpdater, TRANSLATION_KEYS } from '../../store/app-state-context';
 
-type SupportedLocales = keyof typeof locales;
+// type SupportedLocales = keyof typeof locales;
 
 
 
 
 export default function WelcomePage() {
-
-    const [locale, setLocale] = React.useState<SupportedLocales>('enUS');
-    // const [locale, setLocale] = React.useContext(LanguageContext);
-
-    const themeWithLocale = React.useMemo(
-        () => createTheme(theme, locales[locale]),
-        [locale, theme],
-    );
-
-    // It is a hook imported from 'react-i18next'
-    const { t } = useTranslation();
+    const ctx = useContext(AppCtx);
+    const ctxUpdater = useContext(AppCtxUpdater);
+    const t = (key: TRANSLATION_KEYS) => ctx.translations[ctx.nativeLanguage] ? ctx.translations[ctx.nativeLanguage][key] : ctx.translations['en'][key];
 
     return (
-        <ThemeProvider theme={themeWithLocale}>
+        // <ThemeProvider theme={themeWithLocale}>
             <Grid container component="main" sx={{ height: '100vh', bgcolor: 'primary.main' }}>
                 <CssBaseline />
                 <Grid
@@ -83,12 +77,12 @@ export default function WelcomePage() {
                         <Grid container direction="column" alignItems="center" justifyContent="flex-end">
                             <Grid item>
                                 <Typography variant='h4' color='white' fontWeight='bold'>
-                                    {t('Welcome')}
+                                    {t("WELCOME")}
                                 </Typography>
                             </Grid>
                             <Grid item>
                                 <Typography variant='body1' color='white'>
-                                    {t('Choose_Translate')}
+                                    {t('CHOOSE_TRANSLATE')}
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -103,12 +97,12 @@ export default function WelcomePage() {
                         <Grid container sx={{ m: 0 }} direction="column" alignItems="center" justifyContent="flex-end">
                             <Grid item>
                                 <Typography variant='body1' color='white'>
-                                    {t('Or')}
+                                    {t("OR")}
                                 </Typography>
                             </Grid>
                             <Grid item>
                                 <Typography variant='body1' color='white'>
-                                    {t('Discover')}
+                                    {t("DISCOVER_MORE_BELOW")}
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -121,7 +115,7 @@ export default function WelcomePage() {
                                 sx={{ bgcolor: 'white', minHeight: '40px', width: '280px', color: 'primary' }}
                                 href="/signin"
                             >
-                                {t('Sign_In')}
+                                {t("SIGN_IN")}
                             </Button>
                             <Button
                                 fullWidth
@@ -130,7 +124,7 @@ export default function WelcomePage() {
                                 sx={{ mt: 3, mb: 2, color: 'white', minHeight: '40px', width: '280px', border: '2px solid' }}
                                 href="/sign-up"
                             >
-                                {t('Sign_Up')}
+                                {t("SIGN_UP")}
                             </Button>
 
 
@@ -149,6 +143,6 @@ export default function WelcomePage() {
                     </Box>
                 </Grid>
             </Grid >
-        </ThemeProvider >
+        // </ThemeProvider >
     );
 }

@@ -6,15 +6,18 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useTranslation } from "react-i18next";
+import { useContext } from "react";
 import BottomNavigation from "../../components/BottomNavigation";
 import CameraButton from "../../components/cameraButton";
 import FillPageWithSidePic from "../../components/FillPageWithSidePic";
 import TextButton from "../../components/TextButton";
 import UserProfileCard from "../../components/UserProfileCard";
+import AppCtx, { AppCtxUpdater, TRANSLATION_KEYS } from "../../store/app-state-context";
 
 const Dashboard: React.FC = () => {
-  const { t } = useTranslation();
+  const ctx = useContext(AppCtx);
+    const ctxUpdater = useContext(AppCtxUpdater);
+    const t = (key: TRANSLATION_KEYS) => ctx.translations[ctx.nativeLanguage] ? ctx.translations[ctx.nativeLanguage][key] : ctx.translations['en'][key];
   return (
     <FillPageWithSidePic>
       <Stack>
@@ -34,7 +37,7 @@ const Dashboard: React.FC = () => {
             >
               <Grid item>
                 <Typography variant="h4" color="primary" fontWeight="bold">
-                  {t("Welcome")}
+                  {t("WELCOME")}
                 </Typography>
               </Grid>
               <Grid item>

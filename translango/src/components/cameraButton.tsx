@@ -1,12 +1,11 @@
-import { Button, ThemeProvider } from '@mui/material';
-import React, { Component } from 'react';
+import { Button } from '@mui/material';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import theme from '../theme/theme';
 import { Navigate } from "react-router-dom";
-import { withTranslation, WithTranslation } from 'react-i18next';
+import { useContext, useState } from 'react';
+import AppCtx, { AppCtxUpdater, TRANSLATION_KEYS } from '../store/app-state-context';
 
 
-export interface UploadImageProps extends WithTranslation {
+export interface UploadImageProps {
     user?: any;
     uid?: string;
     background: string;
@@ -26,45 +25,40 @@ export interface UploadImageState {
     posted: boolean;
 }
 
+//Component<UploadImageProps, UploadImageState>
 
-class CameraButton extends Component<UploadImageProps, UploadImageState> {
+const CameraButton: React.FC<UploadImageProps> = ({user, uid, background}) => {
+    const ctx = useContext(AppCtx);
+    const ctxUpdater = useContext(AppCtxUpdater);
+    const t = (key: TRANSLATION_KEYS) => ctx.translations[ctx.nativeLanguage] ? ctx.translations[ctx.nativeLanguage][key] : ctx.translations['en'][key];
 
-    constructor(UploadImageProps: any) {
-        super(UploadImageProps);
-
-        this.state = {
-            imgurl: '',
-            img: {},
-            uploadedimg: false,
-            height: 0,
-            width: 0,
-            rawurl: 'https://wallpapercave.com/wp/wp3597484.jpg',
-            location: {},
-            check: false,
-            coordinates: {},
-            setLocation: false,
-            posted: false,
-        };
-
-
-    }
+    const [state, setState] = useState<UploadImageState>({
+        imgurl: '',
+        img: {},
+        uploadedimg: false,
+        height: 0,
+        width: 0,
+        rawurl: 'https://wallpapercave.com/wp/wp3597484.jpg',
+        location: {},
+        check: false,
+        coordinates: {},
+        setLocation: false,
+        posted: false,
+    });
 
 
-    changeImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const changeImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
         if (!event.target.files || !event.target.files[0]) return;
         // event.persist();
         const file = event.target.files[0];
-        this.setState({ img: file, rawurl: URL.createObjectURL(file), uploadedimg: true });
+        setState(oldState => {return { ...oldState, img: file, rawurl: URL.createObjectURL(file), uploadedimg: true };});
 
         await new Promise<void>((resolve, reject) => {
-            console.log('async', this.state.rawurl)
+            console.log('async', state.rawurl)
             resolve();
         })
-        console.log(this.state.rawurl)
+        console.log(state.rawurl)
     };
-
-    render() {
-        const background = this.props.background;
         const cameraStyle = {
             bgcolor: background,
             m: 2,
@@ -82,22 +76,18 @@ class CameraButton extends Component<UploadImageProps, UploadImageState> {
 
         return (
             <>
-                {this.state.uploadedimg && (
-                    <Navigate to="/view-image" replace={true} state={this.state} />
+                {state.uploadedimg && (
+                    <Navigate to="/view-image" replace={true} state={state} />
                 )}
-                <ThemeProvider theme={theme}>
                     <Button variant='text' color="secondary" aria-label="Camera" sx={cameraStyle} component='label'>
-                        <input hidden type="file" accept="image/*" onChange={this.changeImage} />
+                        <input hidden type="file" accept="image/*" onChange={changeImage} />
                         <CameraAltIcon color="secondary" sx={{ fontSize: 100 }} />
-                        <span>{this.props.t('Camera')}</span>
+                        <span>{t('CAMERA')}</span>
                     </Button>
-                </ThemeProvider>
             </>
         )
 
     }
 
-}
-
-export default withTranslation()(CameraButton);
+export default CameraButton;
 
