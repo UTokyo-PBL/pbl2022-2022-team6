@@ -1,6 +1,6 @@
 import classes from './App.module.scss';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import PreviewImage from './pages/previewimage';
+import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
+import PreviewImage from './pages/viewimage/ViewImagePage';
 import WelcomePage from './pages/welcome/WelcomePage';
 import { ThemeProvider } from '@mui/system';
 import theme from './theme/theme';
@@ -12,7 +12,7 @@ import ConfirmEmail from './pages/sign-up/confirm-email';
 import CreateProfile from './pages/sign-up/create-profile/SignUpCreateProfile';
 import Dashboard from './pages/dashboard/DashboardPage';
 import SelectLanguagesPage from './pages/select-languages/SelectLanguagesPage';
-import ViewTranslations from './pages/viewtranslation';
+import ViewTranslations from './pages/viewtranslations/viewtranslations';
 import CreatePost from './pages/createPost';
 import { TestImage } from './pages/test/test';
 import PreviewPost from './pages/previewPost';
@@ -86,6 +86,7 @@ function App() {
               <Route path='/game/:userID' element={<GameScreen />} />
               <Route path='/practice/:userID' element={<PracticeScreen />} />
               <Route path='/quiz/:userID' element={<QuizScreen />} />
+              <Route path='*' element={<Navigate to='/'/>}/>
             </Routes>
           </Router>
         </ThemeProvider>

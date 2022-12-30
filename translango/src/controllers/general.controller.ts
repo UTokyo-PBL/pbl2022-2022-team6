@@ -1,6 +1,6 @@
 import { gServer } from "../constants/common/axios.constants"
 import { AxiosResponse } from "axios";
-import { Language, TranslationResponseType } from "../types/common/common.types";
+import { Language, ObjectDetectionFromImageResponseType, TranslationResponseType } from "../types/common/common.types";
 
 export default class GeneralController {
   // --------> GET: /available-languages?target_lang='en'
@@ -32,5 +32,22 @@ export default class GeneralController {
 
     const translation = axiosResponse.data;
     return translation;
+  }
+
+  /**
+   * Get detections in an image
+   */
+  static getDetectionsInImage = async(imgObj: File, target_languages: string[], source_language: string) => {
+    const formdata = new FormData();
+    formdata.set("file", imgObj,  imgObj.name);
+    //@ts-ignore
+    formdata.set('target_languages', target_languages);
+    formdata.set('source_language', source_language);
+    const axiosResponse = await gServer.post<ObjectDetectionFromImageResponseType>("/testing/image-object-detection", formdata, {
+      headers: {
+        'Content-Type': `multipart/form-data`
+      }
+    });
+    return axiosResponse.data;
   }
 }

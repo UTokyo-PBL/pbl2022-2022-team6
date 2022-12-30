@@ -2038,13 +2038,36 @@ export type ISO3166_2letter_country_codes =
   | "ZM"
   | "ZW";
 
-
 export interface Language {
   code: string;
   name: string;
-};
+}
 
 export interface TranslationResponseType {
   translatedText: string;
   source_lang: string;
-};
+}
+
+export interface DetectionWithTranslation {
+  mid: string;
+  name: string;
+  translatedName: string;
+  score: number;
+  boundingPoly: {
+    normalizedVertices: [
+      { x: number; y: number },
+      { x: number; y: number },
+      { x: number; y: number },
+      { x: number; y: number }
+    ];
+  };
+  translations: {
+    language: string;
+    translation: string;
+  }[];
+}
+
+export interface ObjectDetectionFromImageResponseType {
+  image_name: string;
+  detections: DetectionWithTranslation[]
+}
