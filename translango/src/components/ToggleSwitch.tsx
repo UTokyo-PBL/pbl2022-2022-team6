@@ -2,8 +2,8 @@ import { styled } from '@mui/material/styles';
 import FormGroup from '@mui/material/FormGroup';
 import Switch from '@mui/material/Switch';
 import Stack from '@mui/material/Stack';
-import ViewInArIcon from '@mui/icons-material/ViewInAr';
-import TitleIcon from '@mui/icons-material/Title';
+// import ViewInArIcon from '@mui/icons-material/ViewInAr';
+// import TitleIcon from '@mui/icons-material/Title';
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     width: 80,
@@ -48,23 +48,30 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     },
 }));
 
-function SwitchThumb(props: any) {
-    return (
-        <div className={`switch ${props.isChecked ? 'checked' : 'unchecked'}`}>
-            {props.isChecked ? <ViewInArIcon /> : <TitleIcon />}
-        </div>
-    );
+// function SwitchThumb(props: any) {
+//     return (
+//         <div className={`switch ${props.isChecked ? 'checked' : 'unchecked'}`}>
+//             {props.isChecked ? <ViewInArIcon /> : <TitleIcon />}
+//         </div>
+//     );
+// }
+
+interface Props {
+    name: string;
+    onChange: (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void
 }
 
-export default function ToggleSwitch(props: any) {
+const ToggleSwitch: React.FC<Props> = ({onChange}) => {
     return (
         <FormGroup>
             <Stack direction="row" spacing={1} alignItems="center">
                 {/* <span></span> */}
                 {/* <Typography>Text</Typography> */}
-                <MaterialUISwitch sx={{ m: 1 }} defaultChecked onChange={props.onChange} />
+                <MaterialUISwitch sx={{ m: 1 }} defaultChecked onChange={onChange} />
                 {/* <Typography>Objects</Typography> */}
             </Stack>
         </FormGroup>
     );
 }
+
+export default ToggleSwitch;

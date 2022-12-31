@@ -7,14 +7,13 @@ import {
   InputAdornment,
   Stack,
   TextField,
-  Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import FillPageWithSidePic from "../../../components/FillPageWithSidePic";
 import SignUpAndLoginTop from "../SignUpAndLoginTop";
 
-export default function GetSignUpDetails(props: any) {
+export default function GetSignUpDetails() {
 
   const [invalidPassword, setInvalidPassword] = useState(false);
   const navigate = useNavigate();

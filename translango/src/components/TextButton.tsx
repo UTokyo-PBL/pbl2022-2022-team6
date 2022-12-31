@@ -1,6 +1,6 @@
 import { Button, SvgIcon, SvgIconProps } from '@mui/material';
 import { useContext } from 'react';
-import AppCtx, { AppCtxUpdater, TRANSLATION_KEYS } from '../store/app-state-context';
+import AppCtx, { TRANSLATION_KEYS } from '../store/app-state-context';
 
 
 
@@ -18,9 +18,8 @@ export interface TextButtonProps {
     background: string;
 }
 
-const  TextButton: React.FC<TextButtonProps> = ({user, uid, background}) => {
+const  TextButton: React.FC<TextButtonProps> = ({ background }) => {
     const ctx = useContext(AppCtx);
-    const ctxUpdater = useContext(AppCtxUpdater);
     const t = (key: TRANSLATION_KEYS) => ctx.translations[ctx.nativeLanguage] ? ctx.translations[ctx.nativeLanguage][key] : ctx.translations['en'][key];
         const textStyle = {
             bgcolor: background,

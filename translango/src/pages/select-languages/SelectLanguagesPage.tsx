@@ -13,11 +13,10 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FillPageWithSidePic from "../../components/FillPageWithSidePic";
 import AppCtx, { AppCtxUpdater } from "../../store/app-state-context";
-import { Language } from "../../types/common/common.types";
 
 const SelectLanguagesPage: React.FC = () => {
   const ctx = useContext(AppCtx);
@@ -33,7 +32,7 @@ const SelectLanguagesPage: React.FC = () => {
   };
 
   const onCheckboxChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, checked, value } = event.target;
+    const { checked, value } = event.target;
     const lang_code = value;
 
     if (checked) {ctx.favouriteLanguages.add(lang_code);}

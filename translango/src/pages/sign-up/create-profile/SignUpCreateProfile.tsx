@@ -1,5 +1,5 @@
 import {
-  AccountCircle,
+  // AccountCircle,
   Add,
   Google,
   Language,
@@ -19,19 +19,11 @@ import {
   Typography,
   MenuItem,
 } from "@mui/material";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import FillPageWithSidePic from "../../../components/FillPageWithSidePic";
 import SignUpAndLoginTop from "../SignUpAndLoginTop";
-import {
-  useLazyTranslate,
-  getLanguages,
-  setConfig,
-} from "react-google-translate";
 // import ListLanguagesWithTarget from "../../../googletranslate";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import axios from "axios";
-// import LanguageContext from "../../../components/LanguageContext";
-import { useLocation } from "react-router-dom";
 import AppCtx, { AppCtxUpdater } from "../../../store/app-state-context";
 import { uiLanguages } from "../../../components/selectLanguage";
 
@@ -39,33 +31,13 @@ export default function CreateProfile() {
   const ctx = useContext(AppCtx);
   const ctxUpdater = useContext(AppCtxUpdater);
 
-  const [profilePic, setProfilePic] = useState<undefined | any>();
+  const [_profilePic, setProfilePic] = useState<undefined | File>();
   const [profileURL, setProfileURL] = useState("empty");
-  const [uploadedimg, setUploadedimg] = useState(false);
+  // const [uploadedimg, setUploadedimg] = useState(false);
   const fileInput = useRef<any>();
 
-  // const value = { language, setLanguage }
-  //
-  // const target = useContext(LanguageContext);
-  // const [language, setLanguage] = useState(target.language);
-  const [languageOptions, setLanguageOptions] = useState([]);
 
-  const location = useLocation();
-  //   // Imports the Google Cloud client library
-  // const {Translate} = require('@google-cloud/translate').v2;
-
-  // Creates a client
-  // const translate = new Translate();
-
-  // async function listLanguages() {
-  //   // Lists available translation language with their names in English (the default).
-  //   const [languages] = await translate.getLanguages();
-
-  //   console.log('Languages:');
-  //   languages.forEach(language => console.log(language));
-  // }
-
-  // listLanguages();
+  // const location = useLocation();
 
   const handleChange = (event: SelectChangeEvent) => {
     // setLanguage(event.target.value);
@@ -73,39 +45,13 @@ export default function CreateProfile() {
     ctxUpdater({...ctx});
   };
 
-  // const ListLanguages
-  useEffect(() => {
-    // const languages = ListLanguagesWithTarget();
-    // console.log(language)
-    // console.log(target)
-    // Accessing previous page state
-    console.log(location.state.email);
-    const response = axios
-      .post(
-        "https://translation.googleapis.com/language/translate/v2/languages",
-        {},
-        {
-          params: {
-            key: "AIzaSyA9AKCuN3DSy3LYtzLjJwanD0sGjD5HI-8",
-            target: "ja",
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response.data.data.languages);
-      })
-      .catch((err) => {
-        console.log("rest api error", err);
-      });
-  }, []);
-
   const changeImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files || !event.target.files[0]) return;
     // event.persist();
     const file = event.target.files[0];
     setProfilePic(file);
     setProfileURL(URL.createObjectURL(file));
-    setUploadedimg(true);
+    // setUploadedimg(true);
 
     // this.setState({ img: file, rawurl: URL.createObjectURL(file), uploadedimg: true });
 

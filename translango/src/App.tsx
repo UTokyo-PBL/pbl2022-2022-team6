@@ -54,7 +54,7 @@ function App() {
       setAreLanguagesReady(true);
       ctxUpdater({...ctx});
     });
-  }, [ctx.nativeLanguage]);
+  }, [ctx.nativeLanguage, ctx, ctxUpdater]);
 
   useEffect(() => saveContext(ctx));
 

@@ -44,7 +44,6 @@ export default function PreviewImage() {
 
   const handleToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setToggledObject(event.target.checked);
-    // console.log(toggledObject);
   };
 
   const changeImage = (event: React.ChangeEvent<HTMLInputElement>) => {

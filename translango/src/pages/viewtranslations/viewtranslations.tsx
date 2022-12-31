@@ -1,10 +1,10 @@
 import { Grid, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import TopNavigation from "../../components/TopNavigation";
 import ViewObject from "../../components/viewObject";
 import TranslationObject from "../../components/translationObject";
-import { DetectionWithTranslation } from '../../types/common/common.types';
+// import { DetectionWithTranslation } from '../../types/common/common.types';
 
 
 // background: 'linear-gradient(to right bottom, #430089, #82ffa1)'
@@ -12,13 +12,13 @@ export default function ViewTranslations() {
     const location = useLocation();
     const navigate = useNavigate();
     const [rawurl, setRawURL] = useState('');
-    const [detections, setDetections] = useState<DetectionWithTranslation>();
+    // const [detections, setDetections] = useState<DetectionWithTranslation>();
 
     useEffect(() => {
         if (!location.state) navigate('/');
         else {
             setRawURL(location.state.rawurl);
-            setDetections(location.state.detections);
+            // setDetections(location.state.detections);
         }
     }, []);
 

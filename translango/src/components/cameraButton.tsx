@@ -32,7 +32,6 @@ const CameraButton: React.FC<UploadImageProps> = ({ background }) => {
     ctx.translations[ctx.nativeLanguage]
       ? ctx.translations[ctx.nativeLanguage][key]
       : ctx.translations["en"][key];
-const navigate = useNavigate();
   const [state, setState] = useState<UploadImageState>({
     imgurl: "",
     img: null,
