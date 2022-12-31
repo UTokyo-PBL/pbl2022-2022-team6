@@ -1,13 +1,11 @@
 import classes from './App.module.scss';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import PreviewImage from './pages/viewimage/ViewImagePage';
-import WelcomePage from './pages/welcome/WelcomePage';
 import { ThemeProvider } from '@mui/system';
 import theme from './theme/theme';
 import SignInPage from './pages/signin';
 // import { TestImage } from './pages/test/test';
 
-import GetSignUpDetails from './pages/sign-up/get-sign-up-details';
 import ConfirmEmail from './pages/sign-up/confirm-email';
 import CreateProfile from './pages/sign-up/create-profile/SignUpCreateProfile';
 import Dashboard from './pages/dashboard/DashboardPage';
@@ -20,10 +18,13 @@ import ProfilePage from './pages/profilePage';
 import GameScreen from './pages/gameScreen';
 import PracticeScreen from './pages/practiceScreen';
 import QuizScreen from './pages/quizScreen';
-import { useContext, useEffect, useState } from 'react';
+import React, { Suspense, useContext, useEffect, useState } from 'react';
 import AppCtx, { AppCtxUpdater, saveContext } from './store/app-state-context';
 import GeneralController from './controllers/general.controller';
+import { LoadingButton } from '@mui/lab';
 
+const GetSignUpDetails = React.lazy(() => import('./pages/sign-up/get-sign-up-details'));
+const WelcomePage = React.lazy(() => import('./pages/welcome/WelcomePage'));
 
 function App() {
   const ctx = useContext(AppCtx);
@@ -54,7 +55,7 @@ function App() {
       setAreLanguagesReady(true);
       ctxUpdater({...ctx});
     });
-  }, [ctx.nativeLanguage, ctx, ctxUpdater]);
+  }, [ctx.nativeLanguage]);
 
   useEffect(() => saveContext(ctx));
 
@@ -62,6 +63,7 @@ function App() {
     <div className={classes.App}>
       {areLanguagesReady && <header className={classes.AppHeader}>
         <ThemeProvider theme={theme}>
+          <Suspense fallback={<LoadingButton loading sx={{width: "100%", alignSelf: "center"}}/>}>
           <Router>
             <Routes>
               <Route path='/dashboard'>
@@ -88,6 +90,7 @@ function App() {
               <Route path='*' element={<Navigate to='/'/>}/>
             </Routes>
           </Router>
+          </Suspense>
         </ThemeProvider>
       </header>}
     </div></>
