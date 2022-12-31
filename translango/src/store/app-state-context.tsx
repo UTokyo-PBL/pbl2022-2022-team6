@@ -17,7 +17,9 @@ export type TRANSLATION_KEYS =
   | "CAMERA"
   | "TEXT"
   | "READY_TO_SCAN"
-  | "CHOOSE_TEXT_OR_OBJECT_DETECTION";
+  | "CHOOSE_TEXT_OR_OBJECT_DETECTION"
+  | "CHANGE_PICTURE"
+  | "SCAN";
 
 type TranslateMappingType = {
   [key in TRANSLATION_KEYS]: string;
@@ -28,6 +30,7 @@ type TranslationObjType = {
 };
 
 export interface AppContextInterface {
+  version: string;
   isLoggedIn: boolean;
   firstName?: string;
   lastName?: string;
@@ -54,6 +57,7 @@ export const saveContext = (obj: AppContextInterface) => {
 };
 
 const defaultCtx: AppContextInterface = {
+  version: "0.0.1",
   isLoggedIn: false,
   firstName: "Hey",
   lastName: "User!",
@@ -74,7 +78,9 @@ const defaultCtx: AppContextInterface = {
       CAMERA: "Camera",
       TEXT: "Text",
       READY_TO_SCAN: "Ready to scan?",
-      CHOOSE_TEXT_OR_OBJECT_DETECTION: "Choose between text or object translation"
+      CHOOSE_TEXT_OR_OBJECT_DETECTION: "Choose between text or object translation",
+      CHANGE_PICTURE: "Change picture",
+      SCAN: "Scan"
     },
   },
 };
@@ -89,6 +95,8 @@ export const AppCtxProvider: React.FC<PropsWithChildren> = (props) => {
     const ctxStringInStorage = localStorage.getItem("TRANSLANGO_APP_CTX");
     if (ctxStringInStorage) {
       const ctx: AppContextInterface = JSON.parse(ctxStringInStorage);
+      if (!ctx.version || ctx.version !== defaultCtx.version)
+        return defaultCtx;
       return {
         ...ctx,
         favouriteLanguages: new Set<string>(ctx.favouriteLanguages),

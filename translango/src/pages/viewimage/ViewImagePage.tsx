@@ -1,13 +1,13 @@
-import { Button, CardActions, CardHeader } from "@mui/material";
-import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
+import { Button, CardActions, CardContent, CardHeader, Divider, List, ListItem, ListItemText, Stack } from "@mui/material";
+import {Card, CardMedia} from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ToggleSwitch from "../../components/ToggleSwitch";
 import TopNavigation from "../../components/TopNavigation";
 import Copyright from "../../components/Copyright";
 import GeneralController from "../../controllers/general.controller";
-import AppCtx from "../../store/app-state-context";
+import AppCtx, { TRANSLATION_KEYS } from "../../store/app-state-context";
 import { ObjectDetectionFromImageResponseType } from "../../types/common/common.types";
 
 // background: 'linear-gradient(to right bottom, #430089, #82ffa1)'
@@ -18,14 +18,16 @@ export default function PreviewImage() {
   const [rawurl, setRawURL] = useState("");
   const [imgObj, setImgObj] = useState(new File([], "tempfile"));
   const [toggledObject, setToggledObject] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [apiResponse, setApiResponse] =
     useState<ObjectDetectionFromImageResponseType>({
       image_name: "",
       detections: [],
     });
-  const [requestSent, setRequestSent] = useState(false);
   const [detectionsReady, setDetectionsReady] = useState(false);
-
+  const t = (key: TRANSLATION_KEYS) => ctx.translations[ctx.nativeLanguage]
+    ? ctx.translations[ctx.nativeLanguage][key]
+    : ctx.translations["en"][key];
   /**
    * On first load check that if user has directly come to this page,
    * It means that the page does not have any state,
@@ -52,19 +54,21 @@ export default function PreviewImage() {
 
     setRawURL(URL.createObjectURL(file));
     setImgObj(file);
+    setDetectionsReady(false);
   };
 
   const goScan = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
     if (toggledObject === true) {
-      setRequestSent(true);
+      setIsLoading(true);
       const data = await GeneralController.getDetectionsInImage(
         imgObj,
         Array.from(ctx.favouriteLanguages),
         ctx.nativeLanguage
       );
       setApiResponse(data);
+      setIsLoading(false);
       setDetectionsReady(true);
     } else {
       navigate("/scantext");
@@ -86,8 +90,8 @@ export default function PreviewImage() {
           action={<ToggleSwitch name="toggleObject" onChange={handleToggle} />}
           titleTypographyProps={{ variant: "body1", align: "left" }}
           subheaderTypographyProps={{ variant: "caption", align: "left" }}
-          title="Ready to Scan"
-          subheader="Choose between text or object translation"
+          title={t("READY_TO_SCAN")}
+          subheader={t("CHOOSE_TEXT_OR_OBJECT_DETECTION")}
         />
         <CardMedia
           component="img"
@@ -109,34 +113,41 @@ export default function PreviewImage() {
               accept="image/*"
               onChange={changeImage}
             />
-            Change Picture
+            {t("CHANGE_PICTURE")}
           </Button>
-          <Button
+          <LoadingButton
             size="small"
             color="secondary"
             variant="contained"
+            loading={isLoading}
             onClick={goScan}
           >
-            Scan
-          </Button>
+            {t("SCAN")}
+          </LoadingButton>
         </CardActions>
       </Card>
-      {requestSent && !detectionsReady && <p>Waiting for the apiResponse</p>}
       {detectionsReady &&
         apiResponse.detections.map((detectionWithTranslation) => {
           return (
-            <div
+            <Card
+            sx={{
+              m: 2
+            }}
               key={`${detectionWithTranslation.mid}${detectionWithTranslation.translatedName}${detectionWithTranslation.score}`}
             >
-              <h1>{detectionWithTranslation.translatedName}</h1>
+              <CardHeader title={detectionWithTranslation.translatedName} />
+              <CardContent>
+                <List component={Stack} direction="row" overflow="auto" divider={<Divider orientation="vertical" flexItem />}>
               {detectionWithTranslation.translations.map((trans) => {
                 return (
-                  <p key={trans.language}>{`${
-                    ctx.availableLanguages[trans.language]
-                  } => ${trans.translation}`}</p>
+                <ListItem key={trans.language}>
+                  <ListItemText primary={trans.translation}
+                  secondary={ctx.availableLanguages[trans.language]}/>
+                </ListItem>
                 );
-              })}
-            </div>
+              })}</List>
+              </CardContent>
+            </Card>
           );
         })}
       <Copyright sx={{ mt: 5, color: "purple" }} />
