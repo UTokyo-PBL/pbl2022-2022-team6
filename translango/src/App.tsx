@@ -1,30 +1,32 @@
+import React, { Suspense, useContext, useEffect, useState } from 'react';
 import classes from './App.module.scss';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
-import PreviewImage from './pages/viewimage/ViewImagePage';
+
 import { ThemeProvider } from '@mui/system';
 import theme from './theme/theme';
-import SignInPage from './pages/signin';
 // import { TestImage } from './pages/test/test';
-
-import ConfirmEmail from './pages/sign-up/confirm-email';
-import CreateProfile from './pages/sign-up/create-profile/SignUpCreateProfile';
-import Dashboard from './pages/dashboard/DashboardPage';
-import SelectLanguagesPage from './pages/select-languages/SelectLanguagesPage';
-import ViewTranslations from './pages/viewtranslations/viewtranslations';
-import CreatePost from './pages/createPost';
-import { TestImage } from './pages/test/test';
-import PreviewPost from './pages/previewPost';
-import ProfilePage from './pages/profilePage';
-import GameScreen from './pages/gameScreen';
-import PracticeScreen from './pages/practiceScreen';
-import QuizScreen from './pages/quizScreen';
-import React, { Suspense, useContext, useEffect, useState } from 'react';
 import AppCtx, { AppCtxUpdater, saveContext } from './store/app-state-context';
 import GeneralController from './controllers/general.controller';
+import { TestImage } from './pages/test/test';
 import { LoadingButton } from '@mui/lab';
 
 const GetSignUpDetails = React.lazy(() => import('./pages/sign-up/get-sign-up-details'));
 const WelcomePage = React.lazy(() => import('./pages/welcome/WelcomePage'));
+const PreviewImage = React.lazy(() => import('./pages/viewimage/ViewImagePage'));
+const SignInPage = React.lazy(() => import('./pages/signin'));
+const ConfirmEmail = React.lazy(() => import('./pages/sign-up/confirm-email'));
+const CreateProfile = React.lazy(() => import('./pages/sign-up/create-profile/SignUpCreateProfile'));
+const Dashboard = React.lazy(() => import('./pages/dashboard/DashboardPage'));
+const SelectLanguagesPage = React.lazy(() => import('./pages/select-languages/SelectLanguagesPage'));
+const ViewTranslations = React.lazy(() => import('./pages/viewtranslations/viewtranslations'));
+const CreatePost = React.lazy(() => import('./pages/createPost'));
+const PreviewPost = React.lazy(() => import('./pages/previewPost'));
+const ProfilePage = React.lazy(() => import('./pages/profilePage'));
+const GameScreen = React.lazy(() => import('./pages/gameScreen'));
+const PracticeScreen = React.lazy(() => import('./pages/practiceScreen'));
+const QuizScreen = React.lazy(() => import('./pages/quizScreen'));
+
+
 
 function App() {
   const ctx = useContext(AppCtx);

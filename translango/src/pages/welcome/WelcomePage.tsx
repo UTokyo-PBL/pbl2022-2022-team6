@@ -15,10 +15,8 @@ import Copyright from "../../components/Copyright";
 import TextButton from "../../components/TextButton";
 import SelectLanguage from "../../components/selectLanguage";
 import { useContext } from "react";
-import AppCtx, {
-  TRANSLATION_KEYS,
-} from "../../store/app-state-context";
-
+import AppCtx, { TRANSLATION_KEYS } from "../../store/app-state-context";
+import { Link } from "react-router-dom";
 
 export default function WelcomePage() {
   const ctx = useContext(AppCtx);
@@ -132,36 +130,42 @@ export default function WelcomePage() {
             alignItems="center"
             justifyContent="flex-end"
           >
-            <Button
-              fullWidth
-              variant="text"
-              color="primary"
-              sx={{
-                bgcolor: "white",
-                minHeight: "40px",
-                width: "280px",
-                color: "primary",
-              }}
-              href="/signin"
-            >
-              {t("SIGN_IN")}
-            </Button>
-            <Button
-              fullWidth
-              variant="outlined"
-              color="info"
-              sx={{
-                mt: 3,
-                mb: 2,
-                color: "white",
-                minHeight: "40px",
-                width: "280px",
-                border: "2px solid",
-              }}
-              href="/sign-up"
-            >
-              {t("SIGN_UP")}
-            </Button>
+            
+              <Button
+                fullWidth
+                variant="text"
+                color="primary"
+                sx={{
+                  bgcolor: "white",
+                  minHeight: "40px",
+                  width: "280px",
+                  color: "primary",
+                  "& a:link": {
+                  textDecoration: "none"
+                }
+                }}
+              ><Link to="/signin">
+                {t("SIGN_IN")}
+            </Link>
+              </Button>
+              <Button
+                fullWidth
+                variant="outlined"
+                color="info"
+                sx={{
+                  mt: 3,
+                  mb: 2,
+                  color: "white",
+                  minHeight: "40px",
+                  width: "280px",
+                  border: "2px solid",
+                  "& a:link" : {textDecoration: "none"}
+                }}
+              >
+              <Link to="/sign-up">
+                {t("SIGN_UP")}
+            </Link>
+              </Button>
           </Grid>
 
           <Grid container direction="column" alignItems="center">
