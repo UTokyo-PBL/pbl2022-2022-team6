@@ -1,6 +1,7 @@
 import { ChevronLeft } from "@mui/icons-material";
 import {
   AppBar,
+  Box,
   Card,
   CardContent,
   CardHeader,
@@ -16,13 +17,17 @@ import {
 import { ChangeEvent, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FillPageWithSidePic from "../../components/FillPageWithSidePic";
-import AppCtx, { AppCtxUpdater } from "../../store/app-state-context";
+import SelectLanguage from "../../components/selectLanguage";
+import TopNavigation from "../../components/TopNavigation";
+import AppCtx, { AppCtxUpdater, TRANSLATION_KEYS } from "../../store/app-state-context";
 
 const SelectLanguagesPage: React.FC = () => {
   const ctx = useContext(AppCtx);
   const ctxUpdater = useContext(AppCtxUpdater);
-  
-  const navigate = useNavigate();
+  const t = (key: TRANSLATION_KEYS) =>
+    ctx.translations[ctx.nativeLanguage]
+      ? ctx.translations[ctx.nativeLanguage][key]
+      : ctx.translations["en"][key];
 
   const [filterText, setFilterText] = useState('');
 
@@ -44,25 +49,16 @@ const SelectLanguagesPage: React.FC = () => {
   return (
     <FillPageWithSidePic>
       <Stack>
-        <AppBar position="sticky">
-          <Toolbar>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              sx={{ mr: 2 }}
-              onClick={() => navigate(-1)}
-            >
-              <ChevronLeft />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-
+        <TopNavigation />
+        <Stack direction="row" p={2} alignItems="center" justifyContent="space-between">
+          <Typography>{t("SELECT_NATIVE_LANG")}</Typography>
+          <SelectLanguage />
+        </Stack>
         <Card>
           <CardHeader
             sx={{ color: "primary.main" }}
-            title="Select your preferred languages"
-            subheader="Your preferred languages will be displayed first when you translate a new item. Select as much as you want!"
+            title={t("SELECT_PREFERRED_LANGS")}
+            subheader={t("PREFERRED_LANGS_USAGE")}
           />
           <CardContent component="form">
             <Stack spacing={2}>

@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useContext } from "react";
-import AppCtx from "../store/app-state-context";
+import AppCtx, { TRANSLATION_KEYS } from "../store/app-state-context";
 import ReactCountryFlag from "react-country-flag";
 import { useNavigate } from "react-router-dom";
 
@@ -22,10 +22,14 @@ const FavouriteLanguages: React.FC<{
 }> = ({ fav_languages }) => {
   const navigate = useNavigate();
   const ctx = useContext(AppCtx);
+  const t = (key: TRANSLATION_KEYS) =>
+    ctx.translations[ctx.nativeLanguage]
+      ? ctx.translations[ctx.nativeLanguage][key]
+      : ctx.translations["en"][key];
   return (
     <Stack>
       <Box>
-        <Typography variant="caption">Favourite Languages</Typography>
+        <Typography variant="caption">{t("FAVORITE_LANGS")}</Typography>
         <Typography variant="body1">{fav_languages.size}</Typography>
       </Box>
       <Stack direction="row" spacing={1} alignItems="center">
@@ -49,7 +53,7 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
 
 const UserProfileCard: React.FC = () => {
   const ctx = useContext(AppCtx);
-
+  const navigate = useNavigate();
   return (
     <Card sx={{bgcolor: "primary.main", color: "whitesmoke", borderRadius: 0}}>
       <CardHeader
@@ -69,7 +73,7 @@ const UserProfileCard: React.FC = () => {
           </Badge>
         }
         action={
-          <IconButton aria-label="settings">
+          <IconButton aria-label="settings" onClick={() => navigate("/select-favourite-languages")}>
             <Settings />
           </IconButton>
         }

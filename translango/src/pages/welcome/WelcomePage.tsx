@@ -169,6 +169,23 @@ export default function WelcomePage() {
               >
                 {t("SIGN_UP")}
               </Button>
+              <Button
+                fullWidth
+                variant="outlined"
+                color="info"
+                sx={{
+                  mt: 3,
+                  mb: 2,
+                  color: "white",
+                  minHeight: "40px",
+                  width: "280px",
+                  border: "2px solid",
+                  "& a:link" : {textDecoration: "none"}
+                }}
+                onClick={() => navigate("/dashboard")}
+              >
+                {t("SKIP_AND_EXPLORE")}
+              </Button>
           </Grid>
 
           <Grid container direction="column" alignItems="center">

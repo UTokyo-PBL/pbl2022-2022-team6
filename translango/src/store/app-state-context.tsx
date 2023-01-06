@@ -23,7 +23,12 @@ export type TRANSLATION_KEYS =
   | "MY_ACCOUNT"
   | "LOG_OUT"
   | "SETTINGS"
-  | "TRANSLATE_ON_THE_GO";
+  | "TRANSLATE_ON_THE_GO"
+  | "SKIP_AND_EXPLORE"
+  | "FAVORITE_LANGS"
+  | "SELECT_NATIVE_LANG"
+  | "SELECT_PREFERRED_LANGS"
+  | "PREFERRED_LANGS_USAGE";
 
 type TranslateMappingType = {
   [key in TRANSLATION_KEYS]: string;
@@ -61,7 +66,7 @@ export const saveContext = (obj: AppContextInterface) => {
 };
 
 const defaultCtx: AppContextInterface = {
-  version: "0.0.3",
+  version: "0.0.6",
   isLoggedIn: false,
   firstName: "Hey",
   lastName: "User!",
@@ -82,13 +87,19 @@ const defaultCtx: AppContextInterface = {
       CAMERA: "Camera",
       TEXT: "Text",
       READY_TO_SCAN: "Ready to scan?",
-      CHOOSE_TEXT_OR_OBJECT_DETECTION: "Choose between text or object translation",
+      CHOOSE_TEXT_OR_OBJECT_DETECTION:
+        "Choose between text or object translation",
       CHANGE_PICTURE: "Change picture",
       SCAN: "Scan",
       MY_ACCOUNT: "My Account",
       SETTINGS: "Settings",
       LOG_OUT: "Log Out",
-      TRANSLATE_ON_THE_GO: "Translate on the go"
+      TRANSLATE_ON_THE_GO: "Translate on the go",
+      SKIP_AND_EXPLORE: "Skip and explore!",
+      FAVORITE_LANGS: "Favourite languages",
+      SELECT_NATIVE_LANG: "Select your native language",
+      SELECT_PREFERRED_LANGS: "Select your preferred languages",
+      PREFERRED_LANGS_USAGE: "New texts and objects will be translated to your preferred languages. Select as much as you want!"
     },
   },
 };
@@ -103,8 +114,7 @@ export const AppCtxProvider: React.FC<PropsWithChildren> = (props) => {
     const ctxStringInStorage = localStorage.getItem("TRANSLANGO_APP_CTX");
     if (ctxStringInStorage) {
       const ctx: AppContextInterface = JSON.parse(ctxStringInStorage);
-      if (!ctx.version || ctx.version !== defaultCtx.version)
-        return defaultCtx;
+      if (!ctx.version || ctx.version !== defaultCtx.version) return defaultCtx;
       return {
         ...ctx,
         favouriteLanguages: new Set<string>(ctx.favouriteLanguages),
