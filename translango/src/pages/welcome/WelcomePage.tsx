@@ -142,6 +142,10 @@ export default function WelcomePage() {
                 color: "primary",
                 "& a:link": {
                   textDecoration: "none"
+                },
+                "&:hover": {
+                  color: "white",
+                  border: "2px solid white"
                 }
                 }}
                 onClick={() => navigate("/signin")}
