@@ -19,7 +19,11 @@ export type TRANSLATION_KEYS =
   | "READY_TO_SCAN"
   | "CHOOSE_TEXT_OR_OBJECT_DETECTION"
   | "CHANGE_PICTURE"
-  | "SCAN";
+  | "SCAN"
+  | "MY_ACCOUNT"
+  | "LOG_OUT"
+  | "SETTINGS"
+  | "TRANSLATE_ON_THE_GO";
 
 type TranslateMappingType = {
   [key in TRANSLATION_KEYS]: string;
@@ -57,7 +61,7 @@ export const saveContext = (obj: AppContextInterface) => {
 };
 
 const defaultCtx: AppContextInterface = {
-  version: "0.0.1",
+  version: "0.0.3",
   isLoggedIn: false,
   firstName: "Hey",
   lastName: "User!",
@@ -80,7 +84,11 @@ const defaultCtx: AppContextInterface = {
       READY_TO_SCAN: "Ready to scan?",
       CHOOSE_TEXT_OR_OBJECT_DETECTION: "Choose between text or object translation",
       CHANGE_PICTURE: "Change picture",
-      SCAN: "Scan"
+      SCAN: "Scan",
+      MY_ACCOUNT: "My Account",
+      SETTINGS: "Settings",
+      LOG_OUT: "Log Out",
+      TRANSLATE_ON_THE_GO: "Translate on the go"
     },
   },
 };

@@ -2,7 +2,6 @@ import {
   Card,
   CardHeader,
   Grid,
-  Paper,
   Stack,
   Typography,
 } from "@mui/material";
@@ -12,12 +11,11 @@ import CameraButton from "../../components/cameraButton";
 import FillPageWithSidePic from "../../components/FillPageWithSidePic";
 import TextButton from "../../components/TextButton";
 import UserProfileCard from "../../components/UserProfileCard";
-import AppCtx, { AppCtxUpdater, TRANSLATION_KEYS } from "../../store/app-state-context";
+import AppCtx, { TRANSLATION_KEYS } from "../../store/app-state-context";
 
 const Dashboard: React.FC = () => {
   const ctx = useContext(AppCtx);
-    const ctxUpdater = useContext(AppCtxUpdater);
-    const t = (key: TRANSLATION_KEYS) => ctx.translations[ctx.nativeLanguage] ? ctx.translations[ctx.nativeLanguage][key] : ctx.translations['en'][key];
+  const t = (key: TRANSLATION_KEYS) => ctx.translations[ctx.nativeLanguage] ? ctx.translations[ctx.nativeLanguage][key] : ctx.translations['en'][key];
   return (
     <FillPageWithSidePic>
       <Stack>
@@ -25,8 +23,8 @@ const Dashboard: React.FC = () => {
         <Card sx={{ bgcolor: "primary.light", color: "primary.main" }}>
           <CardHeader
             color="white"
-            title="Translate on the go"
-            subheader="Choose how you'd like to translate"
+            title={t("TRANSLATE_ON_THE_GO")}
+            subheader={t("CHOOSE_TRANSLATE")}
             subheaderTypographyProps={{color: "primary.main"}}
           >
             <Grid
@@ -42,7 +40,7 @@ const Dashboard: React.FC = () => {
               </Grid>
               <Grid item>
                 <Typography variant="body1" color="white">
-                  Choose how you'd like to translate
+                  {t("CHOOSE_TEXT_OR_OBJECT_DETECTION")}
                 </Typography>
               </Grid>
             </Grid>

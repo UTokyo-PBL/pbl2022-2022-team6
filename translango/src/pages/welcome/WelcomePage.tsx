@@ -16,7 +16,7 @@ import TextButton from "../../components/TextButton";
 import SelectLanguage from "../../components/selectLanguage";
 import { useContext } from "react";
 import AppCtx, { TRANSLATION_KEYS } from "../../store/app-state-context";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function WelcomePage() {
   const ctx = useContext(AppCtx);
@@ -24,7 +24,7 @@ export default function WelcomePage() {
     ctx.translations[ctx.nativeLanguage]
       ? ctx.translations[ctx.nativeLanguage][key]
       : ctx.translations["en"][key];
-
+  const navigate = useNavigate();
   return (
     <Grid
       container
@@ -144,9 +144,9 @@ export default function WelcomePage() {
                   textDecoration: "none"
                 }
                 }}
-              ><Link to="/signin">
+                onClick={() => navigate("/signin")}
+              >
                 {t("SIGN_IN")}
-            </Link>
               </Button>
               <Button
                 fullWidth
@@ -161,10 +161,9 @@ export default function WelcomePage() {
                   border: "2px solid",
                   "& a:link" : {textDecoration: "none"}
                 }}
+                onClick={() => navigate("/sign-up")}
               >
-              <Link to="/sign-up">
                 {t("SIGN_UP")}
-            </Link>
               </Button>
           </Grid>
 
