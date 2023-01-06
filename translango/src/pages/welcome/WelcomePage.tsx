@@ -130,42 +130,49 @@ export default function WelcomePage() {
             alignItems="center"
             justifyContent="flex-end"
           >
-            
-              <Button
-                fullWidth
-                variant="text"
-                color="primary"
-                sx={{
-                  bgcolor: "white",
-                  minHeight: "40px",
-                  width: "280px",
-                  color: "primary",
-                  "& a:link": {
+
+            <Button
+              fullWidth
+              variant="text"
+              color="primary"
+              sx={{
+                bgcolor: "white",
+                minHeight: "40px",
+                width: "280px",
+                color: "primary",
+                "& a:link": {
                   textDecoration: "none"
-                }
-                }}
-              ><Link to="/signin">
-                {t("SIGN_IN")}
-            </Link>
-              </Button>
-              <Button
-                fullWidth
-                variant="outlined"
-                color="info"
-                sx={{
-                  mt: 3,
-                  mb: 2,
-                  color: "white",
-                  minHeight: "40px",
-                  width: "280px",
-                  border: "2px solid",
-                  "& a:link" : {textDecoration: "none"}
-                }}
-              >
-              <Link to="/sign-up">
-                {t("SIGN_UP")}
-            </Link>
-              </Button>
+                },
+                ':hover': {
+                  color: 'white',
+                },
+              }}
+              href='/signin'
+            >
+              {/* <Link to="/signin"> */}
+              {t("SIGN_IN")}
+              {/* </Link> */}
+            </Button>
+            <Button
+              fullWidth
+              variant="outlined"
+              color="info"
+              sx={{
+                mt: 3,
+                mb: 2,
+                color: "white",
+                minHeight: "40px",
+                width: "280px",
+                border: "2px solid",
+                "& a:link": { textDecoration: "none" },
+
+              }}
+              href='/sign-up'
+            >
+              {/* <Link to="/sign-up"> */}
+              {t("SIGN_UP")}
+              {/* </Link> */}
+            </Button>
           </Grid>
 
           <Grid container direction="column" alignItems="center">

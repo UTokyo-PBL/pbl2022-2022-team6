@@ -42,7 +42,7 @@ export default function CreateProfile() {
   const handleChange = (event: SelectChangeEvent) => {
     // setLanguage(event.target.value);
     ctx.nativeLanguage = event.target.value;
-    ctxUpdater({...ctx});
+    ctxUpdater({ ...ctx });
   };
 
   const changeImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,16 +76,16 @@ export default function CreateProfile() {
           <Box marginX={"auto"}>
             <Avatar
               sx={{
-                width: { xs: "150px", sm: "300px" },
-                height: { xs: "150px", sm: "300px" },
+                width: { xs: "100px", sm: "200px" },
+                height: { xs: "100px", sm: "200px" },
               }}
               src={profileURL}
             />
             <Box
               position="relative"
               sx={{
-                bottom: { xs: "50px", sm: "90px" },
-                left: { xs: "100px", sm: "220px" },
+                bottom: { xs: "50px", sm: "50px" },
+                left: { xs: "50px", sm: "150px" },
               }}
             >
               <Fab color="secondary" onClick={() => fileInput.current.click()}>
@@ -133,7 +133,7 @@ export default function CreateProfile() {
             }}
           />
 
-          <TextField
+          {/* <TextField
             fullWidth
             variant="standard"
             placeholder="Language"
@@ -144,7 +144,7 @@ export default function CreateProfile() {
                 </InputAdornment>
               ),
             }}
-          />
+          /> */}
           {/* <Select
             fullWidth
             variant="standard"
@@ -169,6 +169,9 @@ export default function CreateProfile() {
             value={ctx.nativeLanguage}
             onChange={handleChange}
             label="Language"
+            sx={{
+              color: 'grey'
+            }}
           >
             {
               /* <MenuItem value="">
@@ -204,9 +207,12 @@ export default function CreateProfile() {
 
           <Button startIcon={<Google />}>Google</Button>
 
-          <Button>
-            Already have an account?{" "}
+          {/* <Button>
+            Already have an account?{"  "}
             <Typography variant="subtitle2">Log in</Typography>
+          </Button> */}
+          <Button href='/signin'>
+            Already have an account? Log In
           </Button>
         </Stack>
       </Stack>
