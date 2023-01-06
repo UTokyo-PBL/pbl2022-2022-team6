@@ -130,17 +130,17 @@ export default function WelcomePage() {
             alignItems="center"
             justifyContent="flex-end"
           >
-            
-              <Button
-                fullWidth
-                variant="text"
-                color="primary"
-                sx={{
-                  bgcolor: "white",
-                  minHeight: "40px",
-                  width: "280px",
-                  color: "primary",
-                  "& a:link": {
+
+            <Button
+              fullWidth
+              variant="text"
+              color="primary"
+              sx={{
+                bgcolor: "white",
+                minHeight: "40px",
+                width: "280px",
+                color: "primary",
+                "& a:link": {
                   textDecoration: "none"
                 }
                 }}
