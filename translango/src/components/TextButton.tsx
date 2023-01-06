@@ -1,5 +1,6 @@
 import { Button, SvgIcon, SvgIconProps } from '@mui/material';
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AppCtx, { TRANSLATION_KEYS } from '../store/app-state-context';
 
 
@@ -20,6 +21,7 @@ export interface TextButtonProps {
 
 const  TextButton: React.FC<TextButtonProps> = ({ background }) => {
     const ctx = useContext(AppCtx);
+    const navigate = useNavigate();
     const t = (key: TRANSLATION_KEYS) => ctx.translations[ctx.nativeLanguage] ? ctx.translations[ctx.nativeLanguage][key] : ctx.translations['en'][key];
         const textStyle = {
             bgcolor: background,
@@ -33,7 +35,7 @@ const  TextButton: React.FC<TextButtonProps> = ({ background }) => {
         };
 
         return (
-                <Button variant='text' color="secondary" aria-label="Text" sx={textStyle} href="#">
+                <Button variant='text' color="secondary" aria-label="Text" sx={textStyle} onClick={() => navigate("/text-translation")}>
                     <TextRecIcon color="secondary" sx={{ fontSize: 100 }} />
                     <span>{t("TEXT")}</span>
                 </Button>

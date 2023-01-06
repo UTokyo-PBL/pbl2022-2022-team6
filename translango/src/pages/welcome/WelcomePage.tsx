@@ -17,6 +17,7 @@ import SelectLanguage from "../../components/selectLanguage";
 import { useContext } from "react";
 import AppCtx, { TRANSLATION_KEYS } from "../../store/app-state-context";
 import { useNavigate } from "react-router-dom";
+import { Divider } from "@mui/material";
 
 export default function WelcomePage() {
   const ctx = useContext(AppCtx);
@@ -169,6 +170,7 @@ export default function WelcomePage() {
               >
                 {t("SIGN_UP")}
               </Button>
+              <Divider variant="middle" sx={{color: "white"}}>{t("OR")}</Divider>
               <Button
                 fullWidth
                 variant="outlined"

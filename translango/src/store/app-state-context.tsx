@@ -28,7 +28,10 @@ export type TRANSLATION_KEYS =
   | "FAVORITE_LANGS"
   | "SELECT_NATIVE_LANG"
   | "SELECT_PREFERRED_LANGS"
-  | "PREFERRED_LANGS_USAGE";
+  | "PREFERRED_LANGS_USAGE"
+  | "WRITE_TEXT_TO_TRANSLATE"
+  | "TEXT_WILL_BE_TRANSLATED"
+  | "TRANSLATE";
 
 type TranslateMappingType = {
   [key in TRANSLATION_KEYS]: string;
@@ -66,7 +69,7 @@ export const saveContext = (obj: AppContextInterface) => {
 };
 
 const defaultCtx: AppContextInterface = {
-  version: "0.0.6",
+  version: "0.0.8",
   isLoggedIn: false,
   firstName: "Hey",
   lastName: "User!",
@@ -99,7 +102,11 @@ const defaultCtx: AppContextInterface = {
       FAVORITE_LANGS: "Favourite languages",
       SELECT_NATIVE_LANG: "Select your native language",
       SELECT_PREFERRED_LANGS: "Select your preferred languages",
-      PREFERRED_LANGS_USAGE: "New texts and objects will be translated to your preferred languages. Select as much as you want!"
+      PREFERRED_LANGS_USAGE:
+        "New texts and objects will be translated to your preferred languages. Select as much as you want!",
+      WRITE_TEXT_TO_TRANSLATE: "Write the text that you want to translate here!",
+      TEXT_WILL_BE_TRANSLATED: "The text will be translated to your favourite languages",
+      TRANSLATE: "Translate"
     },
   },
 };

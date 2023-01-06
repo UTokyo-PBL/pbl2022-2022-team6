@@ -15,11 +15,13 @@ import {
   Typography,
 } from "@mui/material";
 import { ChangeEvent, useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import FillPageWithSidePic from "../../components/FillPageWithSidePic";
 import SelectLanguage from "../../components/selectLanguage";
 import TopNavigation from "../../components/TopNavigation";
-import AppCtx, { AppCtxUpdater, TRANSLATION_KEYS } from "../../store/app-state-context";
+import AppCtx, {
+  AppCtxUpdater,
+  TRANSLATION_KEYS,
+} from "../../store/app-state-context";
 
 const SelectLanguagesPage: React.FC = () => {
   const ctx = useContext(AppCtx);
@@ -29,28 +31,46 @@ const SelectLanguagesPage: React.FC = () => {
       ? ctx.translations[ctx.nativeLanguage][key]
       : ctx.translations["en"][key];
 
-  const [filterText, setFilterText] = useState('');
+  const [filterText, setFilterText] = useState("");
+  const [filteredLanguages, setFilteredLanguages] = useState(
+    Object.entries(ctx.availableLanguages).filter(([_code, name]) =>
+      name.toLocaleLowerCase().includes(filterText)
+    )
+  );
 
   const languageFilterHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const lowercase_searchTerm = event.target.value.trim().toLocaleLowerCase();
     setFilterText(lowercase_searchTerm);
+    setFilteredLanguages(
+      Object.entries(ctx.availableLanguages).filter(([_code, name]) =>
+      name.toLocaleLowerCase().includes(filterText)
+    )
+    );
   };
 
   const onCheckboxChanged = (event: ChangeEvent<HTMLInputElement>) => {
     const { checked, value } = event.target;
     const lang_code = value;
 
-    if (checked) {ctx.favouriteLanguages.add(lang_code);}
-    else {ctx.favouriteLanguages.delete(lang_code);}
-    
-    ctxUpdater({...ctx});
+    if (checked) {
+      ctx.favouriteLanguages.add(lang_code);
+    } else {
+      ctx.favouriteLanguages.delete(lang_code);
+    }
+
+    ctxUpdater({ ...ctx });
   };
 
   return (
     <FillPageWithSidePic>
       <Stack>
         <TopNavigation />
-        <Stack direction="row" p={2} alignItems="center" justifyContent="space-between">
+        <Stack
+          direction="row"
+          p={2}
+          alignItems="center"
+          justifyContent="space-between"
+        >
           <Typography>{t("SELECT_NATIVE_LANG")}</Typography>
           <SelectLanguage />
         </Stack>
@@ -60,7 +80,12 @@ const SelectLanguagesPage: React.FC = () => {
             title={t("SELECT_PREFERRED_LANGS")}
             subheader={t("PREFERRED_LANGS_USAGE")}
           />
-          <CardContent component="form">
+          <CardContent
+            component="form"
+            onSubmit={(e) => {
+              e.preventDefault();
+            }}
+          >
             <Stack spacing={2}>
               <TextField
                 fullWidth
@@ -70,8 +95,8 @@ const SelectLanguagesPage: React.FC = () => {
               />
               <FormControl component="fieldset">
                 <FormGroup>
-                  {Object.entries(ctx.availableLanguages).map(
-                    ([ code, name ]) => {
+                  {filteredLanguages.map(
+                    ([code, name]) => {
                       return (
                         <Stack
                           key={code}

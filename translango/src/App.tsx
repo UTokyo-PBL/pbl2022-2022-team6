@@ -9,6 +9,7 @@ import AppCtx, { AppCtxUpdater, saveContext } from './store/app-state-context';
 import GeneralController from './controllers/general.controller';
 import { TestImage } from './pages/test/test';
 import { LoadingButton } from '@mui/lab';
+import TextTranslationPage from './pages/text-translation/textTranslationPage';
 
 const GetSignUpDetails = React.lazy(() => import('./pages/sign-up/get-sign-up-details'));
 const WelcomePage = React.lazy(() => import('./pages/welcome/WelcomePage'));
@@ -75,6 +76,7 @@ function App() {
               {<Route path='/test' element={<TestImage />} />}
               <Route path='/' element={<WelcomePage />} />
               <Route path="/view-image" element={<PreviewImage />} />
+              <Route path="/text-translation" element={<TextTranslationPage />} />
               <Route path="/signin" element={<SignInPage />} />
               <Route path="/select-favourite-languages" element={<SelectLanguagesPage />} />
               <Route path='/sign-up'>
