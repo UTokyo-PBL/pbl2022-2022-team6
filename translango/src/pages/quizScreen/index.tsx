@@ -1,12 +1,9 @@
-import { Avatar, Box, Button, CardActions, CardHeader, CssBaseline, Grid, IconButton, Input, InputAdornment, InputLabel, Paper, Stack, styled, TextField, ThemeProvider, Typography } from "@mui/material";
-import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
+import { Box, Button, CssBaseline, ThemeProvider } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import theme from '../../theme/theme';
 import TopNavigation from "../../components/TopNavigation";
 import { v4 as uuidv4 } from 'uuid';
-import BottomNavigation from "../../components/BottomNavigation";
 import DashboardController from "../../controllers/dashboard/dashboard.controller";
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -41,7 +38,7 @@ export default function QuizScreen(props: any) {
 
     const getList = () => {
         DashboardController.getLists().then((OpenAPIResponse) => {
-            if (OpenAPIResponse.status == 200) {
+            if (OpenAPIResponse.status === 200) {
                 const response = OpenAPIResponse.data.default_list.objects.slice(0, 10);
                 // DashboardController.getList(OpenAPIResponse.data.default_list.id!).then((finalResponse) => {
                 //     if (finalResponse.status == 200) {
@@ -108,8 +105,6 @@ export default function QuizScreen(props: any) {
         setLoaded(true)
     }, [steps])
 
-
-
     const isStepOptional = (step: number) => {
         return step !== attempted;
     };
@@ -154,7 +149,8 @@ export default function QuizScreen(props: any) {
     };
 
     const handleEnd = () => {
-        setActiveStep(0);
+        // setActiveStep(0);
+        navigate(`/dashboard/${userID}`, { state: { uid: userID } });
 
     };
 

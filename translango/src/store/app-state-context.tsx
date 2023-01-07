@@ -41,6 +41,11 @@ type TranslationObjType = {
   [code in string]: TranslateMappingType;
 };
 
+type GeoCoordinates = {
+  "lat": number;
+  "lon": number;
+}
+
 export interface AppContextInterface {
   version: string;
   isLoggedIn: boolean;
@@ -55,6 +60,7 @@ export interface AppContextInterface {
   theme: "light" | "dark";
   availableLanguages: Record<string, string>;
   translations: TranslationObjType;
+  dummyLocations: Array<GeoCoordinates>;
 }
 
 export const saveContext = (obj: AppContextInterface) => {
@@ -79,6 +85,13 @@ const defaultCtx: AppContextInterface = {
   favouriteLanguages: new Set<string>(["ja"]),
   theme: "light",
   availableLanguages: {},
+  dummyLocations: [
+    { "lat": 35.652832, "lon": 139.839478 },
+    { "lat": 28.644800, "lon": 77.216721 },
+    { "lat": 25.276987, "lon": 55.296249 },
+    { "lat": 42.361145, "lon": -71.057083 },
+    { "lat": 19.432608, "lon": -99.133209 },
+    { "lat": 39.916668, "lon": 116.383331 }],
   translations: {
     en: {
       WELCOME: "Welcome",
@@ -114,7 +127,7 @@ const defaultCtx: AppContextInterface = {
 const AppCtx = createContext<AppContextInterface>(defaultCtx);
 export const AppCtxUpdater = createContext<
   Dispatch<SetStateAction<AppContextInterface>>
->(() => {});
+>(() => { });
 
 export const AppCtxProvider: React.FC<PropsWithChildren> = (props) => {
   const [contextState, setContextState] = useState<AppContextInterface>(() => {

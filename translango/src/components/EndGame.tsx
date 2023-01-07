@@ -1,10 +1,5 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Switch from '@mui/material/Switch';
-import Paper from '@mui/material/Paper';
 import Zoom from '@mui/material/Zoom';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import { Theme } from '@mui/material/styles';
 import { Card, CardContent, CardMedia, Typography } from '@mui/material';
 
 
@@ -36,6 +31,9 @@ export default function EndGame(props: any) {
                     {props.practice ? null : <Typography variant="h6" color="primary" align='center'>
                         You've earned {props.points} points!
                     </Typography>}
+                    <Typography variant="subtitle1" color="text.secondary" align='center'>
+                        Didn't get to play? Upload some objects you would like to learn about!
+                    </Typography>
                 </CardContent>
 
 
