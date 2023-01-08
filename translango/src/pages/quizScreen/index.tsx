@@ -1,5 +1,5 @@
 import { Box, Button, CssBaseline, ThemeProvider } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import theme from '../../theme/theme';
 import TopNavigation from "../../components/TopNavigation";
@@ -10,6 +10,7 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import FlashCard from "../../components/flashcard";
 import EndGame from "../../components/EndGame";
+import AppCtx from "../../store/app-state-context";
 
 // const steps = [
 //     {
@@ -35,6 +36,7 @@ export default function QuizScreen(props: any) {
     const [attempted, setAttempted] = useState<any | number>(null);
     const [options, setOptions] = useState<any[]>([]);
     const [loaded, setLoaded] = useState(false);
+    const ctx = useContext(AppCtx);
 
     const getList = () => {
         DashboardController.getLists().then((OpenAPIResponse) => {

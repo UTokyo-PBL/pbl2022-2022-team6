@@ -9,6 +9,7 @@ import { useContext } from "react";
 import BottomNavigation from "../../components/BottomNavigation";
 import CameraButton from "../../components/cameraButton";
 import FillPageWithSidePic from "../../components/FillPageWithSidePic";
+import MapComponent from "../../components/Mapcomponent";
 import TextButton from "../../components/TextButton";
 import UserProfileCard from "../../components/UserProfileCard";
 import AppCtx, { TRANSLATION_KEYS } from "../../store/app-state-context";
@@ -25,7 +26,7 @@ const Dashboard: React.FC = () => {
             color="white"
             title={t("TRANSLATE_ON_THE_GO")}
             subheader={t("CHOOSE_TRANSLATE")}
-            subheaderTypographyProps={{color: "primary.main"}}
+            subheaderTypographyProps={{ color: "primary.main" }}
           >
             <Grid
               container
@@ -58,6 +59,7 @@ const Dashboard: React.FC = () => {
               <TextButton background="white" />
             </Grid>
           </Grid>
+          <MapComponent />
         </Card>
         <BottomNavigation />
       </Stack>

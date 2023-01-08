@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { GoogleMap, useLoadScript, MarkerF, InfoWindowF, OverlayView } from "@react-google-maps/api";
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import { Box, Card, CardContent, CardMedia, CssBaseline, Popover, ThemeProvider, Typography } from "@mui/material";
@@ -10,6 +10,7 @@ import { ClickAwayListener } from '@mui/base';
 import ViewObject from "./viewObject";
 import Places from "./places";
 import SmallerViewObject from "./SmallerViewObject";
+import AppCtx, { GeoCoordinates } from "../store/app-state-context";
 
 
 export default function MapComponent() {
@@ -64,6 +65,26 @@ function Map() {
     const [bottom, setBottom] = useState(470)
     const mapRef = useRef<GoogleMap>();
     const [isMobile, setIsMobile] = useState(false)
+
+    const ctx = useContext(AppCtx);
+    // const [userLocation, setUserLocation] = useState<Array<GeoCoordinates>>([]);
+
+
+    const getLocation = () => {
+        const index = Math.floor(Math.random() * 6);
+        console.log(ctx.dummyLocations)
+        if (ctx.dummyLocations) {
+            const loc = ctx.dummyLocations[index];
+            console.log(loc);
+            if (loc) {
+                loc.lat = Math.floor(Math.random() * 10) + loc.lat;
+                loc.lon = Math.floor(Math.random() * 10) + loc.lon;
+
+                return { lat: loc!.lat, lng: loc!.lon };
+            }
+        }
+        return { lat: 44, lng: -80 };
+    }
 
     //choose the screen size 
     const handleResize = () => {
@@ -130,7 +151,7 @@ function Map() {
 
     return (
         <ThemeProvider theme={theme}>
-            <CssBaseline />
+
 
             <GoogleMap onLoad={handleOnLoad} zoom={7} mapContainerStyle={styles} options={DEFAULT_OPTIONS}>
                 <Places
@@ -143,7 +164,7 @@ function Map() {
                 {markers.map(({ key, image_url, position }) => (
                     <MarkerF
                         key={key}
-                        position={position}
+                        position={getLocation()}
                         icon={custom_marker}
                     >
                         <InfoWindowF position={position} options={{ pixelOffset: new window.google.maps.Size(0, 24) }}>

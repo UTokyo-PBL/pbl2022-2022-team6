@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Alert, Grid, Snackbar } from '@mui/material';
 import CircleIcon from '@mui/icons-material/Circle';
+import AppCtx from '../store/app-state-context';
 
 export default function FlashCard(props: any) {
 
@@ -19,6 +20,7 @@ export default function FlashCard(props: any) {
     const [internalScore, setInternalScore] = React.useState(0);
     const sendAttempted = props.settingAttempted;
     const sendScore = props.settingScore;
+    const ctx = React.useContext(AppCtx);
 
     React.useEffect(() => {
         // console.log(props)
@@ -82,7 +84,7 @@ export default function FlashCard(props: any) {
                     Select the translation in
                 </Typography>
                 <Typography gutterBottom variant="h5" component="div">
-                    {props.options?.language}
+                    {ctx.availableLanguages[props.options?.language]}
                     {/* Japanese */}
                 </Typography>
                 <Grid container spacing={1} direction='column' alignItems='center'>

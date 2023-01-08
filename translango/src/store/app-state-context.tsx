@@ -31,7 +31,11 @@ export type TRANSLATION_KEYS =
   | "PREFERRED_LANGS_USAGE"
   | "WRITE_TEXT_TO_TRANSLATE"
   | "TEXT_WILL_BE_TRANSLATED"
-  | "TRANSLATE";
+  | "TRANSLATE"
+  | "LANGUAGE_QUIZ"
+  | "PRACTICE"
+  | "QUIZ"
+  | "QUIZ_TEXT";
 
 type TranslateMappingType = {
   [key in TRANSLATION_KEYS]: string;
@@ -41,9 +45,9 @@ type TranslationObjType = {
   [code in string]: TranslateMappingType;
 };
 
-type GeoCoordinates = {
-  "lat": number;
-  "lon": number;
+export type GeoCoordinates = {
+  lat: number;
+  lon: number;
 }
 
 export interface AppContextInterface {
@@ -75,7 +79,7 @@ export const saveContext = (obj: AppContextInterface) => {
 };
 
 const defaultCtx: AppContextInterface = {
-  version: "0.0.8",
+  version: "0.0.9",
   isLoggedIn: false,
   firstName: "Hey",
   lastName: "User!",
@@ -86,12 +90,12 @@ const defaultCtx: AppContextInterface = {
   theme: "light",
   availableLanguages: {},
   dummyLocations: [
-    { "lat": 35.652832, "lon": 139.839478 },
-    { "lat": 28.644800, "lon": 77.216721 },
-    { "lat": 25.276987, "lon": 55.296249 },
-    { "lat": 42.361145, "lon": -71.057083 },
-    { "lat": 19.432608, "lon": -99.133209 },
-    { "lat": 39.916668, "lon": 116.383331 }],
+    { lat: 35.652832, lon: 139.839478 },
+    { lat: 28.644800, lon: 77.216721 },
+    { lat: 25.276987, lon: 55.296249 },
+    { lat: 42.361145, lon: -71.057083 },
+    { lat: 19.432608, lon: -99.133209 },
+    { lat: 39.916668, lon: 116.383331 }],
   translations: {
     en: {
       WELCOME: "Welcome",
@@ -119,7 +123,11 @@ const defaultCtx: AppContextInterface = {
         "New texts and objects will be translated to your preferred languages. Select as much as you want!",
       WRITE_TEXT_TO_TRANSLATE: "Write the text that you want to translate here!",
       TEXT_WILL_BE_TRANSLATED: "The text will be translated to your favourite languages",
-      TRANSLATE: "Translate"
+      TRANSLATE: "Translate",
+      LANGUAGE_QUIZ: "Language Quiz!",
+      QUIZ: "QUIZ",
+      PRACTICE: "PRACTICE",
+      QUIZ_TEXT: "Test or practice your knowledge with this short quiz",
     },
   },
 };
