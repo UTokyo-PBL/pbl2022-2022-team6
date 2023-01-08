@@ -27,7 +27,7 @@ export default function GameScreen(props: any) {
     return (
         <>
             <TopNavigation />
-            <Grid container component="main" direction="column" alignItems="center" justifyContent="center" spacing={6} sx={{ bgcolor: 'primary.light' }}>
+            <Grid container component="main" direction="column" alignItems="center" justifyContent="center" spacing={6} sx={{ height: '100vh', bgcolor: 'primary.light' }}>
                 {/* <TopNavigation /> */}
 
                 <Grid item>
