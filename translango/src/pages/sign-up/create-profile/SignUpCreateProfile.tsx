@@ -1,10 +1,4 @@
-import {
-  // AccountCircle,
-  Add,
-  Google,
-  Language,
-  Person,
-} from "@mui/icons-material";
+import { Add, Google, Person } from "@mui/icons-material";
 import {
   Avatar,
   Button,
@@ -17,32 +11,50 @@ import {
   Stack,
   TextField,
   Typography,
-  MenuItem,
 } from "@mui/material";
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import FillPageWithSidePic from "../../../components/FillPageWithSidePic";
 import SignUpAndLoginTop from "../SignUpAndLoginTop";
-// import ListLanguagesWithTarget from "../../../googletranslate";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import AppCtx, { AppCtxUpdater } from "../../../store/app-state-context";
-import { uiLanguages } from "../../../components/selectLanguage";
+import AppCtx, {
+  AppCtxUpdater,
+  TRANSLATION_KEYS,
+} from "../../../store/app-state-context";
+import SelectLanguage from "../../../components/selectLanguage";
+import { useLocation, useNavigate } from "react-router-dom";
+import UserController from "../../../controllers/user/user.controller";
 
 export default function CreateProfile() {
   const ctx = useContext(AppCtx);
-  const ctxUpdater = useContext(AppCtxUpdater);
+  const contextUpdater = useContext(AppCtxUpdater);
+  const t = (key: TRANSLATION_KEYS) =>
+    ctx.translations[ctx.nativeLanguage]
+      ? ctx.translations[ctx.nativeLanguage][key]
+      : ctx.translations["en"][key];
 
   const [_profilePic, setProfilePic] = useState<undefined | File>();
   const [profileURL, setProfileURL] = useState("empty");
+  const [name, setName] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [username, setUsername] = useState("");
   // const [uploadedimg, setUploadedimg] = useState(false);
   const fileInput = useRef<any>();
 
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  // const location = useLocation();
+  const onNameChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    const name = event.target.value.trimStart().toLocaleLowerCase();
+    const [firstname, lastname] = name.split(" ", 2);
+    setName(name);
+    setFirstname(firstname.trim());
+    setLastname((lastname || "").trim());
+  };
 
-  const handleChange = (event: SelectChangeEvent) => {
-    // setLanguage(event.target.value);
-    ctx.nativeLanguage = event.target.value;
-    ctxUpdater({ ...ctx });
+  const onUsernameChange: React.ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    setUsername(event.target.value.trim().toLocaleLowerCase());
   };
 
   const changeImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,28 +63,51 @@ export default function CreateProfile() {
     const file = event.target.files[0];
     setProfilePic(file);
     setProfileURL(URL.createObjectURL(file));
-    // setUploadedimg(true);
-
-    // this.setState({ img: file, rawurl: URL.createObjectURL(file), uploadedimg: true });
-
-    // await new Promise<void>((resolve, reject) => {
-    //     console.log('async', this.state.rawurl)
-    //     resolve();
-    // })
-    // console.log(this.state.rawurl)
   };
 
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+    event.preventDefault();
+    console.log("Came here");
+
+    UserController.registerUser({
+      id: username,
+      email: location.state.email as string,
+      password: location.state.password as string,
+      first_name: firstname,
+      middle_name: "",
+      last_name: lastname,
+      username,
+      language: ctx.nativeLanguage,
+    }).then((value) => {
+      console.log(value);
+      contextUpdater({
+        ...ctx,
+        isLoggedIn: true,
+        firstName: firstname,
+        lastName: lastname,
+        username,
+        userid: username,
+      });
+      navigate(`/dashboard/${username}`);
+    });
+  };
+
+  useEffect(() => {
+    console.log(location.state);
+    if (!location.state || !location.state.email || !location.state.password)
+      navigate("/sign-up");
+  }, []);
+
   return (
-    // <LanguageContext.Provider value={value}>
     <FillPageWithSidePic>
       <Stack>
         <SignUpAndLoginTop
-          backTo="/sign-up/confirm-email"
-          title="Let's Set Up"
-          subtitle="Create your profile here"
+          backTo="/sign-up"
+          title={t("LETS_SETUP")}
+          subtitle={t("CREATE_PROFILE")}
         />
 
-        <Stack component="form" p={4} spacing={2}>
+        <Stack component="form" p={4} spacing={2} onSubmit={onSubmit}>
           <Box marginX={"auto"}>
             <Avatar
               sx={{
@@ -107,6 +142,8 @@ export default function CreateProfile() {
             placeholder="Full Name"
             name="name"
             id="name"
+            value={name}
+            onChange={onNameChange}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -122,6 +159,8 @@ export default function CreateProfile() {
             placeholder="username"
             name="username"
             id="username"
+            value={username}
+            onChange={onUsernameChange}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -132,91 +171,35 @@ export default function CreateProfile() {
               ),
             }}
           />
+          <SelectLanguage />
 
-          {/* <TextField
-            fullWidth
-            variant="standard"
-            placeholder="Language"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Language />
-                </InputAdornment>
-              ),
-            }}
-          /> */}
-          {/* <Select
-            fullWidth
-            variant="standard"
-            placeholder="Language"
-            defaultValue={{ label: "Chinese", value: "zh-CN" }}
-            // InputProps={{
-            //   startAdornment: (
-            //     <InputAdornment position="start">
-            //       <Language />
-            //     </InputAdornment>
-            //   ),
-            // }}
-            options={languageOptions}
-            onChange={(param: any) => {
-              setLanguage(param.value);
-            }}
-          /> */}
+          <FormControlLabel
+            sx={{ width: "100%" }}
+            control={<Checkbox defaultChecked />}
+            label={t("KEEP_ME_SIGNED_IN")}
+          />
 
-          <Select
-            id="languages"
-            name="languages"
-            value={ctx.nativeLanguage}
-            onChange={handleChange}
-            label="Language"
-            sx={{
-              color: 'grey'
-            }}
+          <FormControlLabel
+            sx={{ width: "100%" }}
+            control={<Checkbox defaultChecked />}
+            label={t("MAIL_ME_ABOUT_OFFERS")}
+          />
+
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            disabled={!username}
           >
-            {
-              /* <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem> */
-
-              uiLanguages.map(({ value, text }) => {
-                return <MenuItem key={value} value={value}>{text}</MenuItem>;
-              })
-            }
-          </Select>
-
-          <FormControlLabel
-            sx={{ width: "100%" }}
-            control={<Checkbox defaultChecked />}
-            label="Keep me signed in"
-          />
-
-          <FormControlLabel
-            sx={{ width: "100%" }}
-            control={<Checkbox defaultChecked />}
-            label="Email me about special pricing and more"
-          />
-
-          <Button variant="contained" fullWidth>
-            Create Account
+            {t("CREATE_ACCOUNT")}
           </Button>
 
-          <Divider>Or sign in with</Divider>
+          <Divider>{t("OR_SIGN_IN_WITH")}</Divider>
 
           <Button startIcon={<Google />}>Google</Button>
-
-          {/* <Button>
-            Already have an account?{"  "}
-            <Typography variant="subtitle2">Log in</Typography>
-          </Button> */}
-          <Button href='/signin'>
-            Already have an account? Log In
-          </Button>
+          <Button href="/signin">{t("ALREADY_HAVE_ACCOUNT?")}</Button>
         </Stack>
       </Stack>
     </FillPageWithSidePic>
-    // </LanguageContext.Provider>
   );
 }

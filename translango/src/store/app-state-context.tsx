@@ -35,7 +35,23 @@ export type TRANSLATION_KEYS =
   | "LANGUAGE_QUIZ"
   | "PRACTICE"
   | "QUIZ"
-  | "QUIZ_TEXT";
+  | "QUIZ_TEXT"
+  | "LETS_REGISTER"
+  | "DISCOVERY_AWAITS"
+  | "WE_KEEP_YOU_SAFE"
+  | "LOGIN"
+  | "PASSWORD"
+  | "CONFIRM_PASSWORD"
+  | "SOMETHING_WENT_WRONG_TRY_AGAIN"
+  | "LETS_SETUP"
+  | "CREATE_PROFILE"
+  | "KEEP_ME_SIGNED_IN"
+  | "MAIL_ME_ABOUT_OFFERS"
+  | "CREATE_ACCOUNT"
+  | "OR_SIGN_IN_WITH"
+  | "ALREADY_HAVE_ACCOUNT?"
+  | "PASS_DONT_MATCH"
+  | "MAIL_IS_REQD";
 
 type TranslateMappingType = {
   [key in TRANSLATION_KEYS]: string;
@@ -48,14 +64,15 @@ type TranslationObjType = {
 export type GeoCoordinates = {
   lat: number;
   lon: number;
-}
+};
 
 export interface AppContextInterface {
   version: string;
   isLoggedIn: boolean;
-  firstName?: string;
-  lastName?: string;
-  username?: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  userid: string;
   email?: string;
   countryCode: ISO3166_2letter_country_codes;
   profile_pic_url?: string;
@@ -79,23 +96,25 @@ export const saveContext = (obj: AppContextInterface) => {
 };
 
 const defaultCtx: AppContextInterface = {
-  version: "0.0.9",
+  version: "0.0.16",
   isLoggedIn: false,
   firstName: "Hey",
   lastName: "User!",
   username: "user",
+  userid: "userid",
   countryCode: "JP",
-  nativeLanguage: "en",
+  nativeLanguage: "hi",
   favouriteLanguages: new Set<string>(["ja"]),
   theme: "light",
   availableLanguages: {},
   dummyLocations: [
     { lat: 35.652832, lon: 139.839478 },
-    { lat: 28.644800, lon: 77.216721 },
+    { lat: 28.6448, lon: 77.216721 },
     { lat: 25.276987, lon: 55.296249 },
     { lat: 42.361145, lon: -71.057083 },
     { lat: 19.432608, lon: -99.133209 },
-    { lat: 39.916668, lon: 116.383331 }],
+    { lat: 39.916668, lon: 116.383331 },
+  ],
   translations: {
     en: {
       WELCOME: "Welcome",
@@ -121,13 +140,32 @@ const defaultCtx: AppContextInterface = {
       SELECT_PREFERRED_LANGS: "Select your preferred languages",
       PREFERRED_LANGS_USAGE:
         "New texts and objects will be translated to your preferred languages. Select as much as you want!",
-      WRITE_TEXT_TO_TRANSLATE: "Write the text that you want to translate here!",
-      TEXT_WILL_BE_TRANSLATED: "The text will be translated to your favourite languages",
+      WRITE_TEXT_TO_TRANSLATE:
+        "Write the text that you want to translate here!",
+      TEXT_WILL_BE_TRANSLATED:
+        "The text will be translated to your favourite languages",
       TRANSLATE: "Translate",
       LANGUAGE_QUIZ: "Language Quiz!",
       QUIZ: "QUIZ",
       PRACTICE: "PRACTICE",
       QUIZ_TEXT: "Test or practice your knowledge with this short quiz",
+      LETS_REGISTER: "Let's register",
+      DISCOVERY_AWAITS: "Discovery awaits!",
+      PASSWORD: "Password",
+      CONFIRM_PASSWORD: "Confirm password",
+      LOGIN: "Login",
+      WE_KEEP_YOU_SAFE:
+        "We keep you safe! Your password is encrypted and inaccesible to anyone except you!",
+      SOMETHING_WENT_WRONG_TRY_AGAIN: "Something went wrong! Please try again",
+      LETS_SETUP: "Let's setup",
+      CREATE_PROFILE: "Create your profile here!",
+      KEEP_ME_SIGNED_IN: "Keep me signed in",
+      MAIL_ME_ABOUT_OFFERS: "Email me about special pricing and more!",
+      CREATE_ACCOUNT: "Create account",
+      "ALREADY_HAVE_ACCOUNT?": "Already have an account? Log in",
+      OR_SIGN_IN_WITH: "Or sign in with",
+      PASS_DONT_MATCH: "Both passwords do not match",
+      MAIL_IS_REQD: "Email is required!",
     },
   },
 };
@@ -135,7 +173,7 @@ const defaultCtx: AppContextInterface = {
 const AppCtx = createContext<AppContextInterface>(defaultCtx);
 export const AppCtxUpdater = createContext<
   Dispatch<SetStateAction<AppContextInterface>>
->(() => { });
+>(() => {});
 
 export const AppCtxProvider: React.FC<PropsWithChildren> = (props) => {
   const [contextState, setContextState] = useState<AppContextInterface>(() => {

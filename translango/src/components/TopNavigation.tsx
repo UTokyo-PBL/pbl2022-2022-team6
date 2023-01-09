@@ -12,7 +12,10 @@ import { useNavigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import UserController from "../controllers/user/user.controller";
 import React from "react";
-import AppCtx, { TRANSLATION_KEYS } from "../store/app-state-context";
+import AppCtx, {
+  AppCtxUpdater,
+  TRANSLATION_KEYS,
+} from "../store/app-state-context";
 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
@@ -24,6 +27,7 @@ function TopNavigation() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const ctx = useContext(AppCtx);
+  const ctxUpdater = useContext(AppCtxUpdater);
   const t = (key: TRANSLATION_KEYS) =>
     ctx.translations[ctx.nativeLanguage]
       ? ctx.translations[ctx.nativeLanguage][key]
@@ -31,7 +35,7 @@ function TopNavigation() {
 
   const getData = () => {
     UserController.getUserProfile()
-      .then(OpenAPIResponse => {
+      .then((OpenAPIResponse) => {
         setUserdata(OpenAPIResponse.data);
         // console.log(OpenAPIResponse.data);
       })
@@ -50,9 +54,10 @@ function TopNavigation() {
 
       if (userdata.profile_image !== "select") {
         setProfileURL(userdata.profile_image);
+        ctxUpdater({ ...ctx, profile_pic_url: userdata.profile_image });
       }
     }
-  });
+  }, []);
 
   const navigate = useNavigate();
 

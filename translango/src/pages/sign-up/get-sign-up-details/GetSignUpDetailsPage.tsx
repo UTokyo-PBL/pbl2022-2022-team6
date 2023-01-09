@@ -8,42 +8,63 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FillPageWithSidePic from "../../../components/FillPageWithSidePic";
+import AppCtx, { TRANSLATION_KEYS } from "../../../store/app-state-context";
 import SignUpAndLoginTop from "../SignUpAndLoginTop";
 
 export default function GetSignUpDetails() {
-
-  const [invalidPassword, setInvalidPassword] = useState(false);
+  const ctx = useContext(AppCtx);
+  const t = (key: TRANSLATION_KEYS) =>
+    ctx.translations[ctx.nativeLanguage]
+      ? ctx.translations[ctx.nativeLanguage][key]
+      : ctx.translations["en"][key];
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = event.currentTarget;
     const user_data = {
-      email: data.email.value,
-      password: data.password.value,
-      confirmpassword: data.confirmpassword.value,
+      email,
+      password,
     };
-    console.log(user_data)
+    console.log(user_data);
 
-    if ((user_data.password !== user_data.confirmpassword) || (!user_data.email) || (!user_data.password) || (!user_data.confirmpassword)) {
-      setInvalidPassword(true);
-    }
-    else {
-      navigate('/sign-up/create-profile', { state: user_data })
-    }
-  }
+    navigate("/sign-up/create-profile", { state: user_data });
+  };
+
+  const onEmailChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    setEmail(event.target.value.trim());
+  };
+
+  const onPasswordChange: React.ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    setPassword(event.target.value.trim());
+  };
+  const onConfirmPasswordChange: React.ChangeEventHandler<HTMLInputElement> = (
+    e
+  ) => {
+    setConfirmPassword(e.target.value.trim());
+  };
 
   return (
     <FillPageWithSidePic>
-      <Box sx={{ maxWidth: '100vh' }}>
+      <Box sx={{ maxWidth: "100vh" }}>
         <SignUpAndLoginTop
           backTo="/"
-          title="Let's register"
-          subtitle="Discovery awaits!"
+          title={t("LETS_REGISTER")}
+          subtitle={t("DISCOVERY_AWAITS")}
         />
-        <Stack component="form" noValidate onSubmit={handleSubmit} p={2} spacing={4}>
+        <Stack
+          component="form"
+          noValidate
+          onSubmit={handleSubmit}
+          p={2}
+          spacing={4}
+        >
           <TextField
             fullWidth
             variant="standard"
@@ -51,6 +72,9 @@ export default function GetSignUpDetails() {
             type="email"
             id="email"
             name="email"
+            value={email}
+            onChange={onEmailChange}
+            required
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -66,7 +90,10 @@ export default function GetSignUpDetails() {
             type="password"
             name="password"
             id="password"
-            placeholder="password"
+            value={password}
+            onChange={onPasswordChange}
+            required
+            placeholder={t("PASSWORD")}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -82,7 +109,10 @@ export default function GetSignUpDetails() {
             type="password"
             name="confirmpassword"
             id="confirmpassword"
-            placeholder="confirm password"
+            value={confirmPassword}
+            onChange={onConfirmPasswordChange}
+            required
+            placeholder={t("CONFIRM_PASSWORD")}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -97,23 +127,25 @@ export default function GetSignUpDetails() {
               
             </Typography>
           </Box> */}
-          {invalidPassword ? <Alert severity="error">Something went wrong, please try again</Alert> : <Alert>We keep you safe! Our password is encrypted and inaccessible to
-            anyone excpept you!</Alert>}
+          {!email ? (
+            <Alert severity="warning">{t("MAIL_IS_REQD")}</Alert>
+          ) : password && password != confirmPassword ? (
+            <Alert severity="error">{t("PASS_DONT_MATCH")}</Alert>
+          ) : (
+            <Alert>{t("WE_KEEP_YOU_SAFE")}</Alert>
+          )}
 
           <Button
             variant="contained"
             type="submit"
+            disabled={!email || !password || password != confirmPassword}
           >
-            Sign Up
+            {t("SIGN_UP")}
           </Button>
-          <Divider>OR</Divider>
-          <Button
-            variant="outlined"
-          >
-            Login
-          </Button>
+          <Divider>{t("OR")}</Divider>
+          <Button variant="outlined">{t("LOGIN")}</Button>
         </Stack>
       </Box>
     </FillPageWithSidePic>
   );
-};
+}
