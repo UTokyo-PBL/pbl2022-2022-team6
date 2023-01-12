@@ -38,7 +38,8 @@ export default function WelcomePage() {
         sm={4}
         md={7}
         sx={{
-          backgroundImage: "url(https://source.unsplash.com/random/?nature)",
+          backgroundImage:
+            "url(https://source.unsplash.com/random/?purple,dark,books)",
           backgroundRepeat: "no-repeat",
           backgroundColor: (t) =>
             t.palette.mode === "light"
@@ -131,7 +132,6 @@ export default function WelcomePage() {
             alignItems="center"
             justifyContent="flex-end"
           >
-
             <Button
               fullWidth
               variant="text"
@@ -142,52 +142,54 @@ export default function WelcomePage() {
                 width: "280px",
                 color: "primary",
                 "& a:link": {
-                  textDecoration: "none"
+                  textDecoration: "none",
                 },
                 "&:hover": {
                   color: "white",
-                  border: "2px solid white"
-                }
-                }}
-                onClick={() => navigate("/signin")}
-              >
-                {t("SIGN_IN")}
-              </Button>
-              <Button
-                fullWidth
-                variant="outlined"
-                color="info"
-                sx={{
-                  mt: 3,
-                  mb: 2,
-                  color: "white",
-                  minHeight: "40px",
-                  width: "280px",
-                  border: "2px solid",
-                  "& a:link" : {textDecoration: "none"}
-                }}
-                onClick={() => navigate("/sign-up")}
-              >
-                {t("SIGN_UP")}
-              </Button>
-              <Divider variant="middle" sx={{color: "white"}}>{t("OR")}</Divider>
-              <Button
-                fullWidth
-                variant="outlined"
-                color="info"
-                sx={{
-                  mt: 3,
-                  mb: 2,
-                  color: "white",
-                  minHeight: "40px",
-                  width: "280px",
-                  border: "2px solid",
-                  "& a:link" : {textDecoration: "none"}
-                }}
-                onClick={() => navigate("/dashboard")}
-              >
-                {t("SKIP_AND_EXPLORE")}
-              </Button>
+                  border: "2px solid white",
+                },
+              }}
+              onClick={() => navigate("/signin")}
+            >
+              {t("SIGN_IN")}
+            </Button>
+            <Button
+              fullWidth
+              variant="outlined"
+              color="info"
+              sx={{
+                mt: 3,
+                mb: 2,
+                color: "white",
+                minHeight: "40px",
+                width: "280px",
+                border: "2px solid",
+                "& a:link": { textDecoration: "none" },
+              }}
+              onClick={() => navigate("/sign-up")}
+            >
+              {t("SIGN_UP")}
+            </Button>
+            <Divider variant="middle" sx={{ color: "white" }}>
+              {t("OR")}
+            </Divider>
+            <Button
+              fullWidth
+              variant="outlined"
+              color="info"
+              sx={{
+                mt: 3,
+                mb: 2,
+                color: "white",
+                minHeight: "40px",
+                width: "280px",
+                border: "2px solid",
+                "& a:link": { textDecoration: "none" },
+              }}
+              onClick={() => navigate("/dashboard")}
+            >
+              {t("SKIP_AND_EXPLORE")}
+            </Button>
           </Grid>
 
           <Grid container direction="column" alignItems="center">

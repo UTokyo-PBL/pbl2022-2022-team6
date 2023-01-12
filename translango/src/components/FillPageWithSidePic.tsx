@@ -10,7 +10,8 @@ const FillPageWithSidePic: React.FC<PropsWithChildren> = (props) => {
         sm={4}
         md={7}
         sx={{
-          backgroundImage: "url(https://source.unsplash.com/random)",
+          backgroundImage:
+            "url(https://source.unsplash.com/random?purple,dark,books)",
           backgroundRepeat: "no-repeat",
           backgroundColor: (t) =>
             t.palette.mode === "light"
