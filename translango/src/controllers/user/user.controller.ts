@@ -1,5 +1,4 @@
 import axiosInstance from "../../constants/common/axios.constants";
-import instance from "../../constants/common/axios.constants";
 
 // --------->>> MAIN CLASS
 export default class UserController {
@@ -61,14 +60,11 @@ export default class UserController {
   // 3.- TESTED & CONNECTED
   static async login({ email, password }: { email: string; password: string }) {
     // Call the AXIOS request
-    const axiosResponse = await instance
-      .post(
-        "/user/login",
-        {
-          email,
-          password,
-        }
-      )
+    const axiosResponse = await axiosInstance
+      .post("/user/login", {
+        email,
+        password,
+      })
       .catch((e) => {
         const JSONError = e.toJSON();
         return JSONError;
@@ -83,10 +79,12 @@ export default class UserController {
   // 1.- TESTED & CONNECTED
   static async logout() {
     // Call the AXIOS request
-    const axiosResponse = await axiosInstance.post("/user/logout", {}).catch((e) => {
-      const JSONError = e.toJSON();
-      return JSONError;
-    });
+    const axiosResponse = await axiosInstance
+      .post("/user/logout", {})
+      .catch((e) => {
+        const JSONError = e.toJSON();
+        return JSONError;
+      });
 
     return axiosResponse;
   }
@@ -120,7 +118,7 @@ export default class UserController {
     last_name,
     username,
     language,
-    profile_image
+    profile_image,
   }: {
     id: string;
     email: string;
@@ -130,7 +128,7 @@ export default class UserController {
     last_name: string;
     username: string;
     language: string;
-    profile_image: string
+    profile_image: string;
   }) {
     // Call the AXIOS request
     const axiosResponse = await axiosInstance
@@ -143,7 +141,7 @@ export default class UserController {
         last_name,
         username,
         language,
-        profile_image
+        profile_image,
       })
       .catch((e) => {
         const JSONError = e.toJSON();

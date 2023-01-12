@@ -51,7 +51,19 @@ export type TRANSLATION_KEYS =
   | "OR_SIGN_IN_WITH"
   | "ALREADY_HAVE_ACCOUNT?"
   | "PASS_DONT_MATCH"
-  | "MAIL_IS_REQD";
+  | "MAIL_IS_REQD"
+  | "LIST"
+  | "HOME"
+  | "DASHBOARD"
+  | "PROFILE"
+  | "PLAY"
+  | "LANGUAGES"
+  | "GAME"
+  | "EMAIL"
+  | "USERNAME"
+  | "FORGOT_PASS"
+  | "DONT_HAVE_ACCOUNT_SIGN_UP"
+  | "USERNAME_OR_PASSWORD_IS_WRONG";
 
 type TranslateMappingType = {
   [key in TRANSLATION_KEYS]: string;
@@ -95,8 +107,8 @@ export const saveContext = (obj: AppContextInterface) => {
   );
 };
 
-const defaultCtx: AppContextInterface = {
-  version: "0.0.16",
+export const defaultCtx: AppContextInterface = {
+  version: "0.0.20",
   isLoggedIn: false,
   firstName: "Hey",
   lastName: "User!",
@@ -166,6 +178,18 @@ const defaultCtx: AppContextInterface = {
       OR_SIGN_IN_WITH: "Or sign in with",
       PASS_DONT_MATCH: "Both passwords do not match",
       MAIL_IS_REQD: "Email is required!",
+      DASHBOARD: "Dashboard",
+      GAME: "Game",
+      HOME: "Home",
+      LANGUAGES: "Languages",
+      LIST: "List",
+      PLAY: "Play",
+      PROFILE: "Profile",
+      EMAIL: "Email address",
+      USERNAME: "Username",
+      FORGOT_PASS: "Forgot password?",
+      DONT_HAVE_ACCOUNT_SIGN_UP: "Don't have an account? Sign Up",
+      USERNAME_OR_PASSWORD_IS_WRONG: "Either username or password is wrong!",
     },
   },
 };

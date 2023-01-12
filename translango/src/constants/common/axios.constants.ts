@@ -17,10 +17,14 @@ export const RESPONSE_STATUS_CODES = {
 
   // FAIL Codes
   400: "FAIL (USUALLY RELATED TO DATA MISSING ON REQUEST)",
-  401: ["EMAIL_CONFIRMATION_HAS_EXPIRED", "INVALID_INFO_INPUTED", 'UNAUTHORIZED'],
+  401: [
+    "EMAIL_CONFIRMATION_HAS_EXPIRED",
+    "INVALID_INFO_INPUTED",
+    "UNAUTHORIZED",
+  ],
   404: "RESOURCE_NOT_FOUND",
   409: "USER_ALREADY_EXISTS",
-  500 : ['SERVER_DIED', 'REQUESTED INFO NOT FOUND IN DB']
+  500: ["SERVER_DIED", "REQUESTED INFO NOT FOUND IN DB"],
 };
 
 // INSTANCE: Set axios' defaults
@@ -28,17 +32,17 @@ const axiosInstance = axios.create({
   baseURL: "https://translango.y-nakai.com",
   withCredentials: true,
   headers: {
-      withCredentials: 'true',
+    withCredentials: "true",
   },
-})
+});
 
 // INSTANCE for directly connecting to backend server by Gaurish
 export const gServer = axios.create({
-  baseURL: "https://translango-fastapi-pfuvrj7daq-uc.a.run.app",
+  baseURL: "http://localhost:8000",
   withCredentials: true,
   headers: {
-    withCredentials: 'true',
-}
+    withCredentials: "true",
+  },
 });
 
 export default axiosInstance;

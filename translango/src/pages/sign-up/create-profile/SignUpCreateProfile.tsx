@@ -22,6 +22,8 @@ import AppCtx, {
 import SelectLanguage from "../../../components/selectLanguage";
 import { useLocation, useNavigate } from "react-router-dom";
 import UserController from "../../../controllers/user/user.controller";
+import { UserFromBackend, UserSignUp } from "../../../types/common/axios.types";
+import GeneralController from "../../../controllers/general.controller";
 
 export default function CreateProfile() {
   const ctx = useContext(AppCtx);
@@ -65,31 +67,39 @@ export default function CreateProfile() {
     setProfileURL(URL.createObjectURL(file));
   };
 
-  const onSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
     console.log("Came here");
-
-    UserController.registerUser({
-      id: username,
+    const userData: UserSignUp = {
+      username,
       email: location.state.email as string,
       password: location.state.password as string,
-      first_name: firstname,
-      middle_name: "",
-      last_name: lastname,
-      username,
-      language: ctx.nativeLanguage,
-    }).then((value) => {
-      console.log(value);
-      contextUpdater({
-        ...ctx,
+      firstname,
+      middlename: "",
+      lastname,
+      primary_lang: ctx.nativeLanguage,
+      favourite_langs: ["ja"],
+    };
+
+    const user: UserFromBackend = await GeneralController.signup(userData);
+    localStorage.setItem(
+      "auth-token",
+      `Bearer ${user.token.access_token_data}`
+    );
+    contextUpdater(function (oldCtx) {
+      return {
+        ...oldCtx,
         isLoggedIn: true,
-        firstName: firstname,
-        lastName: lastname,
-        username,
-        userid: username,
-      });
-      navigate(`/dashboard/${username}`);
+        username: username,
+        email: user.email,
+        firstName: user.firstname,
+        lastName: user.lastname,
+        favouriteLanguages: new Set(
+          user.favourite_languages.map(({ code }) => code)
+        ),
+      };
     });
+    navigate(`/dashboard/${username}`);
   };
 
   useEffect(() => {

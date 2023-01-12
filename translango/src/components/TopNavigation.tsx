@@ -14,16 +14,14 @@ import UserController from "../controllers/user/user.controller";
 import React from "react";
 import AppCtx, {
   AppCtxUpdater,
+  defaultCtx,
   TRANSLATION_KEYS,
 } from "../store/app-state-context";
+import GeneralController from "../controllers/general.controller";
 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function TopNavigation() {
-  const [auth, setAuth] = React.useState(false);
-  const [profileURL, setProfileURL] = React.useState("");
-  const [userdata, setUserdata] = React.useState<null | any>(null);
-  const [username, setUsername] = React.useState("");
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const ctx = useContext(AppCtx);
@@ -33,31 +31,35 @@ function TopNavigation() {
       ? ctx.translations[ctx.nativeLanguage][key]
       : ctx.translations["en"][key];
 
-  const getData = () => {
-    UserController.getUserProfile()
-      .then((OpenAPIResponse) => {
-        setUserdata(OpenAPIResponse.data);
-        // console.log(OpenAPIResponse.data);
-      })
-      .catch()
-      .finally();
-  };
-
-  useEffect(() => {
-    getData();
-    if (userdata) {
-      if (userdata.id !== "") {
-        setAuth(true);
-      }
-
-      setUsername(userdata.username);
-
-      if (userdata.profile_image !== "select") {
-        setProfileURL(userdata.profile_image);
-        ctxUpdater({ ...ctx, profile_pic_url: userdata.profile_image });
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   GeneralController.getUserProfile()
+  //     .then(
+  //       (user) => {
+  //         localStorage.setItem(
+  //           "auth-token",
+  //           `Bearer ${user.token.access_token_data}`
+  //         );
+  //         ctxUpdater(function (oldCtx) {
+  //           return {
+  //             ...oldCtx,
+  //             isLoggedIn: true,
+  //             username: user.username,
+  //             email: user.email,
+  //             firstName: user.firstname,
+  //             lastName: user.lastname,
+  //             favouriteLanguages: new Set(
+  //               user.favourite_languages.map(({ code }) => code)
+  //             ),
+  //           };
+  //         });
+  //       } // then clause ends
+  //     )
+  //     .catch((e) => {
+  //       ctxUpdater(function () {
+  //         return { ...defaultCtx };
+  //       });
+  //     });
+  // }, []);
 
   const navigate = useNavigate();
 
@@ -110,7 +112,7 @@ function TopNavigation() {
           </Typography>
         </Stack>
 
-        {auth && (
+        {ctx.isLoggedIn && (
           <div style={{ float: "right" }}>
             <IconButton
               size="large"
@@ -120,7 +122,7 @@ function TopNavigation() {
               onClick={handleMenu}
               color="inherit"
             >
-              <Avatar alt={username} src={profileURL} />
+              <Avatar alt={ctx.username} src={ctx.profile_pic_url} />
             </IconButton>
             <Menu
               id="menu-appbar"
@@ -137,7 +139,9 @@ function TopNavigation() {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem onClick={() => navigate(`/profilepage/${userdata.id}`)}>
+              <MenuItem
+                onClick={() => navigate(`/profilepage/${ctx.username}`)}
+              >
                 {t("MY_ACCOUNT")}
               </MenuItem>
               <MenuItem onClick={handleClose}>{t("SETTINGS")}</MenuItem>
