@@ -1,4 +1,4 @@
-# team6
+# TranslanGo: Translate on the Go! - Team 6
 
 ## usage
 
