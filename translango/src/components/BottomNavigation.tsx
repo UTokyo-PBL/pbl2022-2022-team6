@@ -44,16 +44,16 @@ export default function BottomNavigation() {
               navigate("/select-favourite-languages");
               break;
             case "dashboard":
-              navigate(`/dashboard/${ctx.username}`);
+              navigate(`/dashboard`);
               break;
             case "play":
-              navigate(`/game/${ctx.username}`);
+              navigate(`/game`);
               break;
             case "profile":
-              navigate(`/profilepage/${ctx.username}`);
+              navigate(`/profilepage`);
               break;
             case "mapview":
-              navigate(`/profilepage/${ctx.username}`);
+              navigate(`/profilepage`);
               break;
             default:
               break;

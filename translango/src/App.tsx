@@ -117,57 +117,6 @@ function App() {
           return { ...ctx };
         });
       }); // .finally ends
-    // GeneralController.getAllLanguages(ctx.nativeLanguage).then((data) => {
-    //   ctx.availableLanguages = data;
-
-    //   if (ctx.translations[ctx.nativeLanguage] === undefined) {
-    //     return Promise.all(
-    //       Object.entries(ctx.translations["en"]).map(async ([key, engText]) => {
-    //         const tr = await GeneralController.getTranslation(
-    //           engText,
-    //           ctx.nativeLanguage,
-    //           "en"
-    //         );
-    //         return { key, translation: tr.translatedText };
-    //       })
-    //     )
-    //       .then((values) => {
-    //         // @ts-ignore: ignore next line because we're soon giving them values
-    //         ctx.translations[ctx.nativeLanguage] = {};
-    //         values.forEach(({ key, translation }) => {
-    //           ctx.translations[ctx.nativeLanguage][key] = translation;
-    //         });
-    //       })
-    //       .then(() => {
-    //         return GeneralController.getUserProfile()
-    //           .then((user) => {
-    //             ctx.isLoggedIn = true;
-    //             ctx.username = user.username;
-    //             ctx.email = user.email;
-    //             ctx.firstName = user.firstname;
-    //             ctx.lastName = user.lastname;
-    //             ctx.favouriteLanguages = new Set(
-    //               user.favourite_languages.map(({ code }) => code)
-    //             );
-    //           })
-    //           .catch(() => {
-    //             localStorage.removeItem("auth-token");
-    //             ctx.isLoggedIn = false;
-    //             ctx.username = "username";
-    //             ctx.email = "mail@mail.com";
-    //             ctx.firstName = "Hey";
-    //             ctx.lastName = "User!";
-    //             ctx.favouriteLanguages = new Set(["ja"]);
-    //           });
-    //       })
-    //       .finally(() => {
-    //         ctxUpdater({ ...ctx });
-    //       });
-    //   }
-
-    //   setAreLanguagesReady(true);
-    //   ctxUpdater({ ...ctx });
-    // });
   }, [ctx.nativeLanguage]);
 
   useEffect(() => saveContext(ctx));
@@ -188,16 +137,13 @@ function App() {
               >
                 <Router>
                   <Routes>
-                    <Route path="/dashboard">
-                      <Route index element={<Dashboard />} />
-                      <Route path=":userID" element={<Dashboard />} />
-                    </Route>
+                    <Route path="/dashboard" element={<Dashboard />} />
                     {<Route path="/test" element={<TestImage />} />}
                     <Route
                       path="/"
                       element={
                         ctx.isLoggedIn ? (
-                          <Navigate replace to={`/dashboard/${ctx.username}`} />
+                          <Navigate replace to={`/dashboard`} />
                         ) : (
                           <WelcomePage />
                         )
@@ -208,19 +154,27 @@ function App() {
                       path="/text-translation"
                       element={<TextTranslationPage />}
                     />
-                    <Route path="/signin" element={<SignInPage />} />
                     <Route
                       path="/select-favourite-languages"
                       element={<SelectLanguagesPage />}
                     />
-                    <Route path="/sign-up">
-                      <Route index element={<GetSignUpDetails />} />
-                      <Route path="confirm-email" element={<ConfirmEmail />} />
-                      <Route
-                        path="create-profile"
-                        element={<CreateProfile />}
-                      />
-                    </Route>
+                    {!ctx.isLoggedIn && (
+                      <Route path="/signin" element={<SignInPage />} />
+                    )}
+
+                    {!ctx.isLoggedIn && (
+                      <Route path="/sign-up">
+                        <Route index element={<GetSignUpDetails />} />
+                        <Route
+                          path="confirm-email"
+                          element={<ConfirmEmail />}
+                        />
+                        <Route
+                          path="create-profile"
+                          element={<CreateProfile />}
+                        />
+                      </Route>
+                    )}
                     <Route
                       path="/viewtranslations/:translationID"
                       element={<ViewTranslations />}
@@ -233,16 +187,12 @@ function App() {
                       path="/previewpost/:translationID"
                       element={<PreviewPost />}
                     />
-                    <Route
-                      path="/profilepage/:userID"
-                      element={<ProfilePage />}
-                    />
-                    <Route path="/game/:userID" element={<GameScreen />} />
-                    <Route
-                      path="/practice/:userID"
-                      element={<PracticeScreen />}
-                    />
-                    <Route path="/quiz/:userID" element={<QuizScreen />} />
+                    {ctx.isLoggedIn && (
+                      <Route path="/profilepage" element={<ProfilePage />} />
+                    )}
+                    <Route path="/game" element={<GameScreen />} />
+                    <Route path="/practice" element={<PracticeScreen />} />
+                    <Route path="/quiz" element={<QuizScreen />} />
                     <Route path="*" element={<Navigate to="/" />} />
                   </Routes>
                 </Router>
