@@ -53,6 +53,7 @@ function App() {
   useEffect(() => {
     GeneralController.getAllLanguages(ctx.nativeLanguage)
       .then(async function (avlLangs) {
+        ctx.availableLanguages = avlLangs;
         if (ctx.translations[ctx.nativeLanguage] === undefined) {
           const promise = Promise.all(
             Object.entries(ctx.translations["en"]).map(
@@ -99,6 +100,7 @@ function App() {
           ctx.favouriteLanguages = new Set(
             user.favourite_languages.map(({ code }) => code)
           );
+          ctx.nativeLanguage = user.primary_lang;
         } else {
           localStorage.removeItem("auth-token");
           ctx.isLoggedIn = false;

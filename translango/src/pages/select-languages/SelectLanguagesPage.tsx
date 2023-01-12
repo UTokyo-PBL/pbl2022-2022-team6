@@ -1,17 +1,12 @@
-import { ChevronLeft } from "@mui/icons-material";
 import {
-  AppBar,
-  Box,
   Card,
   CardContent,
   CardHeader,
   Checkbox,
   FormControl,
   FormGroup,
-  IconButton,
   Stack,
   TextField,
-  Toolbar,
   Typography,
 } from "@mui/material";
 import { ChangeEvent, useContext, useState } from "react";
@@ -43,8 +38,8 @@ const SelectLanguagesPage: React.FC = () => {
     setFilterText(lowercase_searchTerm);
     setFilteredLanguages(
       Object.entries(ctx.availableLanguages).filter(([_code, name]) =>
-      name.toLocaleLowerCase().includes(filterText)
-    )
+        name.toLocaleLowerCase().includes(lowercase_searchTerm)
+      )
     );
   };
 
@@ -95,28 +90,26 @@ const SelectLanguagesPage: React.FC = () => {
               />
               <FormControl component="fieldset">
                 <FormGroup>
-                  {filteredLanguages.map(
-                    ([code, name]) => {
-                      return (
-                        <Stack
-                          key={code}
-                          direction="row"
-                          justifyContent="space-between"
-                          justifyItems="center"
-                        >
-                          {/* <Stack alignItems="center" direction="row" spacing={2} justifyItems="center"> */}
-                          <Typography>{`${name}`}</Typography>
-                          {/* </Stack> */}
-                          <Checkbox
-                            name={name}
-                            checked={ctx.favouriteLanguages.has(code)}
-                            onChange={onCheckboxChanged}
-                            value={code}
-                          />
-                        </Stack>
-                      );
-                    }
-                  )}
+                  {filteredLanguages.map(([code, name]) => {
+                    return (
+                      <Stack
+                        key={code}
+                        direction="row"
+                        justifyContent="space-between"
+                        justifyItems="center"
+                      >
+                        {/* <Stack alignItems="center" direction="row" spacing={2} justifyItems="center"> */}
+                        <Typography>{`${name}`}</Typography>
+                        {/* </Stack> */}
+                        <Checkbox
+                          name={name}
+                          checked={ctx.favouriteLanguages.has(code)}
+                          onChange={onCheckboxChanged}
+                          value={code}
+                        />
+                      </Stack>
+                    );
+                  })}
                 </FormGroup>
               </FormControl>
             </Stack>

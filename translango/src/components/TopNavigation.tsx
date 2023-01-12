@@ -9,15 +9,13 @@ import MainIconSolid from "./MainIconSolid";
 import { Avatar, Stack } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect } from "react";
-import UserController from "../controllers/user/user.controller";
+import { useContext } from "react";
 import React from "react";
 import AppCtx, {
   AppCtxUpdater,
   defaultCtx,
   TRANSLATION_KEYS,
 } from "../store/app-state-context";
-import GeneralController from "../controllers/general.controller";
 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
@@ -31,36 +29,6 @@ function TopNavigation() {
       ? ctx.translations[ctx.nativeLanguage][key]
       : ctx.translations["en"][key];
 
-  // useEffect(() => {
-  //   GeneralController.getUserProfile()
-  //     .then(
-  //       (user) => {
-  //         localStorage.setItem(
-  //           "auth-token",
-  //           `Bearer ${user.token.access_token_data}`
-  //         );
-  //         ctxUpdater(function (oldCtx) {
-  //           return {
-  //             ...oldCtx,
-  //             isLoggedIn: true,
-  //             username: user.username,
-  //             email: user.email,
-  //             firstName: user.firstname,
-  //             lastName: user.lastname,
-  //             favouriteLanguages: new Set(
-  //               user.favourite_languages.map(({ code }) => code)
-  //             ),
-  //           };
-  //         });
-  //       } // then clause ends
-  //     )
-  //     .catch((e) => {
-  //       ctxUpdater(function () {
-  //         return { ...defaultCtx };
-  //       });
-  //     });
-  // }, []);
-
   const navigate = useNavigate();
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -69,6 +37,12 @@ function TopNavigation() {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const onLogOut: React.MouseEventHandler<HTMLLIElement> = () => {
+    localStorage.clear();
+    ctxUpdater({ ...defaultCtx });
+    navigate("/");
   };
 
   return (
@@ -145,7 +119,7 @@ function TopNavigation() {
                 {t("MY_ACCOUNT")}
               </MenuItem>
               <MenuItem onClick={handleClose}>{t("SETTINGS")}</MenuItem>
-              <MenuItem>{t("LOG_OUT")}</MenuItem>
+              <MenuItem onClick={onLogOut}>{t("LOG_OUT")}</MenuItem>
             </Menu>
           </div>
         )}

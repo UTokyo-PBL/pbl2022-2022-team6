@@ -80,6 +80,7 @@ export default function SignInPage() {
           favouriteLanguages: new Set(
             user.favourite_languages.map(({ code }) => code)
           ),
+          nativeLanguage: user.primary_lang,
         };
       });
       navigate("/");

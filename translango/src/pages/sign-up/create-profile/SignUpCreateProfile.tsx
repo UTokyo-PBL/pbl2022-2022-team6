@@ -97,6 +97,7 @@ export default function CreateProfile() {
         favouriteLanguages: new Set(
           user.favourite_languages.map(({ code }) => code)
         ),
+        nativeLanguage: user.primary_lang,
       };
     });
     navigate(`/dashboard/${username}`);
