@@ -12,7 +12,6 @@ import theme from "./theme/theme";
 // import { TestImage } from './pages/test/test';
 import AppCtx, { AppCtxUpdater, saveContext } from "./store/app-state-context";
 import GeneralController from "./controllers/general.controller";
-import { TestImage } from "./pages/test/test";
 import { LoadingButton } from "@mui/lab";
 import TextTranslationPage from "./pages/text-translation/textTranslationPage";
 import { UserFromBackend } from "./types/common/axios.types";
@@ -141,7 +140,6 @@ function App() {
                 <Router>
                   <Routes>
                     <Route path="/dashboard" element={<Dashboard />} />
-                    {<Route path="/test" element={<TestImage />} />}
                     <Route
                       path="/"
                       element={
