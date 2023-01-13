@@ -53,7 +53,9 @@ const SelectLanguagesPage: React.FC = () => {
       ctx.favouriteLanguages.delete(lang_code);
     }
 
-    ctxUpdater({ ...ctx });
+    ctxUpdater(function (oldCtx) {
+      return { ...oldCtx, ...ctx };
+    });
   };
 
   return (
