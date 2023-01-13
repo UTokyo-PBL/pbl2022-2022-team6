@@ -1,4 +1,14 @@
-import { Button, CardActions, CardContent, CardHeader, Divider, List, ListItem, ListItemText, Stack } from "@mui/material";
+import {
+  Button,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Divider,
+  List,
+  ListItem,
+  ListItemText,
+  Stack,
+} from "@mui/material";
 import { Card, CardMedia } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import React, { useContext, useEffect, useState } from "react";
@@ -26,9 +36,10 @@ export default function PreviewImage() {
       detections: [],
     });
   const [detectionsReady, setDetectionsReady] = useState(false);
-  const t = (key: TRANSLATION_KEYS) => ctx.translations[ctx.nativeLanguage]
-    ? ctx.translations[ctx.nativeLanguage][key]
-    : ctx.translations["en"][key];
+  const t = (key: TRANSLATION_KEYS) =>
+    ctx.translations[ctx.nativeLanguage]
+      ? ctx.translations[ctx.nativeLanguage][key]
+      : ctx.translations["en"][key];
   /**
    * On first load check that if user has directly come to this page,
    * It means that the page does not have any state,
@@ -60,19 +71,17 @@ export default function PreviewImage() {
 
   const getLocation = () => {
     const index = Math.floor(Math.random() * 6);
-    console.log(ctx.dummyLocations)
+    console.log(ctx.dummyLocations);
     if (ctx.dummyLocations) {
       const loc = ctx.dummyLocations[index];
       console.log(loc);
       if (loc) {
         loc.lat = Math.floor(Math.random() * 10) + loc.lat;
-        loc.lon = Math.floor(Math.random() * 10) + loc.lon;
+        loc.lng = Math.floor(Math.random() * 10) + loc.lng;
       }
       setUserLocation(loc);
     }
-
-
-  }
+  };
 
   const goScan = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -148,21 +157,29 @@ export default function PreviewImage() {
           return (
             <Card
               sx={{
-                m: 2
+                m: 2,
               }}
               key={`${detectionWithTranslation.mid}${detectionWithTranslation.translatedName}${detectionWithTranslation.score}`}
             >
               <CardHeader title={detectionWithTranslation.translatedName} />
               <CardContent>
-                <List component={Stack} direction="row" overflow="auto" divider={<Divider orientation="vertical" flexItem />}>
+                <List
+                  component={Stack}
+                  direction="row"
+                  overflow="auto"
+                  divider={<Divider orientation="vertical" flexItem />}
+                >
                   {detectionWithTranslation.translations.map((trans) => {
                     return (
                       <ListItem key={trans.language}>
-                        <ListItemText primary={trans.translation}
-                          secondary={ctx.availableLanguages[trans.language]} />
+                        <ListItemText
+                          primary={trans.translation}
+                          secondary={ctx.availableLanguages[trans.language]}
+                        />
                       </ListItem>
                     );
-                  })}</List>
+                  })}
+                </List>
               </CardContent>
             </Card>
           );

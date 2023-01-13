@@ -75,7 +75,7 @@ type TranslationObjType = {
 
 export type GeoCoordinates = {
   lat: number;
-  lon: number;
+  lng: number;
 };
 
 export interface AppContextInterface {
@@ -120,12 +120,12 @@ export const defaultCtx: AppContextInterface = {
   theme: "light",
   availableLanguages: {},
   dummyLocations: [
-    { lat: 35.652832, lon: 139.839478 },
-    { lat: 28.6448, lon: 77.216721 },
-    { lat: 25.276987, lon: 55.296249 },
-    { lat: 42.361145, lon: -71.057083 },
-    { lat: 19.432608, lon: -99.133209 },
-    { lat: 39.916668, lon: 116.383331 },
+    { lat: 35.652832, lng: 139.839478 },
+    { lat: 28.6448, lng: 77.216721 },
+    { lat: 25.276987, lng: 55.296249 },
+    { lat: 42.361145, lng: -71.057083 },
+    { lat: 19.432608, lng: -99.133209 },
+    { lat: 39.916668, lng: 116.383331 },
   ],
   translations: {
     en: {

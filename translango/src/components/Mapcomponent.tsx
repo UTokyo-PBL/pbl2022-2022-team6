@@ -19,7 +19,7 @@ import DashboardController from "../controllers/dashboard/dashboard.controller";
 import "./mapcomponent.css";
 import Places from "./places";
 import SmallerViewObject from "./SmallerViewObject";
-import AppCtx from "../store/app-state-context";
+import AppCtx, { TRANSLATION_KEYS } from "../store/app-state-context";
 
 export default function MapComponent() {
   const { isLoaded } = useLoadScript({
@@ -53,16 +53,16 @@ const DEFAULT_OPTIONS = {
 
 const markers = [
   {
-    key: "item1",
     image_url:
       "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     position: { lat: 44, lng: -80 },
+    text: "オウム",
   },
   {
-    key: "item2",
     image_url:
       "https://images.pexels.com/photos/1661179/pexels-photo-1661179.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     position: { lat: 42, lng: -74 },
+    text: "猫",
   },
 ];
 
@@ -76,6 +76,10 @@ function Map() {
   const [isMobile, setIsMobile] = useState(false);
 
   const ctx = useContext(AppCtx);
+  const t = (key: TRANSLATION_KEYS) =>
+    ctx.translations[ctx.nativeLanguage]
+      ? ctx.translations[ctx.nativeLanguage][key]
+      : ctx.translations["en"][key];
   // const [userLocation, setUserLocation] = useState<Array<GeoCoordinates>>([]);
 
   const getLocation = () => {
@@ -86,9 +90,9 @@ function Map() {
       console.log(loc);
       if (loc) {
         loc.lat = Math.floor(Math.random() * 10) + loc.lat;
-        loc.lon = Math.floor(Math.random() * 10) + loc.lon;
+        loc.lng = Math.floor(Math.random() * 10) + loc.lng;
 
-        return { lat: loc!.lat, lng: loc!.lon };
+        return { lat: loc!.lat, lng: loc!.lng };
       }
     }
     return { lat: 44, lng: -80 };
@@ -149,7 +153,7 @@ function Map() {
   };
 
   useEffect(() => {
-    getItems();
+    // getItems();
     window.addEventListener("resize", handleResize);
 
     if (isMobile) {
@@ -174,7 +178,7 @@ function Map() {
             mapRef.current?.panTo(position);
           }}
         />
-        {markers.map(({ key, image_url, position }) => (
+        {markers.map(({ image_url, position, text }, key) => (
           <MarkerF key={key} position={getLocation()} icon={custom_marker}>
             <InfoWindowF
               position={position}
@@ -182,8 +186,8 @@ function Map() {
             >
               <Card
                 sx={{ maxHeight: 60, maxWidth: 60 }}
-                id={key}
-                onClick={(event) => handleOpenInfo(event, key)}
+                id={`${key}`}
+                onClick={(event) => handleOpenInfo(event, `${key}`)}
               >
                 <CardMedia
                   component="img"
@@ -192,8 +196,8 @@ function Map() {
                   sx={{ paddingLeft: 0.5, objectFit: "contain" }}
                 />
                 <Popover
-                  id={key}
-                  open={openId === key}
+                  id={`${key}`}
+                  open={openId === `${key}`}
                   anchorEl={anchorEl}
                   anchorOrigin={{
                     vertical: "bottom",
@@ -211,7 +215,7 @@ function Map() {
                     date="12/12/2022"
                     rawurl={image_url}
                     onLoad={handleClose}
-                    detectedObject="いぬ"
+                    detectedObject={text}
                   />
                 </Popover>
               </Card>

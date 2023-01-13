@@ -38,7 +38,7 @@ const axiosInstance = axios.create({
 
 // INSTANCE for directly connecting to backend server by Gaurish
 export const gServer = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: "https://translango-fastapi-pfuvrj7daq-uc.a.run.app",
   withCredentials: true,
   headers: {
     withCredentials: "true",
