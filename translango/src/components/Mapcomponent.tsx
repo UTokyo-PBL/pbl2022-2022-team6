@@ -1,39 +1,11 @@
-import {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-
-import { Card, CardMedia, Popover } from "@mui/material";
-import DashboardController from "../controllers/dashboard/dashboard.controller";
-import "./mapcomponent.css";
-import Places from "./places";
-import SmallerViewObject from "./SmallerViewObject";
+import { Map as OlMap, View as OlView } from "ol";
+import TileLayer from "ol/layer/Tile";
+import OSM from "ol/source/OSM";
+import { useEffect } from "react";
 import AppCtx, {
   GeoCoordinates,
   TRANSLATION_KEYS,
 } from "../store/app-state-context";
-
-const styles = {
-  width: "100%",
-  height: "100vh",
-};
-
-const DEFAULT_OPTIONS = {
-  mapTypeControl: false,
-  streetViewControl: false,
-  fullscreenControl: false,
-  rotateControl: false,
-  scaleControl: false,
-  mapId: "208b77f6f7536855",
-  panControl: false,
-  overviewMapControl: false,
-  zoomControl: false,
-  // scaleControl: false,
-};
 
 const markers: {
   image_url: string;
@@ -81,6 +53,28 @@ const markers: {
 ];
 
 export default function MapComponent() {
-  const ol_map = new Map();
-  return <></>;
+  useEffect(() => {
+    const ol_map = new OlMap({
+      target: "map",
+      layers: [
+        new TileLayer({
+          source: new OSM(),
+        }),
+      ],
+      view: new OlView({
+        center: [0, 0],
+        zoom: 2,
+      }),
+    });
+  }, []);
+
+  return (
+    <div
+      style={{
+        height: "90vh",
+        width: "100%",
+      }}
+      id="map"
+    ></div>
+  );
 }
