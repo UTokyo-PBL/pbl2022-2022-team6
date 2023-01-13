@@ -19,7 +19,10 @@ import DashboardController from "../controllers/dashboard/dashboard.controller";
 import "./mapcomponent.css";
 import Places from "./places";
 import SmallerViewObject from "./SmallerViewObject";
-import AppCtx, { TRANSLATION_KEYS } from "../store/app-state-context";
+import AppCtx, {
+  GeoCoordinates,
+  TRANSLATION_KEYS,
+} from "../store/app-state-context";
 
 export default function MapComponent() {
   const { isLoaded } = useLoadScript({
@@ -51,7 +54,11 @@ const DEFAULT_OPTIONS = {
   // scaleControl: false,
 };
 
-const markers = [
+const markers: {
+  image_url: string;
+  position: GeoCoordinates;
+  text: string;
+}[] = [
   {
     image_url:
       "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
@@ -62,7 +69,33 @@ const markers = [
     image_url:
       "https://images.pexels.com/photos/1661179/pexels-photo-1661179.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     position: { lat: 42, lng: -74 },
-    text: "猫",
+    text: "オウム",
+  },
+  {
+    image_url:
+      "https://images.pexels.com/photos/35188/child-childrens-baby-children-s.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    // target_text: "Children",
+    // target_language: "ja",
+    position: { lat: 41, lng: -70 },
+    text: "子供達",
+  },
+  {
+    image_url:
+      "https://images.pexels.com/photos/1391498/pexels-photo-1391498.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    text: "女の子",
+    position: { lat: 45, lng: -79 },
+  },
+  {
+    image_url:
+      "https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    text: "犬",
+    position: { lat: 42, lng: -81 },
+  },
+  {
+    image_url:
+      "https://images.pexels.com/photos/635499/pexels-photo-635499.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    text: "घोड़ा",
+    position: { lat: 40, lng: -76 },
   },
 ];
 
