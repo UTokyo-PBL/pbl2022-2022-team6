@@ -35,7 +35,9 @@ const SelectLanguagesPage = React.lazy(
 const ViewTranslations = React.lazy(
   () => import("./pages/viewtranslations/viewtranslations")
 );
-const CreatePost = React.lazy(() => import("./pages/createPost"));
+const CreatePost = React.lazy(
+  () => import("./pages/createPost/CreatePostPage")
+);
 const PreviewPost = React.lazy(() => import("./pages/previewPost"));
 const ProfilePage = React.lazy(() => import("./pages/profilePage/ProfilePage"));
 const GameScreen = React.lazy(

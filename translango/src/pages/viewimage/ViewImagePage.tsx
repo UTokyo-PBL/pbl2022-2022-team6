@@ -29,7 +29,6 @@ export default function PreviewImage() {
   const [imgObj, setImgObj] = useState(new File([], "tempfile"));
   const [toggledObject, setToggledObject] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [userLocation, setUserLocation] = useState({});
   const [apiResponse, setApiResponse] =
     useState<ObjectDetectionFromImageResponseType>({
       image_name: "",
@@ -51,7 +50,6 @@ export default function PreviewImage() {
     } else {
       setRawURL(location.state.rawurl);
       setImgObj(location.state.img);
-      getLocation();
     }
   }, []);
 
@@ -67,20 +65,6 @@ export default function PreviewImage() {
     setRawURL(URL.createObjectURL(file));
     setImgObj(file);
     setDetectionsReady(false);
-  };
-
-  const getLocation = () => {
-    const index = Math.floor(Math.random() * 6);
-    console.log(ctx.dummyLocations);
-    if (ctx.dummyLocations) {
-      const loc = ctx.dummyLocations[index];
-      console.log(loc);
-      if (loc) {
-        loc.lat = Math.floor(Math.random() * 10) + loc.lat;
-        loc.lng = Math.floor(Math.random() * 10) + loc.lng;
-      }
-      setUserLocation(loc);
-    }
   };
 
   const goScan = async (event: React.MouseEvent<HTMLButtonElement>) => {

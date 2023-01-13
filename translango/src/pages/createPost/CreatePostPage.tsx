@@ -1,44 +1,21 @@
 import {
   Box,
   Button,
-  CardActions,
-  CardHeader,
-  CssBaseline,
   Grid,
-  Input,
   InputAdornment,
-  InputLabel,
   Stack,
   styled,
   TextField,
-  ThemeProvider,
 } from "@mui/material";
-import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import theme from "../../theme/theme";
+import { useLocation } from "react-router-dom";
 import TopNavigation from "../../components/TopNavigation";
 import TranslatedBox from "../../components/translatedBox";
 import RoomIcon from "@mui/icons-material/Room";
 import SendIcon from "@mui/icons-material/Send";
 import Copyright from "../../components/Copyright";
 
-// const GoogleAutoComplete = React.forwardRef(({ inputRef, onFocus, onBlur, ...props }) => (
-//     <Autocomplete
-//         apiKey="AIzaSyCNKzmgqLSVBnT05TLmkkiBR_s9JwnM2ko"
-//         {...props}
-//         onPlaceSelected={(selected) => console.log(selected)}
-//     />)
-//   ))
-
-export default function CreatePost(props: any) {
+export default function CreatePost() {
   const location = useLocation();
-  const navigate = useNavigate();
-  const { translationID } = useParams();
-  const [userdata, setUserdata] = React.useState<null | any>(null);
-
-  const [place, setPlace] = useState<any | null>(null);
 
   const Img = styled("img")({
     margin: "auto",
@@ -54,12 +31,10 @@ export default function CreatePost(props: any) {
     for (var [key, value] of data.entries()) {
       console.log(key, value);
     }
-    console.log(place);
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <>
       <TopNavigation />
       <Grid
         container
@@ -154,6 +129,6 @@ export default function CreatePost(props: any) {
         </Box>
       </Grid>
       <Copyright />
-    </ThemeProvider>
+    </>
   );
 }

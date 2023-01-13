@@ -8,7 +8,6 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import { createTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import TopNavigation from "../../components/TopNavigation";
 import FillPageWithSidePic from "../../components/FillPageWithSidePic";
@@ -20,13 +19,13 @@ import GeneralController from "../../controllers/general.controller";
 import { Alert } from "@mui/material";
 import { useContext, useState } from "react";
 
-function Copyright(props: any) {
+function Copyright() {
   return (
     <Typography
       variant="subtitle1"
       color="text.secondary"
       align="center"
-      {...props}
+      sx={{ mt: 5 }}
     >
       {"Copyright © "}
       <Link color="inherit">TranslanGo</Link> {new Date().getFullYear()}
@@ -34,8 +33,6 @@ function Copyright(props: any) {
     </Typography>
   );
 }
-
-const theme = createTheme();
 
 export default function SignInPage() {
   const ctx = useContext(AppCtx);
@@ -162,7 +159,7 @@ export default function SignInPage() {
               </Link>
             </Grid>
           </Grid>
-          <Copyright sx={{ mt: 5 }} />
+          <Copyright />
         </Box>
       </Box>
     </FillPageWithSidePic>

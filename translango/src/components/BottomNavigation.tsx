@@ -13,10 +13,7 @@ import {
   VideogameAsset,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import AppCtx, {
-  AppCtxUpdater,
-  TRANSLATION_KEYS,
-} from "../store/app-state-context";
+import AppCtx, { TRANSLATION_KEYS } from "../store/app-state-context";
 
 type accepted_values = "list" | "play" | "dashboard" | "mapview" | "profile";
 

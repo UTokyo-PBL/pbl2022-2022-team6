@@ -4,18 +4,9 @@ import { useLocation, useParams } from "react-router-dom";
 import TopNavigation from "../../components/TopNavigation";
 import SinglePost from "../../components/singlePost";
 
-export default function PreviewPost(props: any) {
+export default function PreviewPost() {
   const location = useLocation();
   const { translationID } = useParams();
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const user_data = {
-      email: "example@translango.com",
-      password: "passw0rd",
-    };
-  };
 
   return (
     <>

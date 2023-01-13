@@ -17,8 +17,6 @@ import AppCtx, {
   TRANSLATION_KEYS,
 } from "../store/app-state-context";
 
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
-
 function TopNavigation() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 

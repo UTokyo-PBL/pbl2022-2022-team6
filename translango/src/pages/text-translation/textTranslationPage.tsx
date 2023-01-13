@@ -33,9 +33,9 @@ const Translation: React.FC<TranslationProps> = ({ lang_code, text }) => {
         setTranslationAvl(true);
       }
     );
-  }, [text]);
+  }, [text, lang_code]);
 
-  return (!tranlationAvl || !text.trim()) ? (
+  return !tranlationAvl || !text.trim() ? (
     <></>
   ) : (
     <Card>
@@ -87,10 +87,6 @@ const OriginalTextCard: React.FC<OriginalTextCardProps> = ({ changeText }) => {
 
 const TextTranslationPage: React.FC = () => {
   const ctx = useContext(AppCtx);
-  const t = (key: TRANSLATION_KEYS) =>
-    ctx.translations[ctx.nativeLanguage]
-      ? ctx.translations[ctx.nativeLanguage][key]
-      : ctx.translations["en"][key];
 
   const [text, setText] = useState("");
 

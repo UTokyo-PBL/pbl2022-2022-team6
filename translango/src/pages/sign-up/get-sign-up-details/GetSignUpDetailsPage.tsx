@@ -129,7 +129,7 @@ export default function GetSignUpDetails() {
           </Box> */}
           {!email ? (
             <Alert severity="warning">{t("MAIL_IS_REQD")}</Alert>
-          ) : password && password != confirmPassword ? (
+          ) : password && password !== confirmPassword ? (
             <Alert severity="error">{t("PASS_DONT_MATCH")}</Alert>
           ) : (
             <Alert>{t("WE_KEEP_YOU_SAFE")}</Alert>
@@ -138,7 +138,7 @@ export default function GetSignUpDetails() {
           <Button
             variant="contained"
             type="submit"
-            disabled={!email || !password || password != confirmPassword}
+            disabled={!email || !password || password !== confirmPassword}
           >
             {t("SIGN_UP")}
           </Button>

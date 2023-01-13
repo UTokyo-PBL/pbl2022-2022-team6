@@ -1,15 +1,12 @@
-import { Box, Button, CssBaseline, ThemeProvider } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import theme from "../../theme/theme";
+import { Box, Button } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import TopNavigation from "../../components/TopNavigation";
-import DashboardController from "../../controllers/dashboard/dashboard.controller";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import FlashCard from "../../components/flashcard";
 import EndGame from "../../components/EndGame";
-import AppCtx from "../../store/app-state-context";
 
 export interface GameStep {
   imageUrl: string;
@@ -105,14 +102,7 @@ export default function QuizScreen() {
   const [steps, setSteps] = useState<GameStep[]>(gameSteps);
   const [score, setScore] = useState(0);
   const [attempted, setAttempted] = useState<number>(0);
-  const [options, setOptions] = useState<any[]>([]);
   const [loaded, setLoaded] = useState(false);
-  const ctx = useContext(AppCtx);
-
-  useEffect(() => {
-    // getList();
-    // console.log(steps)
-  }, []);
 
   useEffect(() => {
     // steps.length && createOptions();

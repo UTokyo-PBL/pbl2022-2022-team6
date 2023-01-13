@@ -1,10 +1,8 @@
 import { Button } from "@mui/material";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useContext, useState } from "react";
-import AppCtx, {
-  TRANSLATION_KEYS,
-} from "../store/app-state-context";
+import AppCtx, { TRANSLATION_KEYS } from "../store/app-state-context";
 
 interface UploadImageProps {
   user?: any;
@@ -71,8 +69,9 @@ const CameraButton: React.FC<UploadImageProps> = ({ background }) => {
 
   return (
     <>
-      {state.uploadedimg &&
-        <Navigate to="/view-image" replace={true} state={state} />}
+      {state.uploadedimg && (
+        <Navigate to="/view-image" replace={true} state={state} />
+      )}
       <Button
         variant="text"
         color="secondary"

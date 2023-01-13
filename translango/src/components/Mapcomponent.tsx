@@ -2,10 +2,7 @@ import { Map as OlMap, View as OlView } from "ol";
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
 import { useEffect } from "react";
-import AppCtx, {
-  GeoCoordinates,
-  TRANSLATION_KEYS,
-} from "../store/app-state-context";
+import { GeoCoordinates } from "../store/app-state-context";
 
 const markers: {
   image_url: string;
