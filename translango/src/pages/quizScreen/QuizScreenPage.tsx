@@ -76,6 +76,26 @@ const gameSteps: GameStep[] = [
       text: ["スプーン", "カメラ"],
     },
   },
+  {
+    imageUrl:
+      "https://images.pexels.com/photos/4168645/pexels-photo-4168645.jpeg",
+    target_text: "Biscuits",
+    target_language: "es",
+    options: {
+      correctIndex: 0,
+      text: ["Galletas", "sopa"],
+    },
+  },
+  {
+    imageUrl:
+      "https://images.pexels.com/photos/1670413/pexels-photo-1670413.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    target_text: "Monkey",
+    target_language: "es",
+    options: {
+      correctIndex: 1,
+      text: ["caballo", "mono"],
+    },
+  },
 ];
 
 export default function QuizScreen() {
