@@ -1,13 +1,12 @@
 import React from "react";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Alert, Grid, Snackbar } from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle";
-import AppCtx from "../store/app-state-context";
+import AppCtx, { TRANSLATION_KEYS } from "../store/app-state-context";
 import { GameStep } from "../pages/quizScreen/QuizScreenPage";
 
 interface Props {
@@ -43,9 +42,12 @@ export const FlashCard: React.FC<Props> = ({
   const [open, setOpen] = React.useState(false);
   const [internalScore, setInternalScore] = React.useState(0);
   const ctx = React.useContext(AppCtx);
+  const t = (key: TRANSLATION_KEYS) =>
+    ctx.translations[ctx.nativeLanguage]
+      ? ctx.translations[ctx.nativeLanguage][key]
+      : ctx.translations["en"][key];
 
   React.useEffect(() => {
-    // console.log(props)
     setDisabled([false, false]);
     setColors(["primary", "primary"]);
     setChosen(false);
@@ -62,12 +64,7 @@ export const FlashCard: React.FC<Props> = ({
     }
 
     setOpen(false);
-    // props.getScores(internalScore, true);
   };
-
-  // const sendScore = (score: number) => {
-  //     props.getScores(score);
-  // }
 
   const handleSubmit = (
     event: React.MouseEvent<HTMLElement>,
@@ -107,7 +104,7 @@ export const FlashCard: React.FC<Props> = ({
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          Select the translation in
+          {t("SELECT_THE_TRANSLATION_IN") + " "}
         </Typography>
         <Typography gutterBottom variant="h5" component="div">
           {ctx.availableLanguages[step.target_language]}
@@ -141,18 +138,15 @@ export const FlashCard: React.FC<Props> = ({
           <Grid item sx={{ mb: 1, width: 260 }}>
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
               {successAlert ? (
-                <Alert severity="success">Woohoo! Great Job</Alert>
+                <Alert severity="success">{t("GAME_GREAT_JOB")}</Alert>
               ) : (
-                <Alert severity="error">Oh no, Try Again Later!</Alert>
+                <Alert severity="error">{t("GAME_TRY_AGAIN")}</Alert>
               )}
               {/* {errorAlert ?  : null} */}
             </Snackbar>
           </Grid>
         </Grid>
       </CardContent>
-      {/* <CardActions sx={{ direction: 'column', justifyContent: 'center', alignItems: 'center', m: -1 }}> */}
-
-      {/* </CardActions> */}
     </Card>
   );
 };

@@ -63,7 +63,10 @@ export type TRANSLATION_KEYS =
   | "USERNAME"
   | "FORGOT_PASS"
   | "DONT_HAVE_ACCOUNT_SIGN_UP"
-  | "USERNAME_OR_PASSWORD_IS_WRONG";
+  | "USERNAME_OR_PASSWORD_IS_WRONG"
+  | "SELECT_THE_TRANSLATION_IN"
+  | "GAME_GREAT_JOB"
+  | "GAME_TRY_AGAIN";
 
 type TranslateMappingType = {
   [key in TRANSLATION_KEYS]: string;
@@ -108,7 +111,7 @@ export const saveContext = (obj: AppContextInterface) => {
 };
 
 export const defaultCtx: AppContextInterface = {
-  version: "0.0.20",
+  version: "0.0.22",
   isLoggedIn: false,
   firstName: "Hey",
   lastName: "User!",
@@ -190,6 +193,9 @@ export const defaultCtx: AppContextInterface = {
       FORGOT_PASS: "Forgot password?",
       DONT_HAVE_ACCOUNT_SIGN_UP: "Don't have an account? Sign Up",
       USERNAME_OR_PASSWORD_IS_WRONG: "Either username or password is wrong!",
+      SELECT_THE_TRANSLATION_IN: "Select the translation in",
+      GAME_GREAT_JOB: "Woohoo! Great Job",
+      GAME_TRY_AGAIN: "Oh no, Try Again Later!",
     },
   },
 };
