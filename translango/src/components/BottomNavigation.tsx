@@ -38,7 +38,6 @@ export default function BottomNavigation() {
         // showLabels
         value={value}
         onChange={(_event, newValue: accepted_values) => {
-          setValue(newValue);
           switch (newValue) {
             case "list":
               navigate("/select-favourite-languages");
@@ -58,6 +57,7 @@ export default function BottomNavigation() {
             default:
               break;
           }
+          setValue(newValue);
         }}
       >
         <BottomNavigationAction

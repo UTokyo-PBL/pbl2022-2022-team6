@@ -38,10 +38,13 @@ const ViewTranslations = React.lazy(
 );
 const CreatePost = React.lazy(() => import("./pages/createPost"));
 const PreviewPost = React.lazy(() => import("./pages/previewPost"));
-const ProfilePage = React.lazy(() => import("./pages/profilePage"));
-const GameScreen = React.lazy(() => import("./pages/gameScreen"));
-const PracticeScreen = React.lazy(() => import("./pages/practiceScreen"));
-const QuizScreen = React.lazy(() => import("./pages/quizScreen"));
+const ProfilePage = React.lazy(() => import("./pages/profilePage/ProfilePage"));
+const GameScreen = React.lazy(
+  () => import("./pages/gameScreen/GameScreenPage")
+);
+const QuizScreen = React.lazy(
+  () => import("./pages/quizScreen/QuizScreenPage")
+);
 
 function App() {
   const ctx = useContext(AppCtx);
@@ -191,7 +194,7 @@ function App() {
                       <Route path="/profilepage" element={<ProfilePage />} />
                     )}
                     <Route path="/game" element={<GameScreen />} />
-                    <Route path="/practice" element={<PracticeScreen />} />
+                    <Route path="/practice" element={<QuizScreen />} />
                     <Route path="/quiz" element={<QuizScreen />} />
                     <Route path="*" element={<Navigate to="/" />} />
                   </Routes>
