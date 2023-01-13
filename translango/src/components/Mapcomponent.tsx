@@ -115,21 +115,21 @@ function Map() {
       : ctx.translations["en"][key];
   // const [userLocation, setUserLocation] = useState<Array<GeoCoordinates>>([]);
 
-  const getLocation = () => {
-    const index = Math.floor(Math.random() * 6);
-    console.log(ctx.dummyLocations);
-    if (ctx.dummyLocations) {
-      const loc = ctx.dummyLocations[index];
-      console.log(loc);
-      if (loc) {
-        loc.lat = Math.floor(Math.random() * 10) + loc.lat;
-        loc.lng = Math.floor(Math.random() * 10) + loc.lng;
+  // const getLocation = () => {
+  //   const index = Math.floor(Math.random() * 6);
+  //   console.log(ctx.dummyLocations);
+  //   if (ctx.dummyLocations) {
+  //     const loc = ctx.dummyLocations[index];
+  //     console.log(loc);
+  //     if (loc) {
+  //       loc.lat = Math.floor(Math.random() * 10) + loc.lat;
+  //       loc.lng = Math.floor(Math.random() * 10) + loc.lng;
 
-        return { lat: loc!.lat, lng: loc!.lng };
-      }
-    }
-    return { lat: 44, lng: -80 };
-  };
+  //       return { lat: loc!.lat, lng: loc!.lng };
+  //     }
+  //   }
+  //   return { lat: 44, lng: -80 };
+  // };
 
   //choose the screen size
   const handleResize = () => {
@@ -212,7 +212,7 @@ function Map() {
           }}
         />
         {markers.map(({ image_url, position, text }, key) => (
-          <MarkerF key={key} position={getLocation()} icon={custom_marker}>
+          <MarkerF key={key} position={position} icon={custom_marker}>
             <InfoWindowF
               position={position}
               options={{ pixelOffset: new window.google.maps.Size(0, 24) }}
